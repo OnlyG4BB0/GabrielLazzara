@@ -2,35 +2,66 @@
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #2b2b3b, #4a4a6a); /* Sfumatura di blu/viola per creare profondità */
+    background: linear-gradient(45deg, #101010, #2b2b3b, #5d4b8a);
     background-size: 300% 300%;
-    animation: gradientAnimation 6s infinite;
+    animation: gradientAnimation 4s infinite;
     color: #ffffff;
     scroll-behavior: smooth; /* Abilita lo smooth scroll */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1, h2, p {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 4rem;
+    text-align: center;
+    color: #ffffff;
+    animation: fadeIn 2s ease-out;
+}
+
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #ffffff;
+}
+
+p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #cccccc;
+    text-align: center;
 }
 
 /* Navbar */
 .navbar {
     position: fixed;
     top: 0;
-    right: 10px; 
+    right: 10px; /* Spostato verso destra */
     width: auto;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-end; /* Allinea il menu verso la fine (destra) */
     align-items: center;
     padding: 20px 30px;
     z-index: 1000;
-    background: rgba(0, 0, 0, 0.7); /* Sfumatura scura per la navbar */
 }
 
 .menu-btn {
     background: none;
     border: none;
     color: #fff;
-    font-size: 2.5rem;
+    font-size: 2.5rem; /* Aumentato per visibilità */
     cursor: pointer;
     position: absolute;
-    right: 20px;
+    right: 20px; /* Posizione dell'icona a destra */
     top: 50%;
     transform: translateY(-50%);
 }
@@ -38,9 +69,9 @@ body {
 .menu-items {
     display: none;
     position: absolute;
-    right: 20px;
+    right: 20px; /* Spostato a destra rispetto all'icona */
     top: 60px;
-    background: rgba(0, 0, 0, 0.95); /* Sfumatura più scura per il menu */
+    background: rgba(0, 0, 0, 0.95);
     padding: 20px 25px;
     border-radius: 10px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
@@ -63,7 +94,7 @@ body {
 .menu-items a {
     text-decoration: none;
     color: #ffffff;
-    font-size: 1.5rem;
+    font-size: 1.5rem; /* Ingrandito il menu */
     transition: all 0.3s ease;
 }
 
@@ -80,7 +111,6 @@ body {
     justify-content: center;
     text-align: center;
     padding: 20px;
-    background: linear-gradient(135deg, #3e3e5d, #232342); /* Aggiunta una sfumatura scura per l'header */
 }
 
 .header h1 {
@@ -98,7 +128,7 @@ body {
 .skills {
     padding: 100px 20px;
     text-align: center;
-    background: linear-gradient(135deg, #1c1c32, #232342); /* Colori scuri e coerenti con gli altri sfondi */
+    background: #151523;
 }
 
 .skills-grid {
@@ -140,7 +170,7 @@ body {
 
 /* Contact Section */
 #contact {
-    background: linear-gradient(135deg, #232342, #2b2b3b); /* Gradiente che si abbina con il resto del sito */
+    background: #151523;
     padding: 60px 20px;
     text-align: center;
 }
@@ -199,7 +229,7 @@ body {
 /* Footer */
 .footer {
     padding: 20px;
-    background: #101010; /* Fondo scuro per il footer */
+    background: #0e0e14;
     text-align: center;
 }
 
@@ -214,64 +244,36 @@ body {
     color: #8a7ce7;
 }
 
-/* Animations */
-@keyframes gradientAnimation {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 /* Media Query per mobile */
 @media screen and (max-width: 768px) {
     /* Navbar */
     .navbar {
-        right: 0;
+        right: 0; /* Rende il navbar più centrale */
         padding: 15px;
     }
 
     .menu-btn {
-        font-size: 2rem;
+        font-size: 2rem; /* Ridurre la dimensione dell'icona */
         right: 15px;
     }
 
     .menu-items {
-        top: 50px;
+        top: 50px; /* Modifica la posizione del menu */
         padding: 15px 20px;
     }
 
     .menu-items a {
-        font-size: 1.3rem;
+        font-size: 1.3rem; /* Ridurre la dimensione del testo del menu */
     }
 
     /* Header */
     .header {
-        height: auto;
+        height: auto; /* Evita che l'header sia troppo grande */
         padding: 40px 20px;
-        background: linear-gradient(135deg, #3e3e5d, #232342); /* Adattato anche l'header per mobile */
     }
 
     .header h1 {
-        font-size: 2.5rem;
+        font-size: 2.5rem; /* Ridurre la dimensione del titolo */
     }
 
     .header p {
@@ -284,7 +286,7 @@ body {
     }
 
     .skills-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr; /* Modifica il layout delle skills per schermi piccoli */
     }
 
     .card {
@@ -305,7 +307,7 @@ body {
 
     /* Contact Section */
     .contact-container {
-        width: 100%;
+        width: 100%; /* Full width per schermi piccoli */
         padding: 20px;
     }
 
@@ -314,7 +316,43 @@ body {
     }
 
     .contact-container label, .contact-container input, .contact-container select, .contact-container textarea {
+        font-size: 1rem; /* Ridurre la dimensione del font nei form */
+    }
+
+    #submit-btn {
         font-size: 1rem;
+    }
+
+    /* Footer */
+    .footer .socials a {
+        font-size: 1.2rem; /* Ridurre le dimensioni delle icone social */
+    }
+}
+
+/* Media Query per schermi molto piccoli (smartphone) */
+@media screen and (max-width: 480px) {
+    .header h1 {
+        font-size: 2rem; /* Ridurre ulteriormente la dimensione */
+    }
+
+    .header p {
+        font-size: 1rem;
+    }
+
+    .menu-btn {
+        font-size: 1.8rem; /* Ridurre ancora la dimensione dell'icona */
+    }
+
+    .menu-items a {
+        font-size: 1.2rem; /* Ridurre il testo del menu */
+    }
+
+    .contact-container h2 {
+        font-size: 1.8rem;
+    }
+
+    .contact-container label, .contact-container input, .contact-container select, .contact-container textarea {
+        font-size: 0.9rem;
     }
 
     #submit-btn {
@@ -322,37 +360,6 @@ body {
     }
 
     .footer .socials a {
-        font-size: 1.2rem;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    /* Font sizes e padding per schermi molto piccoli */
-    .header h1 {
-        font-size: 2rem;
-    }
-
-    .menu-btn {
-        font-size: 1.5rem;
-    }
-
-    .menu-items a {
-        font-size: 1.1rem;
-    }
-
-    .skills-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .card i {
-        font-size: 2rem;
-    }
-
-    .card h3 {
-        font-size: 1.2rem;
-    }
-
-    .footer .socials a {
-        font-size: 1rem;
+        font-size: 1rem; /* Icone social più piccole su smartphone */
     }
 }
