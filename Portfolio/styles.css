@@ -1,0 +1,365 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(45deg, #101010, #2b2b3b, #5d4b8a);
+    background-size: 300% 300%;
+    animation: gradientAnimation 4s infinite;
+    color: #ffffff;
+    scroll-behavior: smooth; /* Abilita lo smooth scroll */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1, h2, p {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 4rem;
+    text-align: center;
+    color: #ffffff;
+    animation: fadeIn 2s ease-out;
+}
+
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #ffffff;
+}
+
+p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #cccccc;
+    text-align: center;
+}
+
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    right: 10px; /* Spostato verso destra */
+    width: auto;
+    display: flex;
+    justify-content: flex-end; /* Allinea il menu verso la fine (destra) */
+    align-items: center;
+    padding: 20px 30px;
+    z-index: 1000;
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2.5rem; /* Aumentato per visibilità */
+    cursor: pointer;
+    position: absolute;
+    right: 20px; /* Posizione dell'icona a destra */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.menu-items {
+    display: none;
+    position: absolute;
+    right: 20px; /* Spostato a destra rispetto all'icona */
+    top: 60px;
+    background: rgba(0, 0, 0, 0.95);
+    padding: 20px 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.menu-items.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.menu-items li {
+    margin: 15px 0;
+}
+
+.menu-items a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 1.5rem; /* Ingrandito il menu */
+    transition: all 0.3s ease;
+}
+
+.menu-items a:hover {
+    color: #8a7ce7;
+    transform: translateX(5px);
+}
+
+/* Header */
+.header {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.header h1 {
+    animation: fadeIn 2s ease-out;
+    color: #ffffff;
+}
+
+.header p {
+    font-size: 1.5rem;
+    margin-top: 20px;
+    animation: fadeInUp 2s;
+}
+
+/* Skills Section */
+.skills {
+    padding: 100px 20px;
+    text-align: center;
+    background: #151523;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #1a1a2e;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.card i {
+    font-size: 3rem;
+    color: #8a7ce7;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    margin: 10px 0;
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+.card p {
+    font-size: 1rem;
+    color: #cccccc;
+}
+
+/* Contact Section */
+#contact {
+    background: #151523;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.contact-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #1a1a2e;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.contact-container h2 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 30px;
+}
+
+.contact-container label {
+    display: block;
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.contact-container input, .contact-container select, .contact-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+}
+
+.contact-container textarea {
+    height: 150px;
+    resize: none;
+}
+
+#submit-btn {
+    background-color: #8a7ce7;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+#submit-btn:hover {
+    background-color: #7362df;
+}
+
+/* Footer */
+.footer {
+    padding: 20px;
+    background: #0e0e14;
+    text-align: center;
+}
+
+.footer .socials a {
+    margin: 0 10px;
+    color: #ffffff;
+    font-size: 1.5rem;
+    transition: color 0.3s;
+}
+
+.footer .socials a:hover {
+    color: #8a7ce7;
+}
+
+/* Media Query per mobile */
+@media screen and (max-width: 768px) {
+    /* Navbar */
+    .navbar {
+        right: 0; /* Rende il navbar più centrale */
+        padding: 15px;
+    }
+
+    .menu-btn {
+        font-size: 2rem; /* Ridurre la dimensione dell'icona */
+        right: 15px;
+    }
+
+    .menu-items {
+        top: 50px; /* Modifica la posizione del menu */
+        padding: 15px 20px;
+    }
+
+    .menu-items a {
+        font-size: 1.3rem; /* Ridurre la dimensione del testo del menu */
+    }
+
+    /* Header */
+    .header {
+        height: auto; /* Evita che l'header sia troppo grande */
+        padding: 40px 20px;
+    }
+
+    .header h1 {
+        font-size: 2.5rem; /* Ridurre la dimensione del titolo */
+    }
+
+    .header p {
+        font-size: 1.2rem;
+    }
+
+    /* Skills Section */
+    .skills {
+        padding: 60px 20px;
+    }
+
+    .skills-grid {
+        grid-template-columns: 1fr 1fr; /* Modifica il layout delle skills per schermi piccoli */
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .card i {
+        font-size: 2.5rem;
+    }
+
+    .card h3 {
+        font-size: 1.3rem;
+    }
+
+    .card p {
+        font-size: 0.9rem;
+    }
+
+    /* Contact Section */
+    .contact-container {
+        width: 100%; /* Full width per schermi piccoli */
+        padding: 20px;
+    }
+
+    .contact-container h2 {
+        font-size: 2rem;
+    }
+
+    .contact-container label, .contact-container input, .contact-container select, .contact-container textarea {
+        font-size: 1rem; /* Ridurre la dimensione del font nei form */
+    }
+
+    #submit-btn {
+        font-size: 1rem;
+    }
+
+    /* Footer */
+    .footer .socials a {
+        font-size: 1.2rem; /* Ridurre le dimensioni delle icone social */
+    }
+}
+
+/* Media Query per schermi molto piccoli (smartphone) */
+@media screen and (max-width: 480px) {
+    .header h1 {
+        font-size: 2rem; /* Ridurre ulteriormente la dimensione */
+    }
+
+    .header p {
+        font-size: 1rem;
+    }
+
+    .menu-btn {
+        font-size: 1.8rem; /* Ridurre ancora la dimensione dell'icona */
+    }
+
+    .menu-items a {
+        font-size: 1.2rem; /* Ridurre il testo del menu */
+    }
+
+    .contact-container h2 {
+        font-size: 1.8rem;
+    }
+
+    .contact-container label, .contact-container input, .contact-container select, .contact-container textarea {
+        font-size: 0.9rem;
+    }
+
+    #submit-btn {
+        font-size: 1rem;
+    }
+
+    .footer .socials a {
+        font-size: 1rem; /* Icone social più piccole su smartphone */
+    }
+}
