@@ -1,129 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello World, I'm Gabriel</title>
-  <link rel="icon" href="https://img.icons8.com/?size=160&id=94497&format=png" type="image/png">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabriel's Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Navigation Menu -->
-  <div class="navbar">
-    <button class="menu-btn">&#9776;</button>
-    <ul class="menu-items">
-      <li><a href="#about">About Me</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    </div>  
-    </div>
-  </nav>
 
-  <!-- Header Section -->
-  <header id="header" class="header">
-    <div class="container">
-      <h1 class="wow">Hello World, I'm Gabriel</h1>
-      <p class="wow">Bringing ideas to life with code and design</p>
-    </div>
-  </header>
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Gabriel</h1>
+            <p class="hero-subtitle">Creative Developer & Designer</p>
+            <a href="#about" class="cta-button">Explore More</a>
+        </div>
+    </section>
 
-  <!-- About Me Section -->
-  <section id="about" class="about">
-    <div class="container">
-      <h2 class="wow">About Me</h2>
-      <p class="wow">
-        Hi! I'm Gabriel, a full-stack developer and game programmer. I have a passion for crafting modern web experiences 
-        and engaging games using cutting-edge technologies. My goal is to transform ideas into reality through code.
-      </p>
-    </div>
-  </section>
+    <!-- Navbar -->
+    <header class="navbar">
+        <nav>
+            <div class="logo">
+                <a href="#">Gabriel</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+        <div class="menu">
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
 
-  <!-- Skills Section -->
-  <section id="skills" class="skills">
-    <div class="container">
-      <h2 class="wow">Skills</h2>
-      <div class="skills-grid">
-        <!-- Skill Cards -->
-        <div class="card wow">
-          <i class="fab fa-html5"></i>
-          <h3>HTML5</h3>
-          <p>Expertise in semantic markup and creating accessible web layouts.</p>
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Me</h2>
+            <p>I'm Gabriel, a passionate developer with a keen eye for design. I specialize in creating interactive, dynamic, and responsive websites using modern technologies.</p>
         </div>
-        <div class="card wow">
-          <i class="fab fa-css3-alt"></i>
-          <h3>CSS3</h3>
-          <p>Proficient in modern styling, animations, and responsive designs.</p>
-        </div>
-        <div class="card wow">
-          <i class="fab fa-js"></i>
-          <h3>JavaScript</h3>
-          <p>Skilled in modern JavaScript frameworks and client-side development.</p>
-        </div>
-        <div class="card wow">
-          <i class="fab fa-php"></i>
-          <h3>PHP</h3>
-          <p>Experience in backend development and server-side scripting.</p>
-        </div>
-        <div class="card wow">
-          <i class="fab fa-java"></i>
-          <h3>Java</h3>
-          <p>Object-oriented programming and application development.</p>
-        </div>
-        <div class="card wow">
-          <i class="fab fa-python"></i>
-          <h3>Python</h3>
-          <p>Data analysis, scripting, and building backend systems.</p>
-        </div>
-        <div class="card wow">
-          <i class="fab fa-unity"></i>
-          <h3>C# (Unity)</h3>
-          <p>Game development and interactive applications with Unity.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Contact Section -->
-  <section id="contact">
-    <div class="contact-container">
-      <h2>Contact Me</h2>
-      <form id="contact-form">
-        <label for="name">Your Name</label>
-        <input type="text" id="name" name="name" required placeholder="Enter your name">
-  
-        <label for="email">Your Email</label>
-        <input type="email" id="email" name="email" required placeholder="Enter your email">
-  
-        <label for="contact-method">Select Contact Method</label>
-        <select id="contact-method" name="contact-method" required>
-          <option value="">Choose a contact method</option>
-          <option value="email">Email</option>
-          <option value="telegram">Telegram</option>
-          <option value="discord">Discord</option>
-        </select>
-  
-        <label for="message">Your Message</label>
-        <textarea id="message" name="message" required placeholder="Write your message here"></textarea>
-  
-        <button type="submit" id="submit-btn">Send Message</button>
-      </form>
-    </div>
-  </section>
-  
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2>Skills</h2>
+            <div class="skills-container">
+                <div class="skill-card">
+                    <div class="icon"><i class="fab fa-html5"></i></div>
+                    <h3>HTML</h3>
+                    <p>Building structured, semantic, and accessible HTML documents.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="icon"><i class="fab fa-css3-alt"></i></div>
+                    <h3>CSS</h3>
+                    <p>Mastering styling and layouts with CSS and modern frameworks.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="icon"><i class="fab fa-js"></i></div>
+                    <h3>JavaScript</h3>
+                    <p>Building interactive, dynamic functionality for websites.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- Footer Section -->
-  <footer class="footer">
-    <div class="container">
-      <p>&copy; 2024 Gabriel.</p>
-      <div class="socials">
-        <a href="https://t.me/GabrieleLazzara"><i class="fab fa-telegram"></i></a>
-        <a href="https://discord.com/users/706894566548045914"><i class="fab fa-discord"></i></a>
-        <a href="https://www.instagram.com/gabriel_lazzara_"><i class="fab fa-instagram"></i></a>
-      </div>
-    </div>
-  </footer>
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>My Projects</h2>
+            <div class="projects-container">
+                <div class="project-card">
+                    <div class="icon"><i class="fas fa-cogs"></i></div>
+                    <h3>Weather App</h3>
+                    <p>Weather forecasting app using live data from external APIs.</p>
+                    <a href="https://example.com" class="project-button">View Project</a>
+                </div>
+                <div class="project-card">
+                    <div class="icon"><i class="fas fa-laptop-code"></i></div>
+                    <h3>Portfolio Website</h3>
+                    <p>Personal portfolio website to showcase my skills and projects.</p>
+                    <a href="https://example.com" class="project-button">View Project</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contact Me</h2>
+            <form action="mailto:gabrielelazzara67@gmail.com" method="post" enctype="text/plain">
+                <input type="text" placeholder="Your Name" name="name" required>
+                <input type="email" placeholder="Your Email" name="email" required>
+                <textarea placeholder="Your Message" name="message" required></textarea>
+                <button type="submit" class="cta-button">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Gabriel | All Rights Reserved</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
