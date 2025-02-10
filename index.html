@@ -5,551 +5,231 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gabriel Fullstack Web</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="https://uxwing.com/wp-content/themes/uxwing/download/web-app-development/div-coding-icon.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* General Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #0a0a0a;
-            color: #f5f5f5;
-            line-height: 1.6;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(10, 10, 10, 0.9);
-            padding: 10px 20px;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        header h1 {
-            color: #f9a602;
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        nav {
-            display: flex;
-            gap: 15px;
-        }
-
-        nav a {
-            color: #f5f5f5;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        nav a:hover {
-            background: #f9a602;
-            color: #0a0a0a;
-        }
-
-        /* Hero Section */
-        #hero {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-            background: linear-gradient(to bottom, #0a0a0a, #151515);
-            animation: background-scroll 8s infinite alternate;
-        }
-
-        @keyframes background-scroll {
-            0% {
-                background-position: top;
-            }
-
-            100% {
-                background-position: bottom;
-            }
-        }
-
-        #hero h1 {
-            font-size: 3rem;
-            color: #f9a602;
-            margin-bottom: 10px;
-            animation: fadeIn 2s ease-in-out;
-        }
-
-        #hero p {
-            font-size: 1.5rem;
-            color: #ccc;
-            margin-bottom: 20px;
-            animation: fadeIn 3s ease-in-out;
-        }
-
         @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-        .btn-group {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap; /* Per dispositivi mobili */
-}
-
-.btn-primary {
-    background: #f9a602;
-    color: #0a0a0a;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-
-.btn-primary:hover {
-    background: #d48802;
-    transform: scale(1.05);
-}
-
-.btn-secondary {
-    background: transparent;
-    border: 2px solid #f9a602;
-    color: #f9a602;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-
-.btn-secondary:hover {
-    background: #f9a602;
-    color: #0a0a0a;
-    transform: scale(1.05);
-}
-
-        /* About Section */
-       #about { 
-           padding: 50px 20px; 
-           max-width: 1250px;
-           margin: auto;
-           background: content-box;
-           text-align: center; 
-       }
-
-
-        #about h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #f9a602;
-        }
-
-        #about p {
-            font-size: 1.2rem;
-            color: #ccc;
-            margin-bottom: 30px;
-        }
-
-        #about .btn {
-            background: #f9a602;
-            color: #0a0a0a;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: all 0.3s ease-in-out;
-        }
-
-        #about .btn:hover {
-            transform: scale(1.1);
-        }
-
-        /* Skills Section */
-        #skills {
-            padding: 50px 20px;
-            background: #0a0a0a;
-        }
-
-        #skills h2 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-            text-align: center;
-            color: #f9a602;
-        }
-
-        .skills-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: auto;
-            text-align: center;
-        }
-
-        .skill {
-            background: #151515;
-            padding: 20px;
-            border-radius: 10px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .skill i {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: #f9a602;
-        }
-
-        .skill h3 {
-            font-size: 1.2rem;
-            color: #f9a602;
-        }
-
-        .progress-bar {
-            background: #333;
-            border-radius: 5px;
-            overflow: hidden;
-            margin-top: 10px;
-            position: relative;
-        }
-
-        .progress {
-            background: #f9a602;
-            height: 10px;
-            width: 0;
-            animation: grow 2s ease-in-out forwards;
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
 
         @keyframes grow {
-            0% {
-                width: 0;
+            0% { width: 0; }
+            100% { width: var(--progress); }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .animate-grow {
+            animation: grow 2s ease-in-out forwards;
+        }
+
+        .hamburger-menu {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger-menu {
+                display: block;
             }
 
-            100% {
-                width: var(--progress);
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 10, 10, 0.9);
+                padding: 10px 0;
+            }
+
+            .nav-links.open {
+                display: flex;
             }
         }
 
-        /* Projects Section */
-        #projects {
-            padding: 50px 20px;
-            background: #151515;
-            text-align: center;
+        body {
+            font-family: 'Montserrat', sans-serif;
         }
-
-        #projects h2 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-            color: #f9a602;
-        }
-
-        .project-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            max-width: 1200px;
-            margin: auto;
-            gap: 20px;
-        }
-
-        .project-card {
-            background: #0a0a0a;
-            padding: 20px;
-            border-radius: 10px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .project-card:hover {
-            transform: scale(1.05);
-        }
-
-        .project-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #f9a602;
-        }
-
-        .project-card p {
-            font-size: 1rem;
-            margin-bottom: 20px;
-            color: #ccc;
-        }
-
-        .project-card a {
-            display: inline-block;
-            background: #f9a602;
-            color: #0a0a0a;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .project-card a:hover {
-            transform: scale(1.1);
-        }
-
-       /* Contact Form Styles */
- /* Contact Section */
- #contact {
-            padding: 50px 20px;
-            background: #0a0a0a;
-            text-align: center;
-        }
-
-        #contact h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #f9a602;
-        }
-
-        #contact form {
-            max-width: 500px;
-            margin: auto;
-        }
-
-        #contact form input,
-        #contact form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: none;
-            border-radius: 5px;
-            background: #151515;
-            color: #fff;
-        }
-
-        #contact form button {
-            background: #f9a602;
-            color: #0a0a0a;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-        }
-
-        #contact form button:hover {
-            transform: scale(1.1);
-        }
-
-        footer {
-            padding: 10px;
-            background: #151515;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #ccc;
-        }
-
-        /* Media Queries for Mobile */
-@media screen and (max-width: 768px) {
-    /* Adjust project container layout for smaller screens */
-    .project-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    /* Style adjustments for project cards */
-    .project-card {
-        width: 90%; /* Make the cards responsive */
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    /* Adjust icon size for mobile */
-    .project-icon {
-        font-size: 40px; /* Make the icons slightly larger for mobile */
-    }
-
-    /* Make the headings more readable */
-    .project-card h3 {
-        font-size: 1.5rem; /* Adjust font size for headings */
-    }
-
-    .project-card p {
-        font-size: 14px; /* Adjust font size for paragraphs */
-        line-height: 1.5;
-    }
-
-    .project-card a {
-        font-size: 16px;
-        padding: 10px 20px;
-    }
-}
-
-/* Media Queries for Small Screens (Phones) */
-@media screen and (max-width: 480px) {
-    /* Further adjustments for very small screens */
-    .project-card {
-        width: 100%; /* Cards take full width on small screens */
-        padding: 15px;
-    }
-
-    /* Adjust icon size for extra small screens */
-    .project-icon {
-        font-size: 35px; /* Slightly smaller icons for very small screens */
-    }
-
-    /* Adjust headings and text */
-    .project-card h3 {
-        font-size: 1.2rem; /* Smaller heading for mobile */
-    }
-
-    .project-card p {
-        font-size: 13px; /* Smaller text for mobile */
-        line-height: 1.4;
-    }
-
-    .project-card a {
-        font-size: 15px; /* Adjust link size */
-        padding: 8px 16px; /* Adjust padding for smaller buttons */
-    }
-}
     </style>
 </head>
 
-<body>
-    <header>
-        <h1>G/L</h1>
-        <nav>
-            <a href="#hero">Home</a>
-            <a href="#about">About</a>
-            <a href="#skills">Skills</a>
-            <a href="#projects">Projects</a>
-            <a href="#contact">Contact</a>
+<body class="bg-black text-white">
+    <header class="fixed top-0 left-0 w-full bg-black bg-opacity-90 p-4 z-50 flex justify-between items-center">
+        <h1 class="text-orange-500 text-2xl font-semibold">G/L</h1>
+        <div class="hamburger-menu" onclick="toggleMenu()">
+            <i class="fas fa-bars text-white text-2xl cursor-pointer"></i>
+        </div>
+        <nav class="nav-links">
+            <a href="#hero" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">Home</a>
+            <a href="#about" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">About</a>
+            <a href="#services" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">Services</a>
+            <a href="#skills" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">Skills</a>
+            <a href="#projects" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">Projects</a>
+            <a href="#testimonials" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">Testimonials</a>
+            <a href="#contact" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">Contact</a>
         </nav>
     </header>
+
     <main>
         <!-- Hero Section -->
-        <section id="hero">
-            <h1>Welcome to My Portfolio</h1>
-            <p>Crafting elegant solutions with code and creativity.</p>
-            <div class="btn-group">
-                <a href="#projects" class="btn-primary">View Projects</a>
-                <a href="#contact" class="btn-secondary">Contact Me</a>
-            </div>            
+        <section id="hero" class="h-screen flex flex-col justify-center items-center text-center bg-gradient-to-b from-black to-gray-900 animate-fadeIn">
+            <h1 class="text-5xl text-orange-500 mb-4">Welcome to My Portfolio</h1>
+            <p class="text-xl text-gray-300 mb-8">Crafting elegant solutions with code and creativity. Let's build something amazing together!</p>
+            <div class="flex gap-4">
+                <a href="#projects" class="bg-orange-500 text-black px-6 py-3 rounded font-bold hover:bg-orange-600 transition duration-300">View Projects</a>
+                <a href="#contact" class="border-2 border-orange-500 text-orange-500 px-6 py-3 rounded font-bold hover:bg-orange-500 hover:text-black transition duration-300">Contact Me</a>
+            </div>
         </section>
 
         <!-- About Section -->
-        <section id="about">
-            <h2>About Me</h2>
-            <p>
-                I am Gabriel, a passionate developer with a strong focus on creating efficient and visually
-                appealing solutions. With expertise in various programming languages and frameworks, I aim to
-                bring innovation to every project I work on.
+        <section id="about" class="py-12 px-4 max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl text-orange-500 mb-6">About Me</h2>
+            <p class="text-lg text-gray-300">
+                Hi, I'm Gabriel, a passionate full-stack developer with a love for creating efficient, scalable, and visually stunning web applications. 
+                With over 5 years of experience in the tech industry, I specialize in turning complex ideas into user-friendly digital experiences. 
+                Whether it's building a responsive website or developing a robust backend system, I bring creativity and precision to every project.
             </p>
         </section>
 
-        <!-- Skills Section -->
-        <section id="skills">
-            <h2>My Skills</h2>
-            <div class="skills-container">
-                <div class="skill">
-                    <i class="fab fa-html5"></i>
-                    <h3>HTML</h3>
-                    <div class="progress-bar">
-                        <div class="progress" style="--progress: 95%;"></div>
-                    </div>
+        <!-- Services Section -->
+        <section id="services" class="py-12 px-4 bg-black">
+            <h2 class="text-4xl text-orange-500 text-center mb-8">Services I Offer</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                <div class="bg-gray-800 p-6 rounded-lg text-center">
+                    <i class="fas fa-code text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 mb-2">Web Development</h3>
+                    <p class="text-gray-300">From simple landing pages to complex web applications, I build solutions tailored to your needs.</p>
                 </div>
-                <div class="skill">
-                    <i class="fab fa-css3-alt"></i>
-                    <h3>CSS</h3>
-                    <div class="progress-bar">
-                        <div class="progress" style="--progress: 90%;"></div>
-                    </div>
+                <div class="bg-gray-800 p-6 rounded-lg text-center">
+                    <i class="fas fa-mobile-alt text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 mb-2">Mobile Development</h3>
+                    <p class="text-gray-300">Creating cross-platform mobile apps that deliver seamless user experiences.</p>
                 </div>
-                <div class="skill">
-                    <i class="fab fa-js-square"></i>
-                    <h3>JavaScript</h3>
-                    <div class="progress-bar">
-                        <div class="progress" style="--progress: 85%;"></div>
-                    </div>
-                </div>
-                <div class="skill">
-                    <i class="fab fa-python"></i>
-                    <h3>Python</h3>
-                    <div class="progress-bar">
-                        <div class="progress" style="--progress: 80%;"></div>
-                    </div>
-                </div>
-                <div class="skill">
-                    <i class="fab fa-java"></i>
-                    <h3>Java</h3>
-                    <div class="progress-bar">
-                        <div class="progress" style="--progress: 85%;"></div>
-                    </div>
-                </div>
+                <div class="bg-gray-800 p-6 rounded-lg text-center">
+                    <i class="fas fa-paint-brush text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 mb-2">UI/UX Design</h3>
+                    <p class="text-gray-300">Designing intuitive and visually appealing interfaces that users love.</p>
                 </div>
             </div>
         </section>
 
-     <!-- Projects Section -->
-<section id="projects">
-    <h2>My Projects</h2>
-    <div class="project-container">
-        <!-- Project 1: Luxury Sofà -->
-        <div class="project-card">
-            <i class="fas fa-couch project-icon"></i>
-            <h3>Luxury Sofà</h3>
-            <p>This is a modern and responsive website designed for a luxury furniture store. Built using HTML, CSS, and JavaScript, it provides a smooth user experience across devices.</p>
-            <a href="https://onlyg4bb0.github.io/Luxury-Sof-/" target="_blank">View Project</a>
-        </div>
-        
-        <!-- Project 2: Weatherflow -->
-        <div class="project-card">
-            <i class="fas fa-cloud-sun project-icon"></i>
-            <h3>Weatherflow</h3>
-            <p>Weatherflow is a dynamic weather forecasting web app built with Svelte and Python. It features real-time weather updates with an intuitive user interface and fast performance.</p>
-            <a href="https://onlyg4bb0.github.io/WeatherFlow/" target="_blank">View Project</a>
-        </div>
+        <!-- Skills Section -->
+        <section id="skills" class="py-12 px-4 bg-gray-900">
+            <h2 class="text-4xl text-orange-500 text-center mb-8">My Skills</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                <div class="bg-black p-6 rounded-lg text-center">
+                    <i class="fab fa-html5 text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 mb-2">HTML</h3>
+                    <div class="bg-gray-700 rounded h-2">
+                        <div class="bg-orange-500 h-2 rounded animate-grow" style="--progress: 95%;"></div>
+                    </div>
+                </div>
+                <div class="bg-black p-6 rounded-lg text-center">
+                    <i class="fab fa-css3-alt text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 mb-2">CSS</h3>
+                    <div class="bg-gray-700 rounded h-2">
+                        <div class="bg-orange-500 h-2 rounded animate-grow" style="--progress: 90%;"></div>
+                    </div>
+                </div>
+                <div class="bg-black p-6 rounded-lg text-center">
+                    <i class="fab fa-js-square text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 mb-2">JavaScript</h3>
+                    <div class="bg-gray-700 rounded h-2">
+                        <div class="bg-orange-500 h-2 rounded animate-grow" style="--progress: 85%;"></div>
+                    </div>
+                </div>
+                <div class="bg-black p-6 rounded-lg text-center">
+                    <i class="fab fa-python text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 mb-2">Python</h3>
+                    <div class="bg-gray-700 rounded h-2">
+                        <div class="bg-orange-500 h-2 rounded animate-grow" style="--progress: 80%;"></div>
+                    </div>
+                </div>
+                <div class="bg-black p-6 rounded-lg text-center">
+                    <i class="fab fa-java text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 mb-2">Java</h3>
+                    <div class="bg-gray-700 rounded h-2">
+                        <div class="bg-orange-500 h-2 rounded animate-grow" style="--progress: 85%;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <!-- Project 3: Panineria Grande Piramide -->
-        <div class="project-card">
-            <i class="fas fa-hamburger project-icon"></i>
-            <h3>Panineria Grande Piramide</h3>
-            <p>A fun and interactive website created for a sandwich shop. The theme is inspired by the Great Pyramid of Egypt, featuring a unique design and user-friendly navigation.</p>
-            <a href="https://onlyg4bb0.github.io/PanineriaLaGrandePiramideDegitto/" target="_blank">View Project</a>
-        </div>
-    </div>
-</section>
+        <!-- Projects Section -->
+        <section id="projects" class="py-12 px-4 bg-black">
+            <h2 class="text-4xl text-orange-500 text-center mb-8">My Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                <div class="bg-gray-800 p-6 rounded-lg text-center hover:scale-105 transition duration-300">
+                    <i class="fas fa-couch text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-2xl text-orange-500 mb-4">Luxury Sofà</h3>
+                    <p class="text-gray-300 mb-4">A modern and responsive website for a luxury furniture store, showcasing elegant designs and seamless navigation.</p>
+                    <a href="https://onlyg4bb0.github.io/Luxury-Sof-/" target="_blank" class="bg-orange-500 text-black px-6 py-2 rounded font-bold hover:bg-orange-600 transition duration-300">View Project</a>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg text-center hover:scale-105 transition duration-300">
+                    <i class="fas fa-cloud-sun text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-2xl text-orange-500 mb-4">Weatherflow</h3>
+                    <p class="text-gray-300 mb-4">A dynamic weather forecasting app built with Svelte and Python, offering real-time updates and a sleek interface.</p>
+                    <a href="https://onlyg4bb0.github.io/WeatherFlow/" target="_blank" class="bg-orange-500 text-black px-6 py-2 rounded font-bold hover:bg-orange-600 transition duration-300">View Project</a>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg text-center hover:scale-105 transition duration-300">
+                    <i class="fas fa-hamburger text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-2xl text-orange-500 mb-4">Panineria Grande Piramide</h3>
+                    <p class="text-gray-300 mb-4">A fun and interactive website for a sandwich shop, inspired by the Great Pyramid of Egypt.</p>
+                    <a href="https://onlyg4bb0.github.io/PanineriaLaGrandePiramideDegitto/" target="_blank" class="bg-orange-500 text-black px-6 py-2 rounded font-bold hover:bg-orange-600 transition duration-300">View Project</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="py-12 px-4 bg-gray-900">
+            <h2 class="text-4xl text-orange-500 text-center mb-8">What People Say</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                <div class="bg-black p-6 rounded-lg text-center">
+                    <i class="fas fa-quote-left text-2xl text-orange-500 mb-4"></i>
+                    <p class="text-gray-300 mb-4">"Gabriel is an exceptional developer. His attention to detail and creativity are unmatched!"</p>
+                    <p class="text-orange-500">- John Doe, CEO of Example Inc.</p>
+                </div>
+                <div class="bg-black p-6 rounded-lg text-center">
+                    <i class="fas fa-quote-left text-2xl text-orange-500 mb-4"></i>
+                    <p class="text-gray-300 mb-4">"Working with Gabriel was a pleasure. He delivered beyond our expectations."</p>
+                    <p class="text-orange-500">- Jane Smith, Founder of Startup XYZ</p>
+                </div>
+                <div class="bg-black p-6 rounded-lg text-center">
+                    <i class="fas fa-quote-left text-2xl text-orange-500 mb-4"></i>
+                    <p class="text-gray-300 mb-4">"Gabriel's expertise in web development is truly impressive. Highly recommended!"</p>
+                    <p class="text-orange-500">- Michael Brown, CTO of Tech Solutions</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Contact Section -->
-        <section id="contact">
-            <h2>Contact Me</h2>
-            <form action="mailto:gabrielelazzara67@gmail.com" method="post" enctype="text/plain">
-                <input type="text" name="name" placeholder="Your Name" required>
-                <input type="email" name="email" placeholder="Your Email" required>
-                <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-                <button type="submit">Send Message</button>
+        <section id="contact" class="py-12 px-4 bg-black">
+            <h2 class="text-4xl text-orange-500 text-center mb-8">Contact Me</h2>
+            <form action="mailto:gabrielelazzara67@gmail.com" method="post" enctype="text/plain" class="max-w-lg mx-auto">
+                <input type="text" name="name" placeholder="Your Name" required class="w-full p-3 mb-4 bg-gray-700 text-white rounded">
+                <input type="email" name="email" placeholder="Your Email" required class="w-full p-3 mb-4 bg-gray-700 text-white rounded">
+                <textarea name="message" rows="5" placeholder="Your Message" required class="w-full p-3 mb-4 bg-gray-700 text-white rounded"></textarea>
+                <button type="submit" class="bg-orange-500 text-black px-6 py-3 rounded font-bold hover:bg-orange-600 transition duration-300">Send Message</button>
             </form>
         </section>
     </main>
 
-    <footer>
-        <p>© 2024 Gabriel. All Rights Reserved.</p>
+    <footer class="py-4 bg-gray-900 text-center">
+        <p class="text-gray-300">© 2024 Gabriel. All Rights Reserved.</p>
     </footer>
 
     <script>
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('open');
+        }
+
         // Smooth scroll for navigation links
         document.querySelectorAll('nav a').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -561,7 +241,7 @@
         });
 
         // Animate skill bars on scroll
-        const skillBars = document.querySelectorAll('.progress');
+        const skillBars = document.querySelectorAll('.animate-grow');
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
