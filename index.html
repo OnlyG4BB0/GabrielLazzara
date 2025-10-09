@@ -4,244 +4,629 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gabriel Fullstack Web</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Gabriel | Fullstack Web Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="https://uxwing.com/wp-content/themes/uxwing/download/web-app-development/div-coding-icon.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+        :root {
+            --primary: #f97316;
+            --primary-dark: #ea580c;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --gray-dark: #475569;
         }
-
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        /* Custom Animations */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
         @keyframes grow {
             0% { width: 0; }
             100% { width: var(--progress); }
         }
-
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes slideInLeft {
+            0% { opacity: 0; transform: translateX(-50px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInRight {
+            0% { opacity: 0; transform: translateX(50px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        
         .animate-fadeIn {
-            animation: fadeIn 2s ease-in-out;
+            animation: fadeIn 1s ease-out forwards;
         }
-
+        
         .animate-grow {
-            animation: grow 2s ease-in-out forwards;
+            animation: grow 1.5s ease-out forwards;
         }
-
+        
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        .animate-slideInLeft {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+        
+        .animate-slideInRight {
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 10, 0.8);
+            border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+        }
+        
+        .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Section Styles */
+        .section {
+            position: relative;
+            padding: 6rem 1rem;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        /* Card Styles */
+        .card {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.8), rgba(15, 15, 15, 0.9));
+            border: 1px solid rgba(249, 115, 22, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(249, 115, 22, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .card:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.15);
+            border-color: rgba(249, 115, 22, 0.3);
+        }
+        
+        /* Skill Bars Styles */
+        .skill-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .skill-progress {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            position: relative;
+            width: 0;
+        }
+        
+        .skill-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Contact Form Styles */
+        .form-input {
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            border-radius: 8px;
+            color: var(--light);
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+        }
+        
+        /* Button Styles */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(249, 115, 22, 0.4);
+        }
+        
+        /* Hamburger Menu Styles */
         .hamburger-menu {
             display: none;
+            cursor: pointer;
         }
-
+        
+        .hamburger-menu span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            margin: 5px 0;
+            background-color: var(--light);
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .hamburger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+        
+        .nav-links {
+            display: flex;
+        }
+        
         @media (max-width: 768px) {
             .hamburger-menu {
                 display: block;
             }
-
+            
             .nav-links {
                 display: none;
                 flex-direction: column;
                 position: absolute;
-                top: 60px;
+                top: 100%;
                 left: 0;
                 width: 100%;
-                background: rgba(10, 10, 10, 0.9);
-                padding: 10px 0;
+                background: rgba(10, 10, 10, 0.95);
+                backdrop-filter: blur(10px);
+                padding: 1rem 0;
+                border-top: 1px solid rgba(249, 115, 22, 0.2);
             }
-
+            
             .nav-links.open {
                 display: flex;
             }
+            
+            .nav-link {
+                padding: 0.75rem 1.5rem;
+                width: 100%;
+                text-align: center;
+            }
         }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
+        
+        /* Decorative Particles */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(249, 115, 22, 0.1);
+            pointer-events: none;
+        }
+        
+        /* Background Pattern */
+        .bg-pattern {
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(249, 115, 22, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(249, 115, 22, 0.05) 0%, transparent 50%);
+            background-size: 50% 50%;
+            background-position: 0 0, 100% 100%;
+            background-repeat: no-repeat;
         }
     </style>
 </head>
 
-<body class="bg-black text-white">
-    <header class="fixed top-0 left-0 w-full bg-black bg-opacity-90 p-4 z-50 flex justify-between items-center">
-        <h1 class="text-orange-500 text-2xl font-semibold">G/L</h1>
-        <div class="hamburger-menu" onclick="toggleMenu()">
-            <i class="fas fa-bars text-white text-2xl cursor-pointer"></i>
+<body class="bg-darker">
+    <!-- Header -->
+    <header class="navbar fixed top-0 left-0 w-full p-4 z-50 flex justify-between items-center">
+        <div class="flex items-center">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center mr-3 animate-pulse-slow">
+                <span class="text-black font-bold">G</span>
+            </div>
+            <h1 class="text-xl font-bold">Gabriel<span class="text-orange-500">.</span></h1>
         </div>
+        
+        <div class="hamburger-menu" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
         <nav class="nav-links">
-            <a href="#hero" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">Home</a>
-            <a href="#about" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">About</a>
-            <a href="#services" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">Services</a>
-            <a href="#skills" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">Skills</a>
-            <a href="#projects" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">Projects</a>
-            <a href="#testimonials" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">Testimonials</a>
-            <a href="#contact" class="text-white px-3 py-2 rounded hover:bg-orange-500 hover:text-black transition duration-300">Contact</a>
+            <a href="#hero" class="nav-link text-white px-4 py-2 transition duration-300">Home</a>
+            <a href="#about" class="nav-link text-white px-4 py-2 transition duration-300">About</a>
+            <a href="#services" class="nav-link text-white px-4 py-2 transition duration-300">Services</a>
+            <a href="#skills" class="nav-link text-white px-4 py-2 transition duration-300">Skills</a>
+            <a href="#projects" class="nav-link text-white px-4 py-2 transition duration-300">Projects</a>
+            <a href="#contact" class="nav-link text-white px-4 py-2 transition duration-300">Contact</a>
         </nav>
     </header>
 
     <main>
         <!-- Hero Section -->
-        <section id="hero" class="h-screen flex flex-col justify-center items-center text-center bg-gradient-to-b from-black to-gray-900 animate-fadeIn">
-            <h1 class="text-5xl text-orange-500 mb-4">Welcome to My Portfolio</h1>
-            <p class="text-xl text-gray-300 mb-8">Crafting elegant solutions with code and creativity. Let's build something amazing together!</p>
-            <div class="flex gap-4">
-                <a href="#projects" class="bg-orange-500 text-black px-6 py-3 rounded font-bold hover:bg-orange-600 transition duration-300">View Projects</a>
-                <a href="#contact" class="border-2 border-orange-500 text-orange-500 px-6 py-3 rounded font-bold hover:bg-orange-500 hover:text-black transition duration-300">Contact Me</a>
+        <section id="hero" class="section bg-pattern min-h-screen flex flex-col justify-center items-center text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/80 to-darker/90 z-0"></div>
+            <div class="relative z-10 max-w-3xl mx-auto px-4 animate-fadeIn">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                    <span class="text-white">Fullstack</span>
+                    <span class="text-orange-500"> Developer</span>
+                </h1>
+                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                    I transform complex ideas into elegant and functional digital experiences. 
+                    I create innovative web solutions that combine captivating design and optimal performance.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#projects" class="btn-primary text-black px-8 py-3 rounded font-bold inline-block">View Projects</a>
+                    <a href="#contact" class="border-2 border-orange-500 text-orange-500 px-8 py-3 rounded font-bold hover:bg-orange-500 hover:text-black transition duration-300 inline-block">Contact Me</a>
+                </div>
+            </div>
+            
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+                <a href="#about" class="text-orange-500 text-2xl">
+                    <i class="fas fa-chevron-down"></i>
+                </a>
             </div>
         </section>
 
         <!-- About Section -->
-        <section id="about" class="py-12 px-4 max-w-4xl mx-auto text-center">
-            <h2 class="text-4xl text-orange-500 mb-6">About Me</h2>
-            <p class="text-lg text-gray-300">
-                Hi, I'm Gabriel, a passionate full-stack developer with a love for creating efficient, scalable, and visually stunning web applications. 
-                With over 5 years of experience in the tech industry, I specialize in turning complex ideas into user-friendly digital experiences. 
-                Whether it's building a responsive website or developing a robust backend system, I bring creativity and precision to every project.
-            </p>
+        <section id="about" class="section bg-darker">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="section-title text-4xl text-orange-500 text-center">About Me</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="animate-slideInLeft">
+                        <div class="card p-8">
+                            <p class="text-lg text-gray-300 mb-6">
+                                Hi, I'm <span class="text-orange-500 font-semibold">Gabriel</span>, a passionate full-stack developer with over 5 years of experience in the tech industry.
+                            </p>
+                            <p class="text-lg text-gray-300 mb-6">
+                                I specialize in creating efficient, scalable, and visually stunning web applications. 
+                                I believe in the power of clean code and the importance of a flawless user experience.
+                            </p>
+                            <p class="text-lg text-gray-300">
+                                Whether it's building a responsive website or developing a robust backend system, 
+                                I bring creativity and precision to every project.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="animate-slideInRight">
+                        <div class="relative">
+                            <div class="w-80 h-80 mx-auto bg-gradient-to-br from-orange-500 to-orange-700 rounded-full flex items-center justify-center animate-float">
+                                <div class="w-72 h-72 bg-darker rounded-full flex items-center justify-center">
+                                    <i class="fas fa-code text-6xl text-orange-500"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Services Section -->
-        <section id="services" class="py-12 px-4 bg-black">
-            <h2 class="text-4xl text-orange-500 text-center mb-8">Services I Offer</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                <div class="bg-gray-800 p-6 rounded-lg text-center">
-                    <i class="fas fa-code text-4xl text-orange-500 mb-4"></i>
-                    <h3 class="text-xl text-orange-500 mb-2">Web Development</h3>
-                    <p class="text-gray-300">From simple landing pages to complex web applications, I build solutions tailored to your needs.</p>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg text-center">
-                    <i class="fas fa-mobile-alt text-4xl text-orange-500 mb-4"></i>
-                    <h3 class="text-xl text-orange-500 mb-2">Mobile Development</h3>
-                    <p class="text-gray-300">Creating cross-platform mobile apps that deliver seamless user experiences.</p>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg text-center">
-                    <i class="fas fa-paint-brush text-4xl text-orange-500 mb-4"></i>
-                    <h3 class="text-xl text-orange-500 mb-2">UI/UX Design</h3>
-                    <p class="text-gray-300">Designing intuitive and visually appealing interfaces that users love.</p>
+        <section id="services" class="section bg-pattern">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="section-title text-4xl text-orange-500 text-center">Services I Offer</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="card p-6 text-center animate-fadeIn" style="animation-delay: 0.1s">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-orange-500 to-orange-700 rounded-full flex items-center justify-center">
+                            <i class="fas fa-code text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl text-orange-500 mb-4">Web Development</h3>
+                        <p class="text-gray-300">
+                            From simple landing pages to complex web applications, I build solutions tailored to your needs.
+                        </p>
+                    </div>
+                    <div class="card p-6 text-center animate-fadeIn" style="animation-delay: 0.2s">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-orange-500 to-orange-700 rounded-full flex items-center justify-center">
+                            <i class="fas fa-mobile-alt text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl text-orange-500 mb-4">Mobile Development</h3>
+                        <p class="text-gray-300">
+                            Creating cross-platform mobile apps that deliver seamless user experiences across all devices.
+                        </p>
+                    </div>
+                    <div class="card p-6 text-center animate-fadeIn" style="animation-delay: 0.3s">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-orange-500 to-orange-700 rounded-full flex items-center justify-center">
+                            <i class="fas fa-paint-brush text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl text-orange-500 mb-4">UI/UX Design</h3>
+                        <p class="text-gray-300">
+                            Designing intuitive and visually appealing interfaces that users love to interact with.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Skills Section -->
-        <section id="skills" class="py-12 px-4 bg-gray-900">
-            <h2 class="text-4xl text-orange-500 text-center mb-8">My Skills</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                <div class="bg-black p-6 rounded-lg text-center">
-                    <i class="fab fa-html5 text-4xl text-orange-500 mb-4"></i>
-                    <h3 class="text-xl text-orange-500 mb-2">HTML</h3>
-                    <div class="bg-gray-700 rounded h-2">
-                        <div class="bg-orange-500 h-2 rounded animate-grow" style="--progress: 95%;"></div>
+        <section id="skills" class="section bg-darker">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="section-title text-4xl text-orange-500 text-center">My Skills</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card p-6 animate-fadeIn" style="animation-delay: 0.1s">
+                        <div class="flex items-center mb-4">
+                            <i class="fab fa-html5 text-3xl text-orange-500 mr-3"></i>
+                            <h3 class="text-xl text-orange-500">HTML</h3>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 95%"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="bg-black p-6 rounded-lg text-center">
-                    <i class="fab fa-css3-alt text-4xl text-orange-500 mb-4"></i>
-                    <h3 class="text-xl text-orange-500 mb-2">CSS</h3>
-                    <div class="bg-gray-700 rounded h-2">
-                        <div class="bg-orange-500 h-2 rounded animate-grow" style="--progress: 90%;"></div>
+                    <div class="card p-6 animate-fadeIn" style="animation-delay: 0.2s">
+                        <div class="flex items-center mb-4">
+                            <i class="fab fa-css3-alt text-3xl text-orange-500 mr-3"></i>
+                            <h3 class="text-xl text-orange-500">CSS</h3>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 90%"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="bg-black p-6 rounded-lg text-center">
-                    <i class="fab fa-js-square text-4xl text-orange-500 mb-4"></i>
-                    <h3 class="text-xl text-orange-500 mb-2">JavaScript</h3>
-                    <div class="bg-gray-700 rounded h-2">
-                        <div class="bg-orange-500 h-2 rounded animate-grow" style="--progress: 85%;"></div>
+                    <div class="card p-6 animate-fadeIn" style="animation-delay: 0.3s">
+                        <div class="flex items-center mb-4">
+                            <i class="fab fa-js-square text-3xl text-orange-500 mr-3"></i>
+                            <h3 class="text-xl text-orange-500">JavaScript</h3>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 85%"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="bg-black p-6 rounded-lg text-center">
-                    <i class="fab fa-python text-4xl text-orange-500 mb-4"></i>
-                    <h3 class="text-xl text-orange-500 mb-2">Python</h3>
-                    <div class="bg-gray-700 rounded h-2">
-                        <div class="bg-orange-500 h-2 rounded animate-grow" style="--progress: 80%;"></div>
+                    <div class="card p-6 animate-fadeIn" style="animation-delay: 0.4s">
+                        <div class="flex items-center mb-4">
+                            <i class="fab fa-python text-3xl text-orange-500 mr-3"></i>
+                            <h3 class="text-xl text-orange-500">Python</h3>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 80%"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="bg-black p-6 rounded-lg text-center">
-                    <i class="fab fa-java text-4xl text-orange-500 mb-4"></i>
-                    <h3 class="text-xl text-orange-500 mb-2">Java</h3>
-                    <div class="bg-gray-700 rounded h-2">
-                        <div class="bg-orange-500 h-2 rounded animate-grow" style="--progress: 85%;"></div>
+                    <div class="card p-6 animate-fadeIn" style="animation-delay: 0.5s">
+                        <div class="flex items-center mb-4">
+                            <i class="fab fa-java text-3xl text-orange-500 mr-3"></i>
+                            <h3 class="text-xl text-orange-500">Java</h3>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="card p-6 animate-fadeIn" style="animation-delay: 0.6s">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-database text-3xl text-orange-500 mr-3"></i>
+                            <h3 class="text-xl text-orange-500">Database</h3>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 75%"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Projects Section -->
-        <section id="projects" class="py-12 px-4 bg-black">
-            <h2 class="text-4xl text-orange-500 text-center mb-8">My Projects</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                <div class="bg-gray-800 p-6 rounded-lg text-center hover:scale-105 transition duration-300">
-                    <i class="fas fa-couch text-4xl text-orange-500 mb-4"></i>
-                    <h3 class="text-2xl text-orange-500 mb-4">Luxury Sofà</h3>
-                    <p class="text-gray-300 mb-4">A modern and responsive website for a luxury furniture store, showcasing elegant designs and seamless navigation.</p>
-                    <a href="https://onlyg4bb0.github.io/Luxury-Sof-/" target="_blank" class="bg-orange-500 text-black px-6 py-2 rounded font-bold hover:bg-orange-600 transition duration-300">View Project</a>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg text-center hover:scale-105 transition duration-300">
-                    <i class="fas fa-cloud-sun text-4xl text-orange-500 mb-4"></i>
-                    <h3 class="text-2xl text-orange-500 mb-4">Weatherflow</h3>
-                    <p class="text-gray-300 mb-4">A dynamic weather forecasting app built with Svelte and Python, offering real-time updates and a sleek interface.</p>
-                    <a href="https://onlyg4bb0.github.io/WeatherFlow/" target="_blank" class="bg-orange-500 text-black px-6 py-2 rounded font-bold hover:bg-orange-600 transition duration-300">View Project</a>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg text-center hover:scale-105 transition duration-300">
-                    <i class="fas fa-hamburger text-4xl text-orange-500 mb-4"></i>
-                    <h3 class="text-2xl text-orange-500 mb-4">Panineria Grande Piramide</h3>
-                    <p class="text-gray-300 mb-4">A fun and interactive website for a sandwich shop, inspired by the Great Pyramid of Egypt.</p>
-                    <a href="https://onlyg4bb0.github.io/PanineriaLaGrandePiramideDegitto/" target="_blank" class="bg-orange-500 text-black px-6 py-2 rounded font-bold hover:bg-orange-600 transition duration-300">View Project</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Testimonials Section -->
-        <section id="testimonials" class="py-12 px-4 bg-gray-900">
-            <h2 class="text-4xl text-orange-500 text-center mb-8">What People Say</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                <div class="bg-black p-6 rounded-lg text-center">
-                    <i class="fas fa-quote-left text-2xl text-orange-500 mb-4"></i>
-                    <p class="text-gray-300 mb-4">"Gabriel is an exceptional developer. His attention to detail and creativity are unmatched!"</p>
-                    <p class="text-orange-500">- John Doe, CEO of Example Inc.</p>
-                </div>
-                <div class="bg-black p-6 rounded-lg text-center">
-                    <i class="fas fa-quote-left text-2xl text-orange-500 mb-4"></i>
-                    <p class="text-gray-300 mb-4">"Working with Gabriel was a pleasure. He delivered beyond our expectations."</p>
-                    <p class="text-orange-500">- Jane Smith, Founder of Startup XYZ</p>
-                </div>
-                <div class="bg-black p-6 rounded-lg text-center">
-                    <i class="fas fa-quote-left text-2xl text-orange-500 mb-4"></i>
-                    <p class="text-gray-300 mb-4">"Gabriel's expertise in web development is truly impressive. Highly recommended!"</p>
-                    <p class="text-orange-500">- Michael Brown, CTO of Tech Solutions</p>
+        <section id="projects" class="section bg-pattern">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="section-title text-4xl text-orange-500 text-center">My Projects</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="card p-6 text-center animate-fadeIn" style="animation-delay: 0.1s">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-orange-500 to-orange-700 rounded-full flex items-center justify-center">
+                            <i class="fas fa-couch text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl text-orange-500 mb-4">Luxury Sofà</h3>
+                        <p class="text-gray-300 mb-4">
+                            A modern and responsive website for a luxury furniture store, showcasing elegant designs and seamless navigation.
+                        </p>
+                        <a href="https://onlyg4bb0.github.io/Luxury-Sof-/" target="_blank" class="btn-primary text-black px-6 py-2 rounded font-bold inline-block">View Project</a>
+                    </div>
+                    <div class="card p-6 text-center animate-fadeIn" style="animation-delay: 0.2s">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-orange-500 to-orange-700 rounded-full flex items-center justify-center">
+                            <i class="fas fa-cloud-sun text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl text-orange-500 mb-4">Weatherflow</h3>
+                        <p class="text-gray-300 mb-4">
+                            A dynamic weather forecasting app built with Svelte and Python, offering real-time updates and a sleek interface.
+                        </p>
+                        <a href="https://onlyg4bb0.github.io/WeatherFlow/" target="_blank" class="btn-primary text-black px-6 py-2 rounded font-bold inline-block">View Project</a>
+                    </div>
+                    <div class="card p-6 text-center animate-fadeIn" style="animation-delay: 0.3s">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-orange-500 to-orange-700 rounded-full flex items-center justify-center">
+                            <i class="fas fa-hamburger text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl text-orange-500 mb-4">Panineria Grande Piramide</h3>
+                        <p class="text-gray-300 mb-4">
+                            A fun and interactive website for a sandwich shop, inspired by the Great Pyramid of Egypt.
+                        </p>
+                        <a href="https://onlyg4bb0.github.io/PanineriaLaGrandePiramideDegitto/" target="_blank" class="btn-primary text-black px-6 py-2 rounded font-bold inline-block">View Project</a>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-12 px-4 bg-black">
-            <h2 class="text-4xl text-orange-500 text-center mb-8">Contact Me</h2>
-            <form action="mailto:gabrielelazzara67@gmail.com" method="post" enctype="text/plain" class="max-w-lg mx-auto">
-                <input type="text" name="name" placeholder="Your Name" required class="w-full p-3 mb-4 bg-gray-700 text-white rounded">
-                <input type="email" name="email" placeholder="Your Email" required class="w-full p-3 mb-4 bg-gray-700 text-white rounded">
-                <textarea name="message" rows="5" placeholder="Your Message" required class="w-full p-3 mb-4 bg-gray-700 text-white rounded"></textarea>
-                <button type="submit" class="bg-orange-500 text-black px-6 py-3 rounded font-bold hover:bg-orange-600 transition duration-300">Send Message</button>
-            </form>
+        <section id="contact" class="section bg-darker">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="section-title text-4xl text-orange-500 text-center">Contact Me</h2>
+                <p class="text-lg text-gray-300 text-center mb-8 max-w-2xl mx-auto">
+                    Have a project idea? Want to collaborate? Don't hesitate to get in touch!
+                </p>
+                <form action="mailto:gabrielelazzara67@gmail.com" method="post" enctype="text/plain" class="card p-8">
+                    <div class="mb-6">
+                        <input type="text" name="name" placeholder="Your Name" required class="form-input w-full p-4">
+                    </div>
+                    <div class="mb-6">
+                        <input type="email" name="email" placeholder="Your Email" required class="form-input w-full p-4">
+                    </div>
+                    <div class="mb-6">
+                        <textarea name="message" rows="5" placeholder="Your Message" required class="form-input w-full p-4"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary text-black px-8 py-4 rounded font-bold w-full">Send Message</button>
+                </form>
+            </div>
         </section>
     </main>
 
-    <footer class="py-4 bg-gray-900 text-center">
-        <p class="text-gray-300">© 2024 Gabriel. All Rights Reserved.</p>
+    <footer class="py-8 bg-gradient-to-r from-black to-darker text-center border-t border-orange-500/20">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="https://www.instagram.com/gabriel_lazzara_/" target="_blank" class="text-gray-400 hover:text-orange-500 transition duration-300 text-xl">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.youtube.com/@ONLY_G4BB0" target="_blank" class="text-gray-400 hover:text-orange-500 transition duration-300 text-xl">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="https://github.com/OnlyG4BB0" target="_blank" class="text-gray-400 hover:text-orange-500 transition duration-300 text-xl">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+            <p class="text-gray-400">© 2024 Gabriel. All Rights Reserved.</p>
+        </div>
     </footer>
 
     <script>
+        // Hamburger menu
         function toggleMenu() {
             const navLinks = document.querySelector('.nav-links');
+            const hamburger = document.querySelector('.hamburger-menu');
             navLinks.classList.toggle('open');
+            hamburger.classList.toggle('active');
         }
 
         // Smooth scroll for navigation links
         document.querySelectorAll('nav a').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    // Close mobile menu if open
+                    const navLinks = document.querySelector('.nav-links');
+                    const hamburger = document.querySelector('.hamburger-menu');
+                    if (navLinks.classList.contains('open')) {
+                        navLinks.classList.remove('open');
+                        hamburger.classList.remove('active');
+                    }
+                    
+                    // Scroll to section
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
 
-        // Animate skill bars on scroll
-        const skillBars = document.querySelectorAll('.animate-grow');
+        // Skill bars animation on scroll
+        const skillBars = document.querySelectorAll('.skill-progress');
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -249,11 +634,62 @@
                     progress.style.width = progress.style.getPropertyValue('--progress');
                 }
             });
-        });
+        }, { threshold: 0.5 });
 
         skillBars.forEach(bar => {
             observer.observe(bar);
         });
+
+        // Fade-in animation for elements on scroll
+        const animatedElements = document.querySelectorAll('.animate-fadeIn, .animate-slideInLeft, .animate-slideInRight');
+        const fadeObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                    fadeObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        animatedElements.forEach(el => {
+            // Set animation to paused initially
+            el.style.animationPlayState = 'paused';
+            fadeObserver.observe(el);
+        });
+
+        // Decorative particles
+        function createParticles() {
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'particles-container';
+            particlesContainer.style.position = 'fixed';
+            particlesContainer.style.top = '0';
+            particlesContainer.style.left = '0';
+            particlesContainer.style.width = '100%';
+            particlesContainer.style.height = '100%';
+            particlesContainer.style.pointerEvents = 'none';
+            particlesContainer.style.zIndex = '1';
+            document.body.appendChild(particlesContainer);
+
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 6 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                particle.style.animation = `float ${Math.random() * 10 + 10}s infinite ease-in-out`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize particles when page loads
+        window.addEventListener('load', createParticles);
     </script>
 </body>
 
