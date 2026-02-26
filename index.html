@@ -177,7 +177,6 @@
             <a href="#projects" data-i18n="nav_projects" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Progetti</a>
             <a href="#contact" data-i18n="nav_contact" class="mobile-link text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 mt-4">Contattami</a>
         </div>
-    </header>
 
     <main class="pt-24 md:pt-32 px-4 md:px-8 max-w-7xl mx-auto flex flex-col gap-24 md:gap-40 pb-20">
 
@@ -485,7 +484,8 @@
                     </p>
                 </div>
                 
-                <form id="contact-form" class="space-y-6 relative z-10">
+                <!-- Email integration -->
+                <form id="contact-form" action="mailto:gabrielelazzara67@gmail.com" method="post" enctype="text/plain" class="space-y-6 relative z-10">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label data-i18n="form_name" class="text-sm font-medium text-gray-300 ml-2">Il tuo Nome</label>
@@ -569,8 +569,7 @@
                 form_name: "Il tuo Nome", form_email: "La tua Email", form_msg: "Il tuo Messaggio",
                 form_name_ph: "Mario Rossi", form_email_ph: "mario@example.com", form_msg_ph: "Parlami del tuo progetto...",
                 form_btn: "Invia Messaggio",
-                footer_credits: "Progettato e sviluppato con <i class='fas fa-heart text-purple-500 mx-1'></i> da Gabriel Lazzara.<br>&copy; 2026 Tutti i diritti riservati.",
-                telegram_opening: "Apertura Telegram..."
+                footer_credits: "Progettato e sviluppato con <i class='fas fa-heart text-purple-500 mx-1'></i> da Gabriel Lazzara.<br>&copy; 2026 Tutti i diritti riservati."
             },
             en: {
                 nav_home: "Home", nav_about: "About", nav_services: "Services", nav_skills: "Skills", nav_projects: "Projects", nav_contact: "Let's Talk",
@@ -597,8 +596,7 @@
                 form_name: "Your Name", form_email: "Your Email", form_msg: "Your Message",
                 form_name_ph: "John Doe", form_email_ph: "john@example.com", form_msg_ph: "Tell me about your project...",
                 form_btn: "Send Message",
-                footer_credits: "Designed and developed with <i class='fas fa-heart text-purple-500 mx-1'></i> by Gabriel Lazzara.<br>&copy; 2026 All rights reserved.",
-                telegram_opening: "Opening Telegram..."
+                footer_credits: "Designed and developed with <i class='fas fa-heart text-purple-500 mx-1'></i> by Gabriel Lazzara.<br>&copy; 2026 All rights reserved."
             }
         };
 
@@ -628,7 +626,6 @@
                 this.setupSmoothScrolling();
                 this.setupIntersectionObservers();
                 this.setupScrollListener();
-                this.setupContactForm();
                 this.setupLanguageToggle();
                 this.applyLanguage(this.currentLang);
             }
@@ -778,38 +775,6 @@
                         }
                     });
                 });
-            }
-
-            // --- 6. Integrazione Telegram ---
-            setupContactForm() {
-                const contactForm = document.getElementById('contact-form');
-                if (contactForm) {
-                    contactForm.addEventListener('submit', (e) => {
-                        e.preventDefault(); 
-                        
-                        const name = contactForm.querySelector('input[name="name"]').value;
-                        const email = contactForm.querySelector('input[name="email"]').value;
-                        const message = contactForm.querySelector('textarea[name="message"]').value;
-                        
-                        const text = this.currentLang === 'it' 
-                            ? `👋 *Nuovo messaggio dal Portfolio!*\n\n👤 *Nome:* ${name}\n📧 *Email:* ${email}\n\n💬 *Messaggio:*\n${message}`
-                            : `👋 *New message from Portfolio!*\n\n👤 *Name:* ${name}\n📧 *Email:* ${email}\n\n💬 *Message:*\n${message}`;
-                        
-                        const encodedText = encodeURIComponent(text);
-                        const telegramUrl = `https://t.me/ONLY_G4BB0?text=${encodedText}`;
-                        
-                        window.location.href = telegramUrl;
-                        
-                        const btn = contactForm.querySelector('button[type="submit"]');
-                        const originalHtml = btn.innerHTML;
-                        btn.innerHTML = `${translations[this.currentLang].telegram_opening} <i class='fab fa-telegram-plane ml-1'></i>`;
-                        
-                        setTimeout(() => {
-                            btn.innerHTML = originalHtml;
-                            contactForm.reset();
-                        }, 3000);
-                    });
-                }
             }
         }
 
