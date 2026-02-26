@@ -106,10 +106,11 @@
             transform: translateY(0);
         }
         
-        .hamburger-line { transition: all 0.3s ease; transform-origin: left; }
-        .menu-open .line-1 { transform: rotate(45deg); }
-        .menu-open .line-2 { opacity: 0; }
-        .menu-open .line-3 { transform: rotate(-45deg); }
+        /* Menu Hamburger animato (Migliorato per formare una X perfetta) */
+        .hamburger-line { transition: all 0.3s ease-in-out; }
+        .menu-open .line-1 { transform: translateY(8px) rotate(45deg); }
+        .menu-open .line-2 { opacity: 0; transform: translateX(-10px); }
+        .menu-open .line-3 { transform: translateY(-8px) rotate(-45deg); }
     </style>
 </head>
 
@@ -160,23 +161,23 @@
                 <span class="lang-en-text text-gray-400 text-sm">EN</span>
             </button>
             
-            <button id="mobile-menu-btn" class="lg:hidden w-8 h-8 flex flex-col justify-center gap-1.5 z-50">
-                <div class="w-full h-0.5 bg-white hamburger-line line-1"></div>
-                <div class="w-full h-0.5 bg-white hamburger-line line-2"></div>
-                <div class="w-full h-0.5 bg-white hamburger-line line-3"></div>
+            <button id="mobile-menu-btn" class="lg:hidden w-8 h-8 flex flex-col justify-center gap-1.5 z-50 relative cursor-pointer">
+                <span class="w-full h-0.5 bg-white hamburger-line line-1 rounded-full"></span>
+                <span class="w-full h-0.5 bg-white hamburger-line line-2 rounded-full"></span>
+                <span class="w-full h-0.5 bg-white hamburger-line line-3 rounded-full"></span>
             </button>
         </div>
     </header>
 
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="fixed inset-0 glass-panel bg-dark/80 backdrop-blur-xl flex-col items-center justify-center gap-8 z-40 hidden opacity-0 transition-opacity duration-300">
-            <a href="#hero" data-i18n="nav_home" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Home</a>
-            <a href="#about" data-i18n="nav_about" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">About</a>
-            <a href="#services" data-i18n="nav_services" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Servizi</a>
-            <a href="#skills" data-i18n="nav_skills" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Skills</a>
-            <a href="#projects" data-i18n="nav_projects" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Progetti</a>
-            <a href="#contact" data-i18n="nav_contact" class="mobile-link text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 mt-4">Contattami</a>
-        </div>
+    <!-- Mobile Menu (Aggiunto pt-20 per non finire sotto la navbar) -->
+    <div id="mobile-menu" class="fixed inset-0 glass-panel bg-dark/90 backdrop-blur-2xl flex-col items-center justify-center gap-8 z-40 hidden opacity-0 transition-opacity duration-300 pt-20">
+        <a href="#hero" data-i18n="nav_home" class="mobile-link text-3xl font-bold text-gray-300 hover:text-white hover:scale-110 transition-all">Home</a>
+        <a href="#about" data-i18n="nav_about" class="mobile-link text-3xl font-bold text-gray-300 hover:text-white hover:scale-110 transition-all">About</a>
+        <a href="#services" data-i18n="nav_services" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Servizi</a>
+        <a href="#skills" data-i18n="nav_skills" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Skills</a>
+        <a href="#projects" data-i18n="nav_projects" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Progetti</a>
+        <a href="#contact" data-i18n="nav_contact" class="mobile-link text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 mt-4">Contattami</a>
+    </div>
 
     <main class="pt-24 md:pt-32 px-4 md:px-8 max-w-7xl mx-auto flex flex-col gap-24 md:gap-40 pb-20">
 
@@ -210,7 +211,8 @@
                 </a>
             </div>
 
-            <div class="absolute bottom-0 animate-bounce reveal" style="transition-delay: 500ms;">
+            <!-- Freccia spostata: rimosso il posizionamento assoluto per evitare sovrapposizioni -->
+            <div class="mt-16 md:mt-24 animate-bounce reveal" style="transition-delay: 500ms;">
                 <a href="#about" class="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-purple-400 hover:text-white hover:bg-purple-600/50 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </a>
@@ -405,7 +407,6 @@
 
         <!-- Projects Section -->
         <section id="projects" class="scroll-mt-32">
-            <!-- Nuovo Titolo come richiesto -->
             <h2 data-i18n="proj_title" class="text-3xl md:text-5xl font-bold text-center mb-16 reveal">
                 Alcuni miei <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">design</span>
             </h2>
@@ -485,7 +486,7 @@
                 </div>
                 
                 <!-- Email integration -->
-                <form id="contact-form" action="mailto:gabrielelazzara67@gmail.com" method="post" enctype="text/plain" class="space-y-6 relative z-10">
+                <form id="contact-form" class="space-y-6 relative z-10">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label data-i18n="form_name" class="text-sm font-medium text-gray-300 ml-2">Il tuo Nome</label>
@@ -542,7 +543,7 @@
 
     <!-- JS & i18n Dictionary -->
     <script>
-        // --- Dizionario delle Traduzioni (Aggiornato) ---
+        // --- Dizionario delle Traduzioni ---
         const translations = {
             it: {
                 nav_home: "Home", nav_about: "About", nav_services: "Servizi", nav_skills: "Skills", nav_projects: "Progetti", nav_contact: "Contattami",
@@ -569,7 +570,8 @@
                 form_name: "Il tuo Nome", form_email: "La tua Email", form_msg: "Il tuo Messaggio",
                 form_name_ph: "Mario Rossi", form_email_ph: "mario@example.com", form_msg_ph: "Parlami del tuo progetto...",
                 form_btn: "Invia Messaggio",
-                footer_credits: "Progettato e sviluppato con <i class='fas fa-heart text-purple-500 mx-1'></i> da Gabriel Lazzara.<br>&copy; 2026 Tutti i diritti riservati."
+                footer_credits: "Progettato e sviluppato con <i class='fas fa-heart text-purple-500 mx-1'></i> da Gabriel Lazzara.<br>&copy; 2026 Tutti i diritti riservati.",
+                email_opening: "Apertura App Email..."
             },
             en: {
                 nav_home: "Home", nav_about: "About", nav_services: "Services", nav_skills: "Skills", nav_projects: "Projects", nav_contact: "Let's Talk",
@@ -596,7 +598,8 @@
                 form_name: "Your Name", form_email: "Your Email", form_msg: "Your Message",
                 form_name_ph: "John Doe", form_email_ph: "john@example.com", form_msg_ph: "Tell me about your project...",
                 form_btn: "Send Message",
-                footer_credits: "Designed and developed with <i class='fas fa-heart text-purple-500 mx-1'></i> by Gabriel Lazzara.<br>&copy; 2026 All rights reserved."
+                footer_credits: "Designed and developed with <i class='fas fa-heart text-purple-500 mx-1'></i> by Gabriel Lazzara.<br>&copy; 2026 All rights reserved.",
+                email_opening: "Opening Email App..."
             }
         };
 
@@ -626,6 +629,7 @@
                 this.setupSmoothScrolling();
                 this.setupIntersectionObservers();
                 this.setupScrollListener();
+                this.setupContactForm();
                 this.setupLanguageToggle();
                 this.applyLanguage(this.currentLang);
             }
@@ -687,15 +691,17 @@
                 
                 if (this.isMenuOpen) {
                     this.mobileMenu.classList.remove('hidden');
+                    this.mobileMenu.classList.add('flex'); // Forza il layout flessibile centrato
                     setTimeout(() => {
                         this.mobileMenu.classList.remove('opacity-0');
-                        document.body.style.overflow = 'hidden'; 
+                        document.body.style.overflow = 'hidden'; // Blocca scroll pagina
                     }, 10);
                 } else {
                     this.mobileMenu.classList.add('opacity-0');
-                    document.body.style.overflow = ''; 
+                    document.body.style.overflow = ''; // Sblocca scroll pagina
                     setTimeout(() => {
                         this.mobileMenu.classList.add('hidden');
+                        this.mobileMenu.classList.remove('flex'); // Rimuovi il flex quando nascosto
                     }, 300); 
                 }
             }
@@ -715,7 +721,7 @@
                 });
             }
 
-            // --- 4. Observers ---
+            // --- 4. Observers (Ripristinati) ---
             setupIntersectionObservers() {
                 const revealObserver = new IntersectionObserver((entries, observer) => {
                     entries.forEach(entry => {
@@ -745,7 +751,7 @@
                 this.skillFills.forEach(bar => skillObserver.observe(bar));
             }
 
-            // --- 5. Eventi Scroll ---
+            // --- 5. Eventi Scroll (Ripristinati) ---
             setupScrollListener() {
                 window.addEventListener('scroll', () => {
                     if (window.scrollY > 50) {
@@ -775,6 +781,36 @@
                         }
                     });
                 });
+            }
+
+            // --- 6. Integrazione Email Nativa ---
+            setupContactForm() {
+                const contactForm = document.getElementById('contact-form');
+                if (contactForm) {
+                    contactForm.addEventListener('submit', (e) => {
+                        e.preventDefault(); 
+                        
+                        const name = contactForm.querySelector('input[name="name"]').value;
+                        const email = contactForm.querySelector('input[name="email"]').value;
+                        const message = contactForm.querySelector('textarea[name="message"]').value;
+                        
+                        const subject = encodeURIComponent(`Nuovo contatto dal Portfolio - ${name}`);
+                        const body = encodeURIComponent(`${message}\n\n---\nRispondi a: ${email}`);
+                        
+                        const mailtoUrl = `mailto:gabrielelazzara67@gmail.com?subject=${subject}&body=${body}`;
+                        
+                        window.location.href = mailtoUrl;
+                        
+                        const btn = contactForm.querySelector('button[type="submit"]');
+                        const originalHtml = btn.innerHTML;
+                        btn.innerHTML = `${translations[this.currentLang].email_opening} <i class='fas fa-envelope ml-1'></i>`;
+                        
+                        setTimeout(() => {
+                            btn.innerHTML = originalHtml;
+                            contactForm.reset();
+                        }, 3000);
+                    });
+                }
             }
         }
 
