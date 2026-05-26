@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it" class="scroll-smooth">
 
 <head>
@@ -84,6 +84,7 @@
                         'shimmer': 'shimmer 2.5s linear infinite',
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                        'marquee': 'marquee 28s linear infinite',
                     },
                     keyframes: {
                         blob: {
@@ -109,6 +110,10 @@
                         pulseGlow: {
                             '0%, 100%': { boxShadow: '0 0 15px rgba(168, 85, 247, 0.4)' },
                             '50%': { boxShadow: '0 0 35px rgba(168, 85, 247, 0.8)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
                         }
                     }
                 }
@@ -160,14 +165,12 @@
             </a>
         </div>
         
-        <nav class="hidden lg:flex gap-1 bg-white/5 p-1 rounded-full border border-white/10 backdrop-blur-md" aria-label="Navigazione principale">
-            <a href="#hero" data-i18n="nav_home" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all active-link truncate">Home</a>
-            <a href="#about" data-i18n="nav_about" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all truncate">About</a>
-            <a href="#services" data-i18n="nav_services" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all truncate">Servizi</a>
-            <a href="#process" data-i18n="nav_process" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all truncate">Processo</a>
-            <a href="#skills" data-i18n="nav_skills" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all truncate">Skills</a>
-            <a href="#projects" data-i18n="nav_projects" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all truncate">Progetti</a>
-            <a href="#contact" data-i18n="nav_contact" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all truncate">Contattami</a>
+        <nav class="hidden lg:flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/10 backdrop-blur-md" aria-label="Navigazione principale">
+            <a href="#hero" data-i18n="nav_home" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all active-link">Home</a>
+            <a href="#about" data-i18n="nav_about" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">About</a>
+            <a href="#projects" data-i18n="nav_work" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Lavori</a>
+            <a href="#case-study" data-i18n="nav_case" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Case study</a>
+            <a href="#contact" data-i18n="nav_cta" class="nav-link-cta ml-1 px-5 py-2 rounded-full text-sm font-semibold text-white btn-primary">Parliamone</a>
         </nav>
 
         <div class="flex-1 flex justify-end items-center gap-4">
@@ -186,13 +189,12 @@
     </header>
 
     <div id="mobile-menu" class="fixed inset-0 glass-panel bg-dark/90 backdrop-blur-2xl flex-col items-center justify-center gap-8 z-40 hidden opacity-0 transition-opacity duration-300 pt-20">
-        <a href="#hero" data-i18n="nav_home" class="mobile-link text-3xl font-bold text-gray-300 hover:text-white hover:scale-110 transition-all">Home</a>
-        <a href="#about" data-i18n="nav_about" class="mobile-link text-3xl font-bold text-gray-300 hover:text-white hover:scale-110 transition-all">About</a>
-        <a href="#services" data-i18n="nav_services" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Servizi</a>
-        <a href="#process" data-i18n="nav_process" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Processo</a>
-        <a href="#skills" data-i18n="nav_skills" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Skills</a>
-        <a href="#projects" data-i18n="nav_projects" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Progetti</a>
-        <a href="#contact" data-i18n="nav_contact" class="mobile-link text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 mt-4">Contattami</a>
+        <a href="#hero" data-i18n="nav_home" class="mobile-link text-3xl font-bold text-gray-300 hover:text-white transition-all">Home</a>
+        <a href="#about" data-i18n="nav_about" class="mobile-link text-3xl font-bold text-gray-300 hover:text-white transition-all">About</a>
+        <a href="#projects" data-i18n="nav_work" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 transition-all">Lavori</a>
+        <a href="#case-study" data-i18n="nav_case" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 transition-all">Case study</a>
+        <a href="#services" data-i18n="nav_services" class="mobile-link text-2xl font-semibold text-gray-500 hover:text-purple-300 transition-all">Servizi</a>
+        <a href="#contact" data-i18n="nav_cta" class="mobile-link text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 mt-4">Parliamone</a>
     </div>
 
     <main class="pt-24 md:pt-32 px-4 md:px-8 max-w-7xl mx-auto flex flex-col gap-24 md:gap-40 pb-20">
@@ -238,15 +240,15 @@
                     <div class="grid grid-cols-3 gap-3 mt-10 max-w-lg mx-auto lg:mx-0 reveal" style="transition-delay: 280ms;">
                         <div class="hero-stat">
                             <strong class="stat-value">3+</strong>
-                            <span data-i18n="hero_stat1">Progetti in evidenza</span>
+                            <span data-i18n="hero_stat1">Progetti live</span>
                         </div>
                         <div class="hero-stat">
-                            <strong class="stat-value">IT/EN</strong>
-                            <span data-i18n="hero_stat2">Siti multilingua</span>
+                            <strong class="stat-value">Full</strong>
+                            <span data-i18n="hero_stat2">Stack moderno</span>
                         </div>
                         <div class="hero-stat">
                             <strong class="stat-value">SEO</strong>
-                            <span data-i18n="hero_stat3">Pronto per Google</span>
+                            <span data-i18n="hero_stat3">SEO integrata</span>
                         </div>
                     </div>
                 </div>
@@ -276,6 +278,14 @@
                 </a>
             </div>
         </section>
+
+        <!-- Tech marquee -->
+        <div class="marquee-wrap reveal" aria-hidden="true">
+            <div class="marquee-track animate-marquee">
+                <span class="marquee-item">React</span><span class="marquee-item">JavaScript</span><span class="marquee-item">Python</span><span class="marquee-item">PHP</span><span class="marquee-item">Tailwind CSS</span><span class="marquee-item">Svelte</span><span class="marquee-item">SEO</span><span class="marquee-item">Schema.org</span><span class="marquee-item">GitHub Pages</span><span class="marquee-item">Oracle Cloud</span>
+                <span class="marquee-item">React</span><span class="marquee-item">JavaScript</span><span class="marquee-item">Python</span><span class="marquee-item">PHP</span><span class="marquee-item">Tailwind CSS</span><span class="marquee-item">Svelte</span><span class="marquee-item">SEO</span><span class="marquee-item">Schema.org</span><span class="marquee-item">GitHub Pages</span><span class="marquee-item">Oracle Cloud</span>
+            </div>
+        </div>
 
         <!-- About Section -->
         <section id="about" class="scroll-mt-32" aria-labelledby="about-heading">
@@ -339,43 +349,113 @@
             </div>
         </section>
 
-        <!-- Services Section -->
+        <!-- Values -->
+        <section id="values" class="scroll-mt-32" aria-labelledby="values-heading">
+            <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="values_eyebrow">Perché me</p>
+            <h2 id="values-heading" data-i18n="values_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Cosa porto al <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">tuo progetto</span></h2>
+            <p data-i18n="values_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-12 reveal">Non solo codice: strategia, cura del dettaglio e consegna pronta per il web.</p>
+            <div class="bento-grid">
+                <article class="bento-item bento-span-2 glass-panel glass-card spotlight-card p-8 rounded-3xl reveal">
+                    <i class="fas fa-bullseye text-3xl text-purple-400 mb-4"></i>
+                    <h3 data-i18n="val1_title" class="text-xl font-bold text-white mb-2">Orientato al business</h3>
+                    <p data-i18n="val1_desc" class="text-gray-400 text-sm leading-relaxed">Ogni sezione ha uno scopo: più contatti, prenotazioni o visibilità su Google Maps e ricerca locale.</p>
+                </article>
+                <article class="bento-item glass-panel glass-card spotlight-card p-8 rounded-3xl reveal" style="transition-delay: 80ms;">
+                    <i class="fas fa-mobile-screen text-3xl text-indigo-400 mb-4"></i>
+                    <h3 data-i18n="val2_title" class="text-xl font-bold text-white mb-2">Mobile-first</h3>
+                    <p data-i18n="val2_desc" class="text-gray-400 text-sm leading-relaxed">Layout, velocità e form ottimizzati per smartphone.</p>
+                </article>
+                <article class="bento-item glass-panel glass-card spotlight-card p-8 rounded-3xl reveal" style="transition-delay: 120ms;">
+                    <i class="fas fa-magnifying-glass-chart text-3xl text-sky-400 mb-4"></i>
+                    <h3 data-i18n="val3_title" class="text-xl font-bold text-white mb-2">SEO tecnica</h3>
+                    <p data-i18n="val3_desc" class="text-gray-400 text-sm leading-relaxed">Meta, Schema.org, sitemap e hreflang inclusi.</p>
+                </article>
+                <article class="bento-item bento-span-2 glass-panel glass-card spotlight-card p-8 rounded-3xl reveal" style="transition-delay: 160ms;">
+                    <i class="fas fa-rocket text-3xl text-fuchsia-400 mb-4"></i>
+                    <h3 data-i18n="val4_title" class="text-xl font-bold text-white mb-2">Consegna completa</h3>
+                    <p data-i18n="val4_desc" class="text-gray-400 text-sm leading-relaxed">Deploy, test su dispositivi reali e handoff: non ti lascio con file sparsi senza sito online.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Experience -->
+        <section id="experience" class="scroll-mt-32" aria-labelledby="exp-heading">
+            <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="exp_eyebrow">Percorso</p>
+            <h2 id="exp-heading" data-i18n="exp_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Esperienza & <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">formazione</span></h2>
+            <p data-i18n="exp_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-12 reveal">Crescita continua tra progetti cliente, open source e sperimentazione.</p>
+            <div class="timeline max-w-3xl mx-auto space-y-0">
+                <article class="timeline-item reveal">
+                    <span class="timeline-period" data-i18n="exp1_period">2024 — oggi</span>
+                    <h3 data-i18n="exp1_role" class="text-lg font-bold text-white mt-1">Full-Stack Developer · Freelance</h3>
+                    <p data-i18n="exp1_desc" class="text-gray-400 text-sm mt-2 leading-relaxed">Sviluppo siti e web app per clienti, side project su GitHub Pages e deploy su VPS cloud.</p>
+                </article>
+                <article class="timeline-item reveal" style="transition-delay: 100ms;">
+                    <span class="timeline-period" data-i18n="exp2_period">2022 — 2024</span>
+                    <h3 data-i18n="exp2_role" class="text-lg font-bold text-white mt-1">Sviluppo web & automazione</h3>
+                    <p data-i18n="exp2_desc" class="text-gray-400 text-sm mt-2 leading-relaxed">React, Python, PHP e UI moderne; Liquid Cube e Weatherflow per portfolio.</p>
+                </article>
+                <article class="timeline-item reveal" style="transition-delay: 200ms;">
+                    <span class="timeline-period" data-i18n="exp3_period">Foundations</span>
+                    <h3 data-i18n="exp3_role" class="text-lg font-bold text-white mt-1">Stack fondamentali</h3>
+                    <p data-i18n="exp3_desc" class="text-gray-400 text-sm mt-2 leading-relaxed">HTML, CSS, JavaScript, SQL, Git applicati a progetti reali.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Services Section (bento) -->
         <section id="services" class="scroll-mt-32" aria-labelledby="services-heading">
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="services_eyebrow">Servizi</p>
-            <h2 id="services-heading" data-i18n="services_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-16 reveal">
-                I Miei <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">Servizi</span>
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="glass-panel glass-card p-8 rounded-3xl text-center group reveal">
-                    <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-white/5 border border-purple-500/30 flex items-center justify-center group-hover:bg-purple-500/20 group-hover:scale-110 transition-all duration-300">
-                        <i class="fas fa-laptop-code text-4xl text-purple-400"></i>
-                    </div>
-                    <h3 data-i18n="srv1_title" class="text-2xl font-bold text-white mb-4">Web Development</h3>
-                    <p data-i18n="srv1_desc" class="text-gray-400 leading-relaxed text-sm md:text-base">
-                        Da semplici landing page a complesse web application, costruisco soluzioni su misura per le tue esigenze con le ultime tecnologie.
-                    </p>
-                </div>
-                
-                <div class="glass-panel glass-card p-8 rounded-3xl text-center group reveal" style="transition-delay: 150ms;">
-                    <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-white/5 border border-indigo-500/30 flex items-center justify-center group-hover:bg-indigo-500/20 group-hover:scale-110 transition-all duration-300">
-                        <i class="fas fa-mobile-alt text-4xl text-indigo-400"></i>
-                    </div>
-                    <h3 data-i18n="srv2_title" class="text-2xl font-bold text-white mb-4">Web responsive & PWA</h3>
-                    <p data-i18n="srv2_desc" class="text-gray-400 leading-relaxed text-sm md:text-base">
-                        Interfacce mobile-first, veloci e accessibili: il tuo sito funziona al meglio su smartphone, tablet e desktop senza app nativa separata.
-                    </p>
-                </div>
-                
-                <div class="glass-panel glass-card p-8 rounded-3xl text-center group reveal" style="transition-delay: 300ms;">
-                    <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-white/5 border border-fuchsia-500/30 flex items-center justify-center group-hover:bg-fuchsia-500/20 group-hover:scale-110 transition-all duration-300">
-                        <i class="fas fa-pen-nib text-4xl text-fuchsia-400"></i>
-                    </div>
-                    <h3 data-i18n="srv3_title" class="text-2xl font-bold text-white mb-4">UI/UX Design</h3>
-                    <p data-i18n="srv3_desc" class="text-gray-400 leading-relaxed text-sm md:text-base">
-                        Progetto interfacce intuitive e visivamente accattivanti, mettendo sempre l'utente al centro dell'esperienza digitale.
-                    </p>
-                </div>
+            <h2 id="services-heading" data-i18n="services_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Soluzioni <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">su misura</span></h2>
+            <p data-i18n="services_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-12 reveal">Dal sito vetrina alla web app: scegli il livello giusto per la tua attività.</p>
+            <div class="bento-grid bento-services">
+                <article class="bento-item bento-tall glass-panel glass-card spotlight-card p-8 rounded-3xl reveal">
+                    <i class="fas fa-laptop-code text-4xl text-purple-400 mb-5"></i>
+                    <h3 data-i18n="srv1_title" class="text-2xl font-bold text-white mb-3">Siti vetrina & landing</h3>
+                    <p data-i18n="srv1_desc" class="text-gray-400 text-sm leading-relaxed">Pagine ad alta conversione per presentare servizi, raccogliere lead e posizionarti su ricerche locali.</p>
+                </article>
+                <article class="bento-item glass-panel glass-card spotlight-card p-8 rounded-3xl reveal" style="transition-delay: 80ms;">
+                    <i class="fas fa-layer-group text-3xl text-indigo-400 mb-4"></i>
+                    <h3 data-i18n="srv2_title" class="text-xl font-bold text-white mb-2">Web app & dashboard</h3>
+                    <p data-i18n="srv2_desc" class="text-gray-400 text-sm leading-relaxed">React o Svelte, API e backend Python/PHP.</p>
+                </article>
+                <article class="bento-item glass-panel glass-card spotlight-card p-8 rounded-3xl reveal" style="transition-delay: 120ms;">
+                    <i class="fas fa-globe text-3xl text-sky-400 mb-4"></i>
+                    <h3 data-i18n="srv3_title" class="text-xl font-bold text-white mb-2">SEO & multilingua</h3>
+                    <p data-i18n="srv3_desc" class="text-gray-400 text-sm leading-relaxed">Hreflang, Schema.org e Search Console.</p>
+                </article>
+                <article class="bento-item glass-panel glass-card spotlight-card p-8 rounded-3xl reveal" style="transition-delay: 160ms;">
+                    <i class="fas fa-server text-3xl text-fuchsia-400 mb-4"></i>
+                    <h3 data-i18n="srv4_title" class="text-xl font-bold text-white mb-2">Deploy & manutenzione</h3>
+                    <p data-i18n="srv4_desc" class="text-gray-400 text-sm leading-relaxed">GitHub Pages, VPS cloud e aggiornamenti post-lancio.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Packages -->
+        <section id="packages" class="scroll-mt-32" aria-labelledby="packages-heading">
+            <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="pkg_eyebrow">Pacchetti</p>
+            <h2 id="packages-heading" data-i18n="pkg_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Trasparenza su <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">cosa include</span></h2>
+            <p data-i18n="pkg_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-12 reveal">Ogni progetto è diverso — preventivo personalizzato dopo un breve call.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <article class="pkg-card glass-panel glass-card spotlight-card p-8 rounded-3xl reveal flex flex-col">
+                    <h3 data-i18n="pkg1_name" class="text-xl font-bold text-white">Landing</h3>
+                    <p data-i18n="pkg1_price" class="text-3xl font-display font-bold gradient-text mt-2 mb-6">da €400</p>
+                    <ul data-i18n="pkg1_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc list-inside pkg-features"></ul>
+                    <a href="#contact" data-i18n="pkg_cta" class="block text-center py-3 rounded-xl border border-white/20 hover:bg-white/10 font-semibold transition-all">Chiedi preventivo</a>
+                </article>
+                <article class="pkg-card pkg-featured glass-panel spotlight-card p-8 rounded-3xl reveal flex flex-col border-purple-500/40" style="transition-delay: 100ms;">
+                    <span class="text-xs font-bold uppercase tracking-wider text-purple-300 mb-2">Popolare</span>
+                    <h3 data-i18n="pkg2_name" class="text-xl font-bold text-white">Sito business</h3>
+                    <p data-i18n="pkg2_price" class="text-3xl font-display font-bold gradient-text mt-2 mb-6">da €900</p>
+                    <ul data-i18n="pkg2_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc list-inside pkg-features"></ul>
+                    <a href="#contact" data-i18n="pkg_cta" class="btn-primary block text-center py-3 rounded-xl font-semibold text-white">Chiedi preventivo</a>
+                </article>
+                <article class="pkg-card glass-panel glass-card spotlight-card p-8 rounded-3xl reveal flex flex-col" style="transition-delay: 200ms;">
+                    <h3 data-i18n="pkg3_name" class="text-xl font-bold text-white">Web app / custom</h3>
+                    <p data-i18n="pkg3_price" class="text-3xl font-display font-bold gradient-text mt-2 mb-6">su preventivo</p>
+                    <ul data-i18n="pkg3_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc list-inside pkg-features"></ul>
+                    <a href="#contact" data-i18n="pkg_cta" class="block text-center py-3 rounded-xl border border-white/20 hover:bg-white/10 font-semibold transition-all">Chiedi preventivo</a>
+                </article>
             </div>
         </section>
 
@@ -446,19 +526,73 @@
             </div>
         </section>
 
+        <!-- Case Study -->
+        <section id="case-study" class="scroll-mt-32" aria-labelledby="case-heading">
+            <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="case_eyebrow">Case study</p>
+            <h2 id="case-heading" data-i18n="case_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Rent Boat <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">Mondello</span></h2>
+            <p data-i18n="case_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-12 reveal">Sito completo per noleggio gommoni ed escursioni — dal brief al deploy su VPS Oracle Cloud.</p>
+
+            <div class="case-study-grid">
+                <div class="case-visual reveal">
+                    <div class="case-mockup glass-panel rounded-3xl overflow-hidden border border-sky-500/20">
+                        <img src="https://onlyg4bb0.github.io/GabrielLazzara/assets/projects/rent-boat.jpg" alt="Screenshot Rent Boat Mondello" class="w-full h-64 md:h-80 object-cover" loading="lazy" width="800" height="500">
+                        <div class="p-6 border-t border-white/10">
+                            <p class="text-sky-300 text-sm font-semibold">rentboatmondello.it · VPS Oracle Cloud</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="case-content space-y-6 reveal" style="transition-delay: 120ms;">
+                    <article class="glass-panel p-6 rounded-2xl spotlight-card">
+                        <h3 data-i18n="case_challenge_title" class="font-bold text-white mb-2 flex items-center gap-2"><i class="fas fa-flag text-amber-400"></i> La sfida</h3>
+                        <p data-i18n="case_challenge" class="text-gray-400 text-sm leading-relaxed">Un'attività turistica a Mondello aveva bisogno di presenza online professionale: mostrare flotta e tour, farsi trovare su Google in più lingue e convertire visite in richieste.</p>
+                    </article>
+                    <article class="glass-panel p-6 rounded-2xl spotlight-card">
+                        <h3 data-i18n="case_solution_title" class="font-bold text-white mb-2 flex items-center gap-2"><i class="fas fa-lightbulb text-purple-400"></i> La soluzione</h3>
+                        <p data-i18n="case_solution" class="text-gray-400 text-sm leading-relaxed">Architettura PHP modulare, Tailwind, hreflang IT/EN/DE, Schema.org locale, form contatti e deploy su VPS.</p>
+                    </article>
+                    <div>
+                        <h3 data-i18n="case_result_title" class="font-bold text-white mb-4">Risultati</h3>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="case-metric glass-panel p-4 rounded-xl text-center">
+                                <strong data-i18n="case_m1" class="block text-sky-300 text-sm font-bold">Sito multilingua</strong>
+                                <span data-i18n="case_m1d" class="text-xs text-gray-500">IT · EN · DE</span>
+                            </div>
+                            <div class="case-metric glass-panel p-4 rounded-xl text-center">
+                                <strong data-i18n="case_m2" class="block text-purple-300 text-sm font-bold">SEO locale</strong>
+                                <span data-i18n="case_m2d" class="text-xs text-gray-500">Schema + hreflang</span>
+                            </div>
+                            <div class="case-metric glass-panel p-4 rounded-xl text-center">
+                                <strong data-i18n="case_m3" class="block text-indigo-300 text-sm font-bold">Deploy VPS</strong>
+                                <span data-i18n="case_m3d" class="text-xs text-gray-500">Oracle Cloud</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="http://130.110.2.57/index.php" target="_blank" rel="noopener noreferrer" class="btn-primary flex-1 py-3 rounded-xl text-center font-semibold text-white"><span data-i18n="case_link">Visita il sito live</span> <i class="fas fa-external-link-alt ml-1 text-sm"></i></a>
+                        <a href="#projects" class="flex-1 py-3 rounded-xl glass-panel border border-white/15 text-center font-semibold text-gray-300 hover:text-white transition-all" data-i18n="case_read">Vedi anche nei progetti</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Projects Section -->
         <section id="projects" class="scroll-mt-32" aria-labelledby="projects-heading">
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="proj_eyebrow">Portfolio</p>
-            <h2 id="projects-heading" data-i18n="proj_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-6 reveal">
-                Progetti <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">selezionati</span>
+            <h2 id="projects-heading" data-i18n="proj_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">
+                Tutti i <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">lavori</span>
             </h2>
-            <p data-i18n="proj_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-16 reveal">Lavori reali e side project: stack, ruolo e link al demo live.</p>
+            <p data-i18n="proj_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-8 reveal">Filtra per tipo: progetti cliente e side project open source.</p>
+
+            <div class="project-filters flex flex-wrap justify-center gap-2 mb-12 reveal" role="tablist" aria-label="Filtra progetti">
+                <button type="button" data-project-filter="all" class="filter-btn filter-active" data-i18n="filter_all">Tutti</button>
+                <button type="button" data-project-filter="client" class="filter-btn" data-i18n="filter_client">Cliente</button>
+                <button type="button" data-project-filter="side" class="filter-btn" data-i18n="filter_side">Side project</button>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Rent Boat Mondello - Cliente (in evidenza) -->
-                <article class="project-featured glass-panel glass-card rounded-3xl overflow-hidden reveal group">
-                    <div class="project-featured-inner flex flex-col h-full">
-                    <div class="project-thumb h-56 lg:h-auto relative overflow-hidden bg-sky-950">
+            <div class="projects-bento">
+                <!-- Rent Boat Mondello -->
+                <article data-project-category="client" class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group project-card">
+                    <div class="project-thumb h-56 relative overflow-hidden bg-sky-950">
                         <img src="https://onlyg4bb0.github.io/GabrielLazzara/assets/projects/rent-boat.jpg" alt="Rent Boat Mondello — escursioni in barca a Mondello" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';">
                         <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent z-10"></div>
                         <span data-i18n="tag_client" class="absolute top-4 left-4 z-20 px-3 py-1 bg-sky-500/30 text-sky-200 backdrop-blur-md rounded-full text-xs font-bold border border-sky-400/40">Progetto cliente</span>
@@ -483,10 +617,9 @@
                             </a>
                         </div>
                     </div>
-                    </div>
                 </article>
 
-                <article class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group" style="transition-delay: 150ms;">
+                <article data-project-category="side" class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group project-card" style="transition-delay: 150ms;">
                     <div class="project-thumb h-56 relative overflow-hidden bg-gradient-to-br from-purple-900 to-indigo-950">
                         <img src="https://onlyg4bb0.github.io/GabrielLazzara/assets/projects/liquid-cube.svg" alt="Anteprima progetto Liquid Cube" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';">
                         <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent z-10"></div>
@@ -512,7 +645,7 @@
                     </div>
                 </article>
                 
-                <article class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group" style="transition-delay: 300ms;">
+                <article data-project-category="side" class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group project-card" style="transition-delay: 300ms;">
                     <div class="project-thumb h-56 relative overflow-hidden bg-gradient-to-br from-indigo-900 to-slate-900">
                         <img src="https://onlyg4bb0.github.io/GabrielLazzara/assets/projects/weatherflow.svg" alt="Anteprima progetto Weatherflow" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';">
                         <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent z-10"></div>
@@ -657,9 +790,11 @@
                 <nav class="flex flex-col gap-2" aria-label="Link rapidi footer">
                     <span class="text-xs font-semibold uppercase tracking-wider text-purple-300 mb-1" data-i18n="footer_nav_label">Navigazione</span>
                     <a href="#about" class="footer-link" data-i18n="nav_about">About</a>
-                    <a href="#projects" class="footer-link" data-i18n="nav_projects">Progetti</a>
+                    <a href="#case-study" class="footer-link" data-i18n="nav_case">Case study</a>
+                    <a href="#projects" class="footer-link" data-i18n="nav_work">Lavori</a>
+                    <a href="#services" class="footer-link" data-i18n="nav_services">Servizi</a>
                     <a href="#faq" class="footer-link">FAQ</a>
-                    <a href="#contact" class="footer-link" data-i18n="nav_contact">Contattami</a>
+                    <a href="#contact" class="footer-link" data-i18n="nav_cta">Contatti</a>
                 </nav>
                 <div>
                     <span class="text-xs font-semibold uppercase tracking-wider text-purple-300 mb-3 block" data-i18n="footer_social_label">Social</span>
@@ -684,371 +819,7 @@
         </div>
     </footer>
 
-    <!-- JS & i18n Dictionary -->
-    <script>
-        // --- Dizionario delle Traduzioni ---
-        const translations = {
-            it: {
-                skip_main: "Vai al contenuto principale",
-                nav_home: "Home", nav_about: "About", nav_services: "Servizi", nav_process: "Processo", nav_skills: "Skills", nav_projects: "Progetti", nav_contact: "Contattami",
-                hero_badge: "Disponibile per nuovi progetti",
-                hero_eyebrow: "Portfolio · Palermo",
-                hero_role: "Sviluppatore Web Full-Stack",
-                hero_sub: "Palermo, Sicilia · Progetti per clienti e side project open source",
-                hero_desc: "Sviluppo siti e web app su misura — da landing page a progetti con prenotazioni, SEO locale e multilingua. UI curata, codice pulito, deploy su VPS o GitHub Pages.",
-                hero_stat1: "Progetti in evidenza", hero_stat2: "Siti multilingua", hero_stat3: "Pronto per Google",
-                hero_btn_projects: "Vedi i progetti", hero_btn_contact: "Contattami", hero_btn_github: "GitHub",
-                about_eyebrow: "Chi sono",
-                about_title: "Chi <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Sono</span>",
-                services_eyebrow: "Servizi",
-                process_eyebrow: "Metodo",
-                skills_eyebrow: "Competenze",
-                proj_eyebrow: "Portfolio",
-                faq_eyebrow: "FAQ",
-                about_p1: "Ciao, sono <span class='text-purple-400 font-bold'>Gabriel Lazzara</span>, full-stack developer con focus su siti professionali, web app interattive e progetti consegnati a clienti reali.",
-                about_p2: "Lavoro con <span class='text-white font-medium bg-white/10 px-2 py-1 rounded'>JavaScript · React · Python · PHP</span> e stack moderni (Tailwind, API REST, deploy su VPS e GitHub Pages). Ogni progetto parte da obiettivi chiari: visibilità online, conversioni e UX fluida su mobile.",
-                about_p3: "Dal prototipo al go-live: struttura SEO, performance, form di contatto e manutenzione. Esempio recente: sito completo per <span class='text-sky-300 font-medium'>Rent Boat Mondello</span> (noleggio barche, escursioni, prenotazioni).",
-                services_title: "I Miei <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Servizi</span>",
-                srv1_title: "Web Development", srv1_desc: "Da semplici landing page a complesse web application, costruisco soluzioni su misura per le tue esigenze con le ultime tecnologie.",
-                srv2_title: "Web responsive & PWA", srv2_desc: "Interfacce mobile-first, veloci e accessibili: il tuo sito funziona al meglio su smartphone, tablet e desktop senza app nativa separata.",
-                srv3_title: "UI/UX Design", srv3_desc: "Progetto interfacce intuitive e visivamente accattivanti, mettendo sempre l'utente al centro dell'esperienza digitale.",
-                process_title: "Come <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>lavoro</span>",
-                process_sub: "Dal brief al deploy: un flusso chiaro per consegnare progetti solidi, anche per clienti senza team tecnico.",
-                proc1_title: "Brief & obiettivi", proc1_desc: "Capisco attività, target e priorità (lead, prenotazioni, SEO locale).",
-                proc2_title: "UI & struttura", proc2_desc: "Wireframe, sezioni chiave e copy orientato alla conversione.",
-                proc3_title: "Sviluppo", proc3_desc: "Codice modulare, responsive, form, integrazioni e test su dispositivi reali.",
-                proc4_title: "Deploy & SEO", proc4_desc: "Pubblicazione (VPS, GitHub Pages), meta tag, performance e handoff al cliente.",
-                skills_title: "Tech <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Stack</span>",
-                skills_sub: "Competenze raggruppate per area — senza percentuali arbitrarie, con focus su ciò che uso nei progetti.",
-                skill_cat_front: "Frontend", skill_cat_back: "Backend & dati", skill_cat_tools: "Tools & workflow", skill_cat_deliver: "Delivery",
-                proj_title: "Progetti <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>selezionati</span>",
-                proj_sub: "Lavori reali e side project: stack, ruolo e link al demo live.",
-                proj_visit: "Visita il sito", proj_demo: "Demo", proj_code: "Codice",
-                proj_role_client: "Full-stack · Sito vetrina + prenotazioni",
-                proj_role_cube: "Side project · Creative coding",
-                proj_role_weather: "Side project · Full-stack",
-                tag_client: "Progetto cliente", tag_cube: "Esperimento 3D", tag_webapp: "Web App",
-                proj1_desc: "Simulazione interattiva di un cubo liquido: esplorazione di animazioni fluide e rendering in tempo reale nel browser.",
-                proj2_desc: "App meteo con aggiornamenti in tempo reale, UI pulita e backend Python per dati e logica applicativa.",
-                proj3_desc: "Sito per noleggio gommoni ed escursioni a Mondello (Palermo): flotta, tour Capogallo/Zingaro, form contatti e SEO locale multilingua (IT/EN/DE…).",
-                proj3_bullets: "<li>Pagine PHP strutturate (home, flotta, escursioni, contatti)</li><li>Schema.org, hreflang e meta per ricerca locale</li><li>Deploy su VPS Oracle Cloud</li>",
-                faq_title: "Domande <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>frequenti</span>",
-                faq_sub: "Risposte rapide per capire se possiamo lavorare bene insieme.",
-                faq_q1: "Quali servizi offri?",
-                faq_a1: "Realizzo siti web, landing page e web app responsive con SEO tecnica di base, integrazione form e deploy su GitHub Pages o VPS.",
-                faq_q2: "In quanto tempo consegni un progetto?",
-                faq_a2: "Dipende dalla complessità: una landing può richiedere pochi giorni, un sito più strutturato da 1 a 3 settimane.",
-                faq_q3: "Lavori anche da remoto?",
-                faq_a3: "Sì, collaboro sia in presenza su Palermo sia da remoto con clienti in tutta Italia.",
-                faq_q4: "Il sito sarà visibile su Google?",
-                faq_a4: "Sì: struttura semantica, meta tag, sitemap, robots.txt e dati strutturati (Schema.org) sono parte del mio workflow di base.",
-                faq_q5: "Offri manutenzione dopo il lancio?",
-                faq_a5: "Posso occuparmi di aggiornamenti contenuti, piccole modifiche e monitoraggio base su accordo mensile o a richiesta.",
-                cta_title: "Hai un progetto in mente?",
-                cta_sub: "Raccontami obiettivi e tempistiche: ti rispondo con una proposta chiara, senza impegno.",
-                cta_btn: "Inizia una conversazione",
-                contact_title: "Lavoriamo <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Insieme</span>",
-                contact_sub: "Hai un'idea o un progetto in mente? Collaborazioni, freelance e consulenze — rispondo entro 48 ore.",
-                contact_copy: "Copia email", contact_copied: "Copiata!",
-                form_name: "Il tuo Nome", form_email: "La tua Email", form_msg: "Il tuo Messaggio",
-                form_name_ph: "Mario Rossi", form_email_ph: "mario@example.com", form_msg_ph: "Parlami del tuo progetto...",
-                form_btn: "Invia Messaggio",
-                footer_tagline: "Full-stack developer · Palermo, Sicilia",
-                footer_nav_label: "Navigazione",
-                footer_social_label: "Social",
-                footer_credits: "Progettato e sviluppato con <i class='fas fa-heart text-purple-500 mx-1'></i> da Gabriel Lazzara.<br>&copy; 2026 Tutti i diritti riservati.",
-                email_opening: "Apertura client email..."
-            },
-            en: {
-                skip_main: "Skip to main content",
-                nav_home: "Home", nav_about: "About", nav_services: "Services", nav_process: "Process", nav_skills: "Skills", nav_projects: "Projects", nav_contact: "Let's Talk",
-                hero_badge: "Available for new projects",
-                hero_eyebrow: "Portfolio · Palermo",
-                hero_role: "Full-Stack Web Developer",
-                hero_sub: "Palermo, Sicily · Client projects and open-source side work",
-                hero_desc: "I build tailored websites and web apps — from landing pages to projects with bookings, local SEO and multilingual support. Polished UI, clean code, VPS or GitHub Pages deploys.",
-                hero_stat1: "Featured projects", hero_stat2: "Multilingual sites", hero_stat3: "Google-ready SEO",
-                hero_btn_projects: "View projects", hero_btn_contact: "Contact me", hero_btn_github: "GitHub",
-                about_eyebrow: "About",
-                about_title: "About <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Me</span>",
-                services_eyebrow: "Services",
-                process_eyebrow: "Process",
-                skills_eyebrow: "Skills",
-                proj_eyebrow: "Work",
-                faq_eyebrow: "FAQ",
-                about_p1: "Hi, I'm <span class='text-purple-400 font-bold'>Gabriel Lazzara</span>, a full-stack developer focused on professional websites, interactive web apps and real client deliveries.",
-                about_p2: "I work with <span class='text-white font-medium bg-white/10 px-2 py-1 rounded'>JavaScript · React · Python · PHP</span> and modern stacks (Tailwind, REST APIs, VPS and GitHub Pages deploys). Every project starts with clear goals: visibility, conversions and smooth mobile UX.",
-                about_p3: "From prototype to go-live: SEO structure, performance, contact forms and maintenance. Recent example: full site for <span class='text-sky-300 font-medium'>Rent Boat Mondello</span> (boat rental, tours, bookings).",
-                services_title: "My <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Services</span>",
-                srv1_title: "Web Development", srv1_desc: "From simple landing pages to complex web applications, I build tailored solutions using modern technologies.",
-                srv2_title: "Responsive web & PWA", srv2_desc: "Mobile-first, fast and accessible interfaces — your site works great on phones, tablets and desktop without a separate native app.",
-                srv3_title: "UI/UX Design", srv3_desc: "I design intuitive, visually appealing interfaces with the user at the center.",
-                process_title: "How I <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>work</span>",
-                process_sub: "From brief to deploy: a clear flow to ship solid projects, even for non-technical clients.",
-                proc1_title: "Brief & goals", proc1_desc: "I understand the business, audience and priorities (leads, bookings, local SEO).",
-                proc2_title: "UI & structure", proc2_desc: "Wireframes, key sections and conversion-oriented copy.",
-                proc3_title: "Development", proc3_desc: "Modular code, responsive layout, forms, integrations and real-device testing.",
-                proc4_title: "Deploy & SEO", proc4_desc: "Launch (VPS, GitHub Pages), meta tags, performance and client handoff.",
-                skills_title: "Tech <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Stack</span>",
-                skills_sub: "Skills grouped by area — no arbitrary percentages, focused on what I use in production.",
-                skill_cat_front: "Frontend", skill_cat_back: "Backend & data", skill_cat_tools: "Tools & workflow", skill_cat_deliver: "Delivery",
-                proj_title: "Selected <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>projects</span>",
-                proj_sub: "Client work and side projects: stack, role and live demo links.",
-                proj_visit: "Visit site", proj_demo: "Demo", proj_code: "Code",
-                proj_role_client: "Full-stack · Business site + bookings",
-                proj_role_cube: "Side project · Creative coding",
-                proj_role_weather: "Side project · Full-stack",
-                tag_client: "Client project", tag_cube: "3D Experiment", tag_webapp: "Web App",
-                proj1_desc: "Interactive liquid cube simulation: fluid animations and real-time browser rendering.",
-                proj2_desc: "Weather app with real-time updates, clean UI and Python backend for data and app logic.",
-                proj3_desc: "Boat rental and tours site in Mondello (Palermo): fleet, Capogallo/Zingaro tours, contact forms and multilingual local SEO (IT/EN/DE…).",
-                proj3_bullets: "<li>Structured PHP pages (home, fleet, tours, contact)</li><li>Schema.org, hreflang and local search meta</li><li>Deployed on Oracle Cloud VPS</li>",
-                faq_title: "Frequently asked <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>questions</span>",
-                faq_sub: "Quick answers to help you understand how we can work together.",
-                faq_q1: "Which services do you offer?",
-                faq_a1: "I build websites, landing pages and responsive web apps with basic technical SEO, form integration and deployment to GitHub Pages or VPS.",
-                faq_q2: "How long does a project take?",
-                faq_a2: "It depends on complexity: a landing page can take a few days, while a more structured website usually takes 1 to 3 weeks.",
-                faq_q3: "Do you also work remotely?",
-                faq_a3: "Yes, I work both locally in Palermo and remotely with clients across Italy.",
-                faq_q4: "Will my site show up on Google?",
-                faq_a4: "Yes — semantic HTML, meta tags, sitemap, robots.txt and structured data (Schema.org) are part of my baseline workflow.",
-                faq_q5: "Do you offer post-launch maintenance?",
-                faq_a5: "I can handle content updates, small changes and basic monitoring on a monthly retainer or per request.",
-                cta_title: "Have a project in mind?",
-                cta_sub: "Tell me your goals and timeline — I'll reply with a clear, no-obligation proposal.",
-                cta_btn: "Start a conversation",
-                contact_title: "Let's Work <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Together</span>",
-                contact_sub: "Have an idea or project in mind? Collaborations, freelance and consulting — I reply within 48 hours.",
-                contact_copy: "Copy email", contact_copied: "Copied!",
-                form_name: "Your Name", form_email: "Your Email", form_msg: "Your Message",
-                form_name_ph: "John Doe", form_email_ph: "john@example.com", form_msg_ph: "Tell me about your project...",
-                form_btn: "Send Message",
-                footer_tagline: "Full-stack developer · Palermo, Sicily",
-                footer_nav_label: "Navigation",
-                footer_social_label: "Social",
-                footer_credits: "Designed and developed with <i class='fas fa-heart text-purple-500 mx-1'></i> by Gabriel Lazzara.<br>&copy; 2026 All rights reserved.",
-                email_opening: "Opening email client..."
-            }
-        };
-
-        class PortfolioApp {
-            constructor() {
-                // DOM Elements
-                this.navbar = document.getElementById('navbar');
-                this.menuBtn = document.getElementById('mobile-menu-btn');
-                this.mobileMenu = document.getElementById('mobile-menu');
-                this.sections = document.querySelectorAll('section');
-                this.navLinks = document.querySelectorAll('.nav-link');
-                this.mobileLinks = document.querySelectorAll('.mobile-link');
-                this.revealElements = document.querySelectorAll('.reveal');
-                this.langToggles = document.querySelectorAll('.lang-toggle');
-                this.copyEmailBtn = document.getElementById('copy-email-btn'); 
-                
-                // Stato
-                this.isMenuOpen = false;
-                this.currentLang = localStorage.getItem('portfolio_lang') || 'it'; 
-
-                // Init
-                this.init();
-            }
-
-            init() {
-                this.setupMobileMenu();
-                this.setupSmoothScrolling();
-                this.setupIntersectionObservers();
-                this.setupScrollListener();
-                this.setupContactForm();
-                this.setupCopyEmail();
-                this.setupLanguageToggle();
-                this.applyLanguage(this.currentLang);
-            }
-
-            // --- 1. Gestione Lingua (i18n) ---
-            setupLanguageToggle() {
-                this.langToggles.forEach(toggle => {
-                    toggle.addEventListener('click', () => {
-                        this.currentLang = this.currentLang === 'it' ? 'en' : 'it';
-                        localStorage.setItem('portfolio_lang', this.currentLang);
-                        this.applyLanguage(this.currentLang);
-                    });
-                });
-            }
-
-            applyLanguage(lang) {
-                document.documentElement.lang = lang === 'it' ? 'it' : 'en';
-
-                const itTexts = document.querySelectorAll('.lang-it-text');
-                const enTexts = document.querySelectorAll('.lang-en-text');
-                
-                if (lang === 'it') {
-                    itTexts.forEach(el => el.className = 'lang-it-text font-bold text-purple-400 text-sm transition-all');
-                    enTexts.forEach(el => el.className = 'lang-en-text text-gray-400 text-sm transition-all');
-                } else {
-                    itTexts.forEach(el => el.className = 'lang-it-text text-gray-400 text-sm transition-all');
-                    enTexts.forEach(el => el.className = 'lang-en-text font-bold text-purple-400 text-sm transition-all');
-                }
-
-                document.querySelectorAll('[data-i18n]').forEach(el => {
-                    const key = el.getAttribute('data-i18n');
-                    if (translations[lang][key]) {
-                        el.innerHTML = translations[lang][key];
-                    }
-                });
-
-                document.querySelectorAll('[data-i18n-ph]').forEach(el => {
-                    const key = el.getAttribute('data-i18n-ph');
-                    if (translations[lang][key]) {
-                        el.setAttribute('placeholder', translations[lang][key]);
-                    }
-                });
-
-                document.querySelectorAll('[data-i18n="proj3_bullets"]').forEach(el => {
-                    if (translations[lang].proj3_bullets) el.innerHTML = translations[lang].proj3_bullets;
-                });
-            }
-
-            setupCopyEmail() {
-                if (!this.copyEmailBtn) return;
-                const email = 'gabrielelazzara67@gmail.com';
-                this.copyEmailBtn.addEventListener('click', async () => {
-                    try {
-                        await navigator.clipboard.writeText(email);
-                        const span = this.copyEmailBtn.querySelector('[data-i18n]') || this.copyEmailBtn;
-                        span.textContent = translations[this.currentLang].contact_copied;
-                        setTimeout(() => this.applyLanguage(this.currentLang), 2000);
-                    } catch {
-                        window.location.href = `mailto:${email}`;
-                    }
-                });
-            }
-
-            // --- 2. Gestione Menu Mobile ---
-            setupMobileMenu() {
-                this.menuBtn.addEventListener('click', () => this.toggleMenu());
-                this.mobileLinks.forEach(link => {
-                    link.addEventListener('click', () => {
-                        if (this.isMenuOpen) this.toggleMenu();
-                    });
-                });
-            }
-
-            toggleMenu() {
-                this.isMenuOpen = !this.isMenuOpen;
-                this.menuBtn.classList.toggle('menu-open');
-                
-                if (this.isMenuOpen) {
-                    this.mobileMenu.classList.remove('hidden');
-                    this.mobileMenu.classList.add('flex');
-                    setTimeout(() => {
-                        this.mobileMenu.classList.remove('opacity-0');
-                        document.body.style.overflow = 'hidden'; 
-                    }, 10);
-                } else {
-                    this.mobileMenu.classList.add('opacity-0');
-                    document.body.style.overflow = ''; 
-                    setTimeout(() => {
-                        this.mobileMenu.classList.add('hidden');
-                        this.mobileMenu.classList.remove('flex');
-                    }, 300); 
-                }
-            }
-
-            // --- 3. Scroll Morbido ---
-            setupSmoothScrolling() {
-                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                    anchor.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const targetId = anchor.getAttribute('href');
-                        const targetSection = document.querySelector(targetId);
-                        
-                        if (targetSection) {
-                            targetSection.scrollIntoView({ behavior: 'smooth' });
-                        }
-                    });
-                });
-            }
-
-            // --- 4. Observers ---
-            setupIntersectionObservers() {
-                const revealObserver = new IntersectionObserver((entries, observer) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('active');
-                            observer.unobserve(entry.target); 
-                        }
-                    });
-                }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
-
-                this.revealElements.forEach(el => revealObserver.observe(el));
-            }
-
-            // --- 5. Eventi Scroll ---
-            setupScrollListener() {
-                window.addEventListener('scroll', () => {
-                    if (window.scrollY > 50) {
-                        this.navbar.classList.add('bg-dark/80', 'backdrop-blur-xl', 'border-b', 'border-white/10');
-                        this.navbar.classList.remove('py-4');
-                        this.navbar.classList.add('py-2');
-                    } else {
-                        this.navbar.classList.remove('bg-dark/80', 'backdrop-blur-xl', 'border-b', 'border-white/10');
-                        this.navbar.classList.remove('py-2');
-                        this.navbar.classList.add('py-4');
-                    }
-
-                    let currentSectionId = '';
-                    this.sections.forEach(section => {
-                        const sectionTop = section.offsetTop;
-                        if (window.scrollY >= sectionTop - 250) {
-                            currentSectionId = section.getAttribute('id');
-                        }
-                    });
-
-                    this.navLinks.forEach(link => {
-                        link.classList.remove('active-link', 'text-white', 'bg-white/10');
-                        link.classList.add('text-gray-300');
-                        if (link.getAttribute('href') === `#${currentSectionId}`) {
-                            link.classList.add('active-link', 'text-white', 'bg-white/10');
-                            link.classList.remove('text-gray-300');
-                        }
-                    });
-                });
-            }
-
-            // --- 6. Integrazione Email Nativa ---
-            setupContactForm() {
-                const contactForm = document.getElementById('contact-form');
-                if (contactForm) {
-                    contactForm.addEventListener('submit', (e) => {
-                        e.preventDefault(); 
-                        
-                        const name = contactForm.querySelector('input[name="name"]').value;
-                        const email = contactForm.querySelector('input[name="email"]').value;
-                        const message = contactForm.querySelector('textarea[name="message"]').value;
-                        
-                        const subject = encodeURIComponent(`Nuovo contatto dal Portfolio - ${name}`);
-                        const body = encodeURIComponent(`${message}\n\n---\nRispondi a: ${email}`);
-                        
-                        const mailtoUrl = `mailto:gabrielelazzara67@gmail.com?subject=${subject}&body=${body}`;
-                        
-                        window.location.href = mailtoUrl;
-                        
-                        const btn = contactForm.querySelector('button[type="submit"]');
-                        const originalHtml = btn.innerHTML;
-                        btn.innerHTML = `${translations[this.currentLang].email_opening} <i class='fas fa-envelope ml-1'></i>`;
-                        
-                        setTimeout(() => {
-                            btn.innerHTML = originalHtml;
-                            contactForm.reset();
-                        }, 3000);
-                    });
-                }
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const portfolio = new PortfolioApp();
-        });
-    </script>
+    <script src="./js/i18n.js" defer></script>
+    <script src="./js/main.js" defer></script>
 </body>
 </html>
