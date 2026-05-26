@@ -164,6 +164,7 @@ body,
 .navbar-inner {
     position: relative;
     display: flex;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
@@ -177,49 +178,66 @@ body,
     padding-bottom: 0.5rem;
 }
 
+.navbar-brand {
+    position: relative;
+    z-index: 3;
+    flex-shrink: 0;
+}
+
 .navbar-actions {
     position: relative;
-    z-index: 2;
+    z-index: 3;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.navbar-nav {
+    flex-shrink: 0;
 }
 
 @media (min-width: 1024px) {
     .navbar-inner {
-        display: grid;
-        grid-template-columns: auto minmax(0, 1fr) auto;
-        align-items: center;
-        column-gap: 1.25rem;
+        display: flex;
+        justify-content: flex-end;
     }
 
-    .navbar-inner > a[href="#hero"] {
-        justify-self: start;
-        min-width: 0;
+    .navbar-brand {
+        margin-right: auto;
     }
 
-    #navbar .nav-pill {
-        justify-self: center;
-        position: static;
-        transform: none;
+    .navbar-nav {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
         width: max-content;
-        max-width: 100%;
-        margin-inline: auto;
-        z-index: 1;
-        flex-wrap: nowrap;
+        max-width: calc(100% - 22rem);
+        z-index: 2;
     }
 
-    #navbar .nav-link {
+  #navbar .nav-link {
         padding-left: 0.75rem;
         padding-right: 0.75rem;
         font-size: 0.8125rem;
+        white-space: nowrap;
     }
 
     #navbar .nav-link-cta {
         padding-left: 1rem;
         padding-right: 1rem;
     }
+}
 
-    .navbar-actions {
-        justify-self: end;
-        flex-shrink: 0;
+@media (min-width: 1024px) and (max-width: 1180px) {
+    #navbar .nav-link {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    #navbar .nav-link-cta {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
     }
 }
 
@@ -923,9 +941,13 @@ h2.font-display .accent-word {
 
 /* Header controls */
 .nav-pill {
+    width: max-content;
+    max-width: 100%;
+    flex: 0 0 auto;
     background: var(--c-secondary);
     border: 1px solid var(--c-secondary-border);
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .theme-toggle,
