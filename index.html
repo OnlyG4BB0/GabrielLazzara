@@ -95,6 +95,8 @@
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
                         'marquee': 'marquee 28s linear infinite',
+                        'fade-up': 'fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                        'scale-in': 'scaleIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards',
                     },
                     keyframes: {
                         blob: {
@@ -124,7 +126,15 @@
                         marquee: {
                             '0%': { transform: 'translateX(0)' },
                             '100%': { transform: 'translateX(-50%)' },
-                        }
+                        },
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(24px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        scaleIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.92)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        },
                     }
                 }
             }
@@ -141,11 +151,12 @@
 
   <div class="site-blobs fixed inset-0 pointer-events-none z-[-1] overflow-hidden" aria-hidden="true">
         <div class="blob absolute top-[-10%] left-[-5%] w-64 h-64 md:w-80 md:h-80 animate-blob"></div>
+        <div class="blob blob--accent absolute top-[40%] left-[35%] w-48 h-48 md:w-64 md:h-64 animate-blob" style="animation-delay: 5s;"></div>
         <div class="blob absolute top-[25%] right-[-5%] w-56 h-56 md:w-72 md:h-72 animate-blob-reverse" style="animation-delay: 3s;"></div>
     </div>
 
     <!-- Header Glass -->
-    <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 glass-panel border-x-0 border-t-0">
+    <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 glass-panel glass-strong border-x-0 border-t-0">
         <div class="site-shell navbar-inner">
             <a href="#hero" class="navbar-brand flex items-center gap-3 group shrink-0" aria-label="Gabriel Lazzara — torna all'inizio">
                 <!-- Logo Corretto (x1/y1 con percentuali per compatibilità mobile SVG) -->
@@ -185,7 +196,7 @@
                 <i class="fas fa-sun theme-icon-light" aria-hidden="true"></i>
                 <i class="fas fa-moon theme-icon-dark" aria-hidden="true"></i>
             </button>
-            <button type="button" class="lang-toggle w-[4.5rem] sm:w-[5rem] py-1.5 rounded-full transition-all flex items-center justify-center gap-2 cursor-pointer">
+            <button type="button" class="lang-toggle w-[4.5rem] sm:w-[5rem] py-1.5 rounded-full flex items-center justify-center gap-2 cursor-pointer">
                 <span class="lang-it-text font-bold text-purple-400 text-sm">IT</span>
                 <span class="text-gray-600 text-xs">|</span>
                 <span class="lang-en-text text-gray-400 text-sm">EN</span>
@@ -249,16 +260,16 @@
                         </a>
                     </div>
 
-                    <div class="hero-stats grid grid-cols-3 gap-3 mt-10 reveal" style="transition-delay: 280ms;">
-                        <div class="hero-stat">
+                    <div class="hero-stats grid grid-cols-3 gap-3 mt-10 reveal-stagger">
+                        <div class="hero-stat reveal">
                             <strong class="stat-value">7+</strong>
                             <span data-i18n="hero_stat1">Progetti live</span>
                         </div>
-                        <div class="hero-stat">
+                        <div class="hero-stat reveal">
                             <strong class="stat-value">Full</strong>
                             <span data-i18n="hero_stat2">Stack moderno</span>
                         </div>
-                        <div class="hero-stat">
+                        <div class="hero-stat reveal">
                             <strong class="stat-value">SEO</strong>
                             <span data-i18n="hero_stat3">SEO integrata</span>
                         </div>
@@ -266,7 +277,7 @@
                 </div>
 
                 <div class="hero-visual-col hidden lg:block reveal" style="transition-delay: 200ms;">
-                    <div class="hero-visual-card animate-float">
+                    <div class="hero-visual-card glass-panel rounded-3xl">
                         <div class="flex items-center gap-2 mb-4 text-xs text-gray-500">
                             <span class="w-3 h-3 rounded-full bg-red-400/80"></span>
                             <span class="w-3 h-3 rounded-full bg-amber-400/80"></span>
@@ -366,23 +377,23 @@
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="values_eyebrow">Perché me</p>
             <h2 id="values-heading" data-i18n="values_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Cosa porto al <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">tuo progetto</span></h2>
             <p data-i18n="values_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Non solo codice: strategia, cura del dettaglio e consegna pronta per il web.</p>
-            <div class="bento-grid">
+            <div class="bento-grid reveal-stagger">
                 <article class="bento-item bento-span-2 glass-panel glass-card spotlight-card p-8 rounded-3xl reveal">
                     <i class="fas fa-bullseye text-3xl text-purple-400 mb-4"></i>
                     <h3 data-i18n="val1_title" class="text-xl font-bold text-white mb-2">Orientato al business</h3>
                     <p data-i18n="val1_desc" class="text-gray-400 text-sm leading-relaxed">Ogni sezione ha uno scopo: più contatti, prenotazioni o visibilità su Google Maps e ricerca locale.</p>
                 </article>
-                <article class="bento-item glass-panel glass-card spotlight-card p-8 rounded-3xl reveal" style="transition-delay: 80ms;">
+                <article class="bento-item glass-panel glass-card spotlight-card p-8 rounded-3xl reveal">
                     <i class="fas fa-mobile-screen text-3xl text-indigo-400 mb-4"></i>
                     <h3 data-i18n="val2_title" class="text-xl font-bold text-white mb-2">Mobile-first</h3>
                     <p data-i18n="val2_desc" class="text-gray-400 text-sm leading-relaxed">Layout, velocità e form ottimizzati per smartphone.</p>
                 </article>
-                <article class="bento-item glass-panel glass-card spotlight-card p-8 rounded-3xl reveal" style="transition-delay: 120ms;">
+                <article class="bento-item glass-panel glass-card spotlight-card p-8 rounded-3xl reveal">
                     <i class="fas fa-magnifying-glass-chart text-3xl text-sky-400 mb-4"></i>
                     <h3 data-i18n="val3_title" class="text-xl font-bold text-white mb-2">SEO tecnica</h3>
                     <p data-i18n="val3_desc" class="text-gray-400 text-sm leading-relaxed">Meta, Schema.org, sitemap e hreflang inclusi.</p>
                 </article>
-                <article class="bento-item bento-span-2 glass-panel glass-card spotlight-card p-8 rounded-3xl reveal" style="transition-delay: 160ms;">
+                <article class="bento-item bento-span-2 glass-panel glass-card spotlight-card p-8 rounded-3xl reveal">
                     <i class="fas fa-rocket text-3xl text-fuchsia-400 mb-4"></i>
                     <h3 data-i18n="val4_title" class="text-xl font-bold text-white mb-2">Consegna completa</h3>
                     <p data-i18n="val4_desc" class="text-gray-400 text-sm leading-relaxed">Deploy, test su dispositivi reali e handoff: non ti lascio con file sparsi senza sito online.</p>
@@ -395,18 +406,18 @@
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="exp_eyebrow">Percorso</p>
             <h2 id="exp-heading" data-i18n="exp_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Esperienza & <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">formazione</span></h2>
             <p data-i18n="exp_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Crescita continua tra progetti cliente, open source e sperimentazione.</p>
-            <div class="timeline max-w-3xl mx-auto space-y-0">
+            <div class="timeline max-w-3xl mx-auto space-y-0 reveal-stagger">
                 <article class="timeline-item reveal">
                     <span class="timeline-period" data-i18n="exp1_period">2024 — oggi</span>
                     <h3 data-i18n="exp1_role" class="text-lg font-bold text-white mt-1">Full-Stack Developer · Freelance</h3>
                     <p data-i18n="exp1_desc" class="text-gray-400 text-sm mt-2 leading-relaxed">Sviluppo siti e web app per clienti, side project su GitHub Pages e deploy su VPS cloud.</p>
                 </article>
-                <article class="timeline-item reveal" style="transition-delay: 100ms;">
+                <article class="timeline-item reveal">
                     <span class="timeline-period" data-i18n="exp2_period">2022 — 2024</span>
                     <h3 data-i18n="exp2_role" class="text-lg font-bold text-white mt-1">Sviluppo web & automazione</h3>
                     <p data-i18n="exp2_desc" class="text-gray-400 text-sm mt-2 leading-relaxed">React, Python, PHP e UI moderne; Liquid Cube e Weatherflow per portfolio.</p>
                 </article>
-                <article class="timeline-item reveal" style="transition-delay: 200ms;">
+                <article class="timeline-item reveal">
                     <span class="timeline-period" data-i18n="exp3_period">Foundations</span>
                     <h3 data-i18n="exp3_role" class="text-lg font-bold text-white mt-1">Stack fondamentali</h3>
                     <p data-i18n="exp3_desc" class="text-gray-400 text-sm mt-2 leading-relaxed">HTML, CSS, JavaScript, SQL, Git applicati a progetti reali.</p>
@@ -419,18 +430,18 @@
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="services_eyebrow">Servizi</p>
             <h2 id="services-heading" data-i18n="services_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Soluzioni <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">su misura</span></h2>
             <p data-i18n="services_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Dal sito vetrina alla web app: scegli il livello giusto per la tua attività.</p>
-            <div class="bento-grid bento-services">
+            <div class="bento-grid bento-services reveal-stagger">
                 <article class="bento-item bento-tall glass-panel glass-card spotlight-card p-8 rounded-3xl reveal">
                     <i class="fas fa-laptop-code text-4xl text-purple-400 mb-5"></i>
                     <h3 data-i18n="srv1_title" class="text-2xl font-bold text-white mb-3">Siti vetrina & landing</h3>
                     <p data-i18n="srv1_desc" class="text-gray-400 text-sm leading-relaxed">Pagine ad alta conversione per presentare servizi, raccogliere lead e posizionarti su ricerche locali.</p>
                 </article>
-                <article class="bento-item glass-panel glass-card spotlight-card p-8 rounded-3xl reveal" style="transition-delay: 80ms;">
+                <article class="bento-item glass-panel glass-card spotlight-card p-8 rounded-3xl reveal">
                     <i class="fas fa-layer-group text-3xl text-indigo-400 mb-4"></i>
                     <h3 data-i18n="srv2_title" class="text-xl font-bold text-white mb-2">Web app & dashboard</h3>
                     <p data-i18n="srv2_desc" class="text-gray-400 text-sm leading-relaxed">React o Svelte, API e backend Python/PHP.</p>
                 </article>
-                <article class="bento-item glass-panel glass-card spotlight-card p-8 rounded-3xl reveal" style="transition-delay: 120ms;">
+                <article class="bento-item glass-panel glass-card spotlight-card p-8 rounded-3xl reveal">
                     <i class="fas fa-globe text-3xl text-sky-400 mb-4"></i>
                     <h3 data-i18n="srv3_title" class="text-xl font-bold text-white mb-2">SEO & multilingua</h3>
                     <p data-i18n="srv3_desc" class="text-gray-400 text-sm leading-relaxed">Hreflang, Schema.org e Search Console.</p>
@@ -448,21 +459,21 @@
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="pkg_eyebrow">Pacchetti</p>
             <h2 id="packages-heading" data-i18n="pkg_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Trasparenza su <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">cosa include</span></h2>
             <p data-i18n="pkg_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Ogni progetto è diverso — preventivo personalizzato dopo un breve call.</p>
-            <div class="packages-grid grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="packages-grid grid grid-cols-1 md:grid-cols-3 gap-6 reveal-stagger">
                 <article class="pkg-card glass-panel glass-card spotlight-card p-8 rounded-3xl reveal flex flex-col">
                     <h3 data-i18n="pkg1_name" class="text-xl font-bold text-white">Landing</h3>
                     <p data-i18n="pkg1_price" class="text-3xl font-display font-bold gradient-text mt-2 mb-6">da €400</p>
                     <ul data-i18n="pkg1_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc list-inside pkg-features"></ul>
                     <a href="#contact" data-i18n="pkg_cta" class="block text-center py-3 rounded-xl border border-white/20 hover:bg-white/10 font-semibold transition-all">Chiedi preventivo</a>
                 </article>
-                <article class="pkg-card pkg-featured glass-panel spotlight-card p-8 rounded-3xl reveal flex flex-col border-purple-500/40" style="transition-delay: 100ms;">
+                <article class="pkg-card pkg-featured glass-panel spotlight-card p-8 rounded-3xl reveal flex flex-col border-purple-500/40">
                     <span class="pkg-badge mb-2 block" data-i18n="pkg_popular">Più richiesto</span>
                     <h3 data-i18n="pkg2_name" class="text-xl font-bold text-white">Sito business</h3>
                     <p data-i18n="pkg2_price" class="text-3xl font-display font-bold gradient-text mt-2 mb-6">da €900</p>
                     <ul data-i18n="pkg2_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc list-inside pkg-features"></ul>
                     <a href="#contact" data-i18n="pkg_cta" class="btn-primary block text-center py-3 rounded-xl font-semibold text-white">Chiedi preventivo</a>
                 </article>
-                <article class="pkg-card glass-panel glass-card spotlight-card p-8 rounded-3xl reveal flex flex-col" style="transition-delay: 200ms;">
+                <article class="pkg-card glass-panel glass-card spotlight-card p-8 rounded-3xl reveal flex flex-col">
                     <h3 data-i18n="pkg3_name" class="text-xl font-bold text-white">Web app / custom</h3>
                     <p data-i18n="pkg3_price" class="text-3xl font-display font-bold gradient-text mt-2 mb-6">su preventivo</p>
                     <ul data-i18n="pkg3_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc list-inside pkg-features"></ul>
@@ -478,23 +489,23 @@
                 Come <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">lavoro</span>
             </h2>
             <p data-i18n="process_sub" class="section-lead text-center max-w-2xl mx-auto mb-14 reveal">Dal brief al deploy: un flusso chiaro per consegnare progetti solidi, anche per clienti senza team tecnico.</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 reveal-stagger">
                 <div class="glass-panel glass-card process-step p-6 rounded-2xl reveal">
                     <span class="text-purple-400 font-bold text-sm">01</span>
                     <h3 data-i18n="proc1_title" class="text-xl font-bold text-white mt-2 mb-2">Brief & obiettivi</h3>
                     <p data-i18n="proc1_desc" class="text-gray-400 text-sm leading-relaxed">Capisco attività, target e priorità (lead, prenotazioni, SEO locale).</p>
                 </div>
-                <div class="glass-panel glass-card process-step p-6 rounded-2xl reveal" style="transition-delay: 100ms;">
+                <div class="glass-panel glass-card process-step p-6 rounded-2xl reveal">
                     <span class="text-purple-400 font-bold text-sm">02</span>
                     <h3 data-i18n="proc2_title" class="text-xl font-bold text-white mt-2 mb-2">UI & struttura</h3>
                     <p data-i18n="proc2_desc" class="text-gray-400 text-sm leading-relaxed">Wireframe, sezioni chiave e copy orientato alla conversione.</p>
                 </div>
-                <div class="glass-panel glass-card process-step p-6 rounded-2xl reveal" style="transition-delay: 200ms;">
+                <div class="glass-panel glass-card process-step p-6 rounded-2xl reveal">
                     <span class="text-purple-400 font-bold text-sm">03</span>
                     <h3 data-i18n="proc3_title" class="text-xl font-bold text-white mt-2 mb-2">Sviluppo</h3>
                     <p data-i18n="proc3_desc" class="text-gray-400 text-sm leading-relaxed">Codice modulare, responsive, form, integrazioni e test su dispositivi reali.</p>
                 </div>
-                <div class="glass-panel glass-card process-step p-6 rounded-2xl reveal" style="transition-delay: 300ms;">
+                <div class="glass-panel glass-card process-step p-6 rounded-2xl reveal">
                     <span class="text-purple-400 font-bold text-sm">04</span>
                     <h3 data-i18n="proc4_title" class="text-xl font-bold text-white mt-2 mb-2">Deploy & SEO</h3>
                     <p data-i18n="proc4_desc" class="text-gray-400 text-sm leading-relaxed">Pubblicazione (VPS, GitHub Pages), meta tag, performance e handoff al cliente.</p>
@@ -510,26 +521,26 @@
             </h2>
             <p data-i18n="skills_sub" class="section-lead text-center max-w-xl mx-auto mb-14 reveal">Competenze raggruppate per area — senza percentuali arbitrarie, con focus su ciò che uso nei progetti.</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal-stagger">
                 <div class="glass-panel glass-card p-8 rounded-3xl reveal">
                     <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-palette text-purple-400"></i> <span data-i18n="skill_cat_front">Frontend</span></h3>
                     <div class="flex flex-wrap gap-2">
                         <span class="skill-tag">HTML5</span><span class="skill-tag">CSS3</span><span class="skill-tag">Tailwind</span><span class="skill-tag">JavaScript</span><span class="skill-tag">React</span><span class="skill-tag">Svelte</span>
                     </div>
                 </div>
-                <div class="glass-panel glass-card p-8 rounded-3xl reveal" style="transition-delay: 100ms;">
+                <div class="glass-panel glass-card p-8 rounded-3xl reveal">
                     <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-server text-indigo-400"></i> <span data-i18n="skill_cat_back">Backend & dati</span></h3>
                     <div class="flex flex-wrap gap-2">
                         <span class="skill-tag">Python</span><span class="skill-tag">Java</span><span class="skill-tag">PHP</span><span class="skill-tag">SQL</span><span class="skill-tag">REST API</span>
                     </div>
                 </div>
-                <div class="glass-panel glass-card p-8 rounded-3xl reveal" style="transition-delay: 150ms;">
+                <div class="glass-panel glass-card p-8 rounded-3xl reveal">
                     <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-tools text-fuchsia-400"></i> <span data-i18n="skill_cat_tools">Tools & workflow</span></h3>
                     <div class="flex flex-wrap gap-2">
                         <span class="skill-tag">Git</span><span class="skill-tag">GitHub</span><span class="skill-tag">Docker</span><span class="skill-tag">Vite</span><span class="skill-tag">VS Code</span>
                     </div>
                 </div>
-                <div class="glass-panel glass-card p-8 rounded-3xl reveal" style="transition-delay: 200ms;">
+                <div class="glass-panel glass-card p-8 rounded-3xl reveal">
                     <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-rocket text-sky-400"></i> <span data-i18n="skill_cat_deliver">Delivery</span></h3>
                     <div class="flex flex-wrap gap-2">
                         <span class="skill-tag">SEO base</span><span class="skill-tag">GitHub Pages</span><span class="skill-tag">Responsive</span><span class="skill-tag">i18n</span><span class="skill-tag">Performance</span>
@@ -601,7 +612,7 @@
                 <button type="button" data-project-filter="side" class="filter-btn" data-i18n="filter_side">Side project</button>
             </div>
             
-            <div class="projects-bento">
+            <div class="projects-bento reveal-stagger">
                 <!-- Rent Boat Mondello -->
                 <article data-project-category="client" class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group project-card project-card--featured">
                     <div class="project-thumb h-56 relative overflow-hidden bg-sky-950">
@@ -834,7 +845,7 @@
 
         <!-- CTA Section -->
         <section id="cta" class="scroll-mt-32 reveal" aria-labelledby="cta-heading">
-            <div class="cta-band text-center relative z-10">
+            <div class="cta-band glass-panel text-center relative z-10">
                 <h2 id="cta-heading" data-i18n="cta_title" class="font-display text-2xl md:text-4xl font-bold text-white mb-3">Hai un progetto in mente?</h2>
                 <p data-i18n="cta_sub" class="text-gray-300 max-w-xl mx-auto mb-8 text-sm md:text-base">Raccontami obiettivi e tempistiche: ti rispondo con una proposta chiara, senza impegno.</p>
                 <a href="#contact" class="btn-primary inline-flex h-14 px-10 rounded-full text-white font-semibold items-center justify-center gap-2">
@@ -868,18 +879,18 @@
                         <div class="space-y-2">
                             <label data-i18n="form_name" class="text-sm font-medium text-gray-300 ml-2">Il tuo Nome</label>
                             <input type="text" name="name" data-i18n-ph="form_name_ph" placeholder="Mario Rossi" required 
-                                class="w-full bg-darker/50 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all backdrop-blur-sm">
+                                class="glass-input w-full rounded-2xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 backdrop-blur-sm">
                         </div>
                         <div class="space-y-2">
                             <label data-i18n="form_email" class="text-sm font-medium text-gray-300 ml-2">La tua Email</label>
                             <input type="email" name="email" data-i18n-ph="form_email_ph" placeholder="mario@example.com" required 
-                                class="w-full bg-darker/50 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all backdrop-blur-sm">
+                                class="glass-input w-full rounded-2xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 backdrop-blur-sm">
                         </div>
                     </div>
                     <div class="space-y-2">
                         <label data-i18n="form_msg" class="text-sm font-medium text-gray-300 ml-2">Il tuo Messaggio</label>
                         <textarea name="message" rows="4" data-i18n-ph="form_msg_ph" placeholder="Parlami del tuo progetto..." required 
-                            class="w-full bg-darker/50 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all backdrop-blur-sm resize-none"></textarea>
+                            class="glass-input w-full rounded-2xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 backdrop-blur-sm resize-none"></textarea>
                     </div>
                     
                     <button type="submit" class="w-full md:w-64 h-14 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl font-bold text-white hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-300 flex items-center justify-center gap-2 mx-auto mt-8">
@@ -891,14 +902,14 @@
     </main>
 
     <!-- Footer Glass -->
-    <footer class="border-t border-white/10 bg-dark/50 backdrop-blur-lg pt-16 pb-8">
+    <footer class="site-footer border-t border-white/10 pt-16 pb-8">
         <div class="site-shell">
             <div class="site-footer-inner">
-                <div>
+                <div class="reveal">
                     <p class="font-display text-xl font-bold text-white mb-2">Gabriel Lazzara</p>
                     <p data-i18n="footer_tagline" class="text-gray-500 text-sm leading-relaxed">Full-stack developer · Palermo, Sicilia</p>
                 </div>
-                <nav class="flex flex-col gap-2" aria-label="Link rapidi footer">
+                <nav class="flex flex-col gap-2 reveal" style="transition-delay: 100ms;" aria-label="Link rapidi footer">
                     <span class="text-xs font-semibold uppercase tracking-wider text-purple-300 mb-1" data-i18n="footer_nav_label">Navigazione</span>
                     <a href="#about" class="footer-link" data-i18n="nav_about">About</a>
                     <a href="#case-study" class="footer-link" data-i18n="nav_case">Case study</a>
@@ -907,7 +918,7 @@
                     <a href="#faq" class="footer-link">FAQ</a>
                     <a href="#contact" class="footer-link" data-i18n="nav_cta">Contatti</a>
                 </nav>
-                <div>
+                <div class="reveal" style="transition-delay: 200ms;">
                     <span class="text-xs font-semibold uppercase tracking-wider text-purple-300 mb-3 block" data-i18n="footer_social_label">Social</span>
                     <div class="flex justify-center md:justify-start gap-4">
                         <a href="https://www.instagram.com/gabriel_lazzara_/" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-gray-400 hover:text-white hover:bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-500 hover:border-transparent transition-all duration-300 hover:-translate-y-1" aria-label="Instagram">
@@ -923,7 +934,7 @@
                 </div>
             </div>
 
-            <p data-i18n="footer_credits" class="text-gray-500 text-sm font-light text-center">
+            <p data-i18n="footer_credits" class="text-gray-500 text-sm font-light text-center reveal" style="transition-delay: 280ms;">
                 Progettato e sviluppato con <i class="fas fa-heart text-purple-500 mx-1"></i> da Gabriel Lazzara.<br>
                 &copy; 2026 Tutti i diritti riservati.
             </p>

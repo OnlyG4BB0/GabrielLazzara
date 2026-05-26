@@ -4,9 +4,11 @@ class PortfolioApp {
         this.menuBtn = document.getElementById('mobile-menu-btn');
         this.mobileMenu = document.getElementById('mobile-menu');
         this.sections = document.querySelectorAll('section');
+        this.mainSections = document.querySelectorAll('.site-main > section');
         this.navLinks = document.querySelectorAll('.nav-link');
         this.mobileLinks = document.querySelectorAll('.mobile-link');
         this.revealElements = document.querySelectorAll('.reveal');
+        this.blobsLayer = document.querySelector('.site-blobs');
         this.langToggles = document.querySelectorAll('.lang-toggle');
         this.copyEmailBtn = document.getElementById('copy-email-btn');
         this.projectCards = document.querySelectorAll('[data-project-category]');
@@ -34,7 +36,7 @@ class PortfolioApp {
         this.setupProjectFilters();
         this.setupSpotlightCards();
         this.applyLanguage(this.currentLang);
-        this.applyProjectFilter(this.currentFilter);
+        this.applyProjectFilter(this.currentFilter, true);
     }
 
     setupThemeToggle() {
@@ -127,12 +129,21 @@ class PortfolioApp {
         });
     }
 
-    applyProjectFilter(filter) {
+    applyProjectFilter(filter, isInitial = false) {
         this.projectCards.forEach((card) => {
             const cat = card.getAttribute('data-project-category');
             const show = filter === 'all' || cat === filter;
             card.classList.toggle('project-hidden', !show);
             card.setAttribute('aria-hidden', show ? 'false' : 'true');
+            if (!isInitial) {
+                if (show) {
+                    card.classList.remove('project-enter');
+                    void card.offsetWidth;
+                    card.classList.add('project-enter');
+                } else {
+                    card.classList.remove('project-enter');
+                }
+            }
         });
     }
 
@@ -215,18 +226,42 @@ class PortfolioApp {
                     }
                 });
             },
-            { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+            { threshold: 0.08, rootMargin: '0px 0px -5% 0px' }
         );
 
-        this.revealElements.forEach((el) => revealObserver.observe(el));
+        this.revealElements.forEach((el) => {
+            revealObserver.observe(el);
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+                el.classList.add('active');
+            }
+        });
+
+        const sectionObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    entry.target.classList.toggle('section-visible', entry.isIntersecting);
+                });
+            },
+            { threshold: 0.15, rootMargin: '-10% 0px -10% 0px' }
+        );
+
+        this.mainSections.forEach((section) => sectionObserver.observe(section));
     }
 
     setupScrollListener() {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
                 this.navbar.classList.add('navbar-scrolled');
             } else {
                 this.navbar.classList.remove('navbar-scrolled');
+            }
+
+            if (!prefersReducedMotion && this.blobsLayer) {
+                const offset = window.scrollY * 0.06;
+                this.blobsLayer.style.transform = `translate3d(0, ${offset}px, 0)`;
             }
 
             let currentSectionId = '';
