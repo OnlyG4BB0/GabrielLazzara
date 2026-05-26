@@ -4,7 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gabriel | Fullstack Web Developer</title>
+    <title>Gabriel Lazzara | Full-Stack Web Developer · Palermo</title>
+    <meta name="description" content="Gabriel Lazzara — full-stack developer da Palermo. Siti web, web app e progetti per clienti reali. React, JavaScript, Python, PHP. Portfolio e contatti.">
+    <meta name="keywords" content="Gabriel Lazzara, full stack developer, web developer Palermo, portfolio developer, React, Python">
+    <meta name="author" content="Gabriel Lazzara">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://onlyg4bb0.github.io/GabrielLazzara/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Gabriel Lazzara Portfolio">
+    <meta property="og:title" content="Gabriel Lazzara | Full-Stack Web Developer">
+    <meta property="og:description" content="Sviluppo siti e web app su misura. Progetti personali e lavori per clienti — da Mondello a GitHub Pages.">
+    <meta property="og:url" content="https://onlyg4bb0.github.io/GabrielLazzara/">
+    <meta property="og:locale" content="it_IT">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Gabriel Lazzara | Full-Stack Web Developer">
+    <meta name="twitter:description" content="Portfolio di Gabriel Lazzara — full-stack developer, progetti web e contatti.">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Person","name":"Gabriel Lazzara","url":"https://onlyg4bb0.github.io/GabrielLazzara/","jobTitle":"Full-Stack Web Developer","sameAs":["https://github.com/OnlyG4BB0","https://www.instagram.com/gabriel_lazzara_/","https://www.youtube.com/@ONLY_G4BB0"],"email":"gabrielelazzara67@gmail.com","knowsAbout":["JavaScript","React","Python","PHP","HTML","CSS","Tailwind CSS"]}
+    </script>
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -113,10 +130,52 @@
         .menu-open .line-1 { transform: translateY(8px) rotate(45deg); }
         .menu-open .line-2 { opacity: 0; transform: translateX(-10px); }
         .menu-open .line-3 { transform: translateY(-8px) rotate(-45deg); }
+
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            top: 1rem;
+            z-index: 100;
+            padding: 0.75rem 1.25rem;
+            background: #9333ea;
+            color: white;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+        .skip-link:focus { left: 1rem; }
+
+        .skill-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #e9d5ff;
+        }
+
+        .project-thumb img {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-card:hover .project-thumb img { transform: scale(1.06); }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .reveal { opacity: 1; transform: none; }
+            .animate-blob, .animate-blob-reverse, .animate-bounce, .animate-float, .animate-pulse { animation: none !important; }
+        }
     </style>
 </head>
 
 <body class="bg-dark text-white overflow-x-hidden antialiased selection:bg-purple-500 selection:text-white">
+    <a href="#hero" class="skip-link" data-i18n="skip_main">Vai al contenuto principale</a>
 
     <!-- Sfondo Animato (Corretto per Mobile: rimossa classe mix-blend-screen problematica) -->
     <div class="fixed inset-0 w-full h-full pointer-events-none z-[-1] overflow-hidden bg-dark">
@@ -158,6 +217,7 @@
             <a href="#hero" data-i18n="nav_home" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all active-link truncate">Home</a>
             <a href="#about" data-i18n="nav_about" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all truncate">About</a>
             <a href="#services" data-i18n="nav_services" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all truncate">Servizi</a>
+            <a href="#process" data-i18n="nav_process" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all truncate">Processo</a>
             <a href="#skills" data-i18n="nav_skills" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all truncate">Skills</a>
             <a href="#projects" data-i18n="nav_projects" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all truncate">Progetti</a>
             <a href="#contact" data-i18n="nav_contact" class="nav-link w-[100px] text-center py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all truncate">Contattami</a>
@@ -182,6 +242,7 @@
         <a href="#hero" data-i18n="nav_home" class="mobile-link text-3xl font-bold text-gray-300 hover:text-white hover:scale-110 transition-all">Home</a>
         <a href="#about" data-i18n="nav_about" class="mobile-link text-3xl font-bold text-gray-300 hover:text-white hover:scale-110 transition-all">About</a>
         <a href="#services" data-i18n="nav_services" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Servizi</a>
+        <a href="#process" data-i18n="nav_process" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Processo</a>
         <a href="#skills" data-i18n="nav_skills" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Skills</a>
         <a href="#projects" data-i18n="nav_projects" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 hover:scale-110 transition-all">Progetti</a>
         <a href="#contact" data-i18n="nav_contact" class="mobile-link text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 mt-4">Contattami</a>
@@ -196,25 +257,32 @@
                 <span data-i18n="hero_badge" class="text-purple-300 text-sm font-medium tracking-wide">Disponibile per nuovi progetti</span>
             </div>
             
-            <h1 class="text-6xl md:text-8xl font-extrabold mb-6 leading-tight tracking-tight reveal" style="transition-delay: 100ms;">
-                <span class="block text-white">Creative</span>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-400 to-indigo-500 text-glow">
-                    Fullstack Developer
+            <h1 class="text-5xl sm:text-6xl md:text-8xl font-extrabold mb-4 leading-tight tracking-tight reveal" style="transition-delay: 100ms;">
+                <span class="block text-white">Gabriel Lazzara</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-400 to-indigo-500 text-glow text-4xl sm:text-5xl md:text-7xl mt-2 block">
+                    Full-Stack Developer
                 </span>
             </h1>
+            <p data-i18n="hero_sub" class="text-purple-300/90 text-sm md:text-base font-medium tracking-wide mb-6 reveal" style="transition-delay: 150ms;">
+                Palermo · Italia · Disponibile per progetti web e collaborazioni
+            </p>
             
             <p data-i18n="hero_desc" class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl font-light leading-relaxed reveal" style="transition-delay: 200ms;">
-                Trasformo idee complesse in esperienze digitali eleganti e funzionali. 
-                Creo soluzioni web innovative combinando design accattivante e performance ottimali.
+                Sviluppo siti e web app su misura — da landing page a progetti per clienti con prenotazioni, SEO e multilingua.
+                Unisco UI curata, codice pulito e deploy affidabile.
             </p>
             
             <div class="flex flex-col sm:flex-row gap-5 justify-center w-full sm:w-auto reveal" style="transition-delay: 300ms;">
                 <a href="#projects" class="w-full sm:w-60 h-14 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:scale-105 hover:shadow-[0_0_30px_rgba(168,85,247,0.5)] transition-all duration-300 flex justify-center items-center gap-2">
-                    <span data-i18n="hero_btn_projects" class="truncate">Visualizza Progetti</span> 
+                    <span data-i18n="hero_btn_projects" class="truncate">Vedi i progetti</span> 
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </a>
-                <a href="#contact" class="w-full sm:w-60 h-14 rounded-full glass-panel border border-white/20 hover:bg-white/10 text-white font-semibold hover:scale-105 transition-all duration-300 flex justify-center items-center">
+                <a href="#contact" class="w-full sm:w-60 h-14 rounded-full glass-panel border border-white/20 hover:bg-white/10 text-white font-semibold hover:scale-105 transition-all duration-300 flex justify-center items-center gap-2">
                     <span data-i18n="hero_btn_contact" class="truncate">Contattami</span>
+                </a>
+                <a href="https://github.com/OnlyG4BB0" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto h-14 px-6 rounded-full glass-panel border border-white/20 hover:bg-white/10 text-white font-semibold hover:scale-105 transition-all duration-300 flex justify-center items-center gap-2">
+                    <i class="fab fa-github"></i>
+                    <span data-i18n="hero_btn_github" class="truncate">GitHub</span>
                 </a>
             </div>
 
@@ -237,15 +305,14 @@
                         <i class="fas fa-quote-left text-2xl text-white"></i>
                     </div>
                     <p data-i18n="about_p1" class="text-lg text-gray-300 mb-6 leading-relaxed pt-4">
-                        Ciao, sono <span class="text-purple-400 font-bold">Gabriel</span>, un full-stack developer appassionato con solida esperienza nel settore tech.
+                        Ciao, sono <span class="text-purple-400 font-bold">Gabriel Lazzara</span>, full-stack developer con focus su siti professionali, web app interattive e progetti consegnati a clienti reali.
                     </p>
                     <p data-i18n="about_p2" class="text-lg text-gray-300 mb-6 leading-relaxed">
-                        Mi specializzo nella creazione di applicazioni web efficienti, scalabili e visivamente sorprendenti. 
-                        Credo fermamente nel potere del <span class="text-white font-medium bg-white/10 px-2 py-1 rounded">clean code</span> e nell'importanza di una user experience impeccabile.
+                        Lavoro con <span class="text-white font-medium bg-white/10 px-2 py-1 rounded">JavaScript · React · Python · PHP</span> e stack moderni (Tailwind, API REST, deploy su VPS e GitHub Pages).
+                        Ogni progetto parte da obiettivi chiari: visibilità online, conversioni e esperienza utente fluida su mobile.
                     </p>
                     <p data-i18n="about_p3" class="text-lg text-gray-300 leading-relaxed">
-                        Che si tratti di sviluppare un sito web responsivo o di architettare un sistema backend robusto, 
-                        metto creatività e precisione in ogni singolo progetto.
+                        Dal prototipo al go-live: struttura SEO, performance, form di contatto e manutenzione. Esempio recente: sito completo per <span class="text-sky-300 font-medium">Rent Boat Mondello</span> (noleggio barche, escursioni, prenotazioni).
                     </p>
                 </div>
                 
@@ -308,9 +375,9 @@
                     <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-white/5 border border-indigo-500/30 flex items-center justify-center group-hover:bg-indigo-500/20 group-hover:scale-110 transition-all duration-300">
                         <i class="fas fa-mobile-alt text-4xl text-indigo-400"></i>
                     </div>
-                    <h3 data-i18n="srv2_title" class="text-2xl font-bold text-white mb-4">Mobile Apps</h3>
+                    <h3 data-i18n="srv2_title" class="text-2xl font-bold text-white mb-4">Web responsive & PWA</h3>
                     <p data-i18n="srv2_desc" class="text-gray-400 leading-relaxed text-sm md:text-base">
-                        Sviluppo app mobile cross-platform che offrono un'esperienza utente fluida e nativa su tutti i dispositivi.
+                        Interfacce mobile-first, veloci e accessibili: il tuo sito funziona al meglio su smartphone, tablet e desktop senza app nativa separata.
                     </p>
                 </div>
                 
@@ -326,106 +393,66 @@
             </div>
         </section>
 
+        <!-- Process Section -->
+        <section id="process" class="scroll-mt-32">
+            <h2 data-i18n="process_title" class="text-3xl md:text-5xl font-bold text-center mb-6 reveal">
+                Come <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">lavoro</span>
+            </h2>
+            <p data-i18n="process_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-14 reveal">Dal brief al deploy: un flusso chiaro per consegnare progetti solidi, anche per clienti senza team tecnico.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass-panel glass-card p-6 rounded-2xl reveal">
+                    <span class="text-purple-400 font-bold text-sm">01</span>
+                    <h3 data-i18n="proc1_title" class="text-xl font-bold text-white mt-2 mb-2">Brief & obiettivi</h3>
+                    <p data-i18n="proc1_desc" class="text-gray-400 text-sm leading-relaxed">Capisco attività, target e priorità (lead, prenotazioni, SEO locale).</p>
+                </div>
+                <div class="glass-panel glass-card p-6 rounded-2xl reveal" style="transition-delay: 100ms;">
+                    <span class="text-purple-400 font-bold text-sm">02</span>
+                    <h3 data-i18n="proc2_title" class="text-xl font-bold text-white mt-2 mb-2">UI & struttura</h3>
+                    <p data-i18n="proc2_desc" class="text-gray-400 text-sm leading-relaxed">Wireframe, sezioni chiave e copy orientato alla conversione.</p>
+                </div>
+                <div class="glass-panel glass-card p-6 rounded-2xl reveal" style="transition-delay: 200ms;">
+                    <span class="text-purple-400 font-bold text-sm">03</span>
+                    <h3 data-i18n="proc3_title" class="text-xl font-bold text-white mt-2 mb-2">Sviluppo</h3>
+                    <p data-i18n="proc3_desc" class="text-gray-400 text-sm leading-relaxed">Codice modulare, responsive, form, integrazioni e test su dispositivi reali.</p>
+                </div>
+                <div class="glass-panel glass-card p-6 rounded-2xl reveal" style="transition-delay: 300ms;">
+                    <span class="text-purple-400 font-bold text-sm">04</span>
+                    <h3 data-i18n="proc4_title" class="text-xl font-bold text-white mt-2 mb-2">Deploy & SEO</h3>
+                    <p data-i18n="proc4_desc" class="text-gray-400 text-sm leading-relaxed">Pubblicazione (VPS, GitHub Pages), meta tag, performance e handoff al cliente.</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Skills Section -->
         <section id="skills" class="scroll-mt-32">
-            <h2 data-i18n="skills_title" class="text-3xl md:text-5xl font-bold text-center mb-16 reveal">
-                Tech <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">Skills</span>
+            <h2 data-i18n="skills_title" class="text-3xl md:text-5xl font-bold text-center mb-6 reveal">
+                Tech <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">Stack</span>
             </h2>
+            <p data-i18n="skills_sub" class="text-center text-gray-400 max-w-xl mx-auto mb-14 reveal">Competenze raggruppate per area — senza percentuali arbitrarie, con focus su ciò che uso nei progetti.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Colonna 1 -->
-                <div class="flex flex-col gap-6">
-                    <div class="glass-panel glass-card p-6 rounded-2xl reveal">
-                        <div class="flex justify-between items-center mb-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center text-orange-500"><i class="fab fa-html5 text-xl"></i></div>
-                                <h3 class="text-lg font-semibold text-white">HTML / CSS / Tailwind</h3>
-                            </div>
-                            <span class="text-purple-400 font-bold">95%</span>
-                        </div>
-                        <div class="h-2 w-full bg-darker rounded-full overflow-hidden">
-                            <div class="skill-fill h-full bg-gradient-to-r from-orange-500 to-purple-500 rounded-full relative w-0" data-width="95%">
-                                <div class="absolute inset-0 bg-white/30 animate-shimmer"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="glass-panel glass-card p-6 rounded-2xl reveal" style="transition-delay: 100ms;">
-                        <div class="flex justify-between items-center mb-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-yellow-400/20 flex items-center justify-center text-yellow-400"><i class="fab fa-js text-xl"></i></div>
-                                <h3 class="text-lg font-semibold text-white">JavaScript / React</h3>
-                            </div>
-                            <span class="text-purple-400 font-bold">85%</span>
-                        </div>
-                        <div class="h-2 w-full bg-darker rounded-full overflow-hidden">
-                            <div class="skill-fill h-full bg-gradient-to-r from-yellow-400 to-purple-500 rounded-full relative w-0" data-width="85%">
-                                <div class="absolute inset-0 bg-white/30 animate-shimmer"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="glass-panel glass-card p-6 rounded-2xl reveal" style="transition-delay: 200ms;">
-                        <div class="flex justify-between items-center mb-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400"><i class="fab fa-python text-xl"></i></div>
-                                <h3 class="text-lg font-semibold text-white">Python</h3>
-                            </div>
-                            <span class="text-purple-400 font-bold">80%</span>
-                        </div>
-                        <div class="h-2 w-full bg-darker rounded-full overflow-hidden">
-                            <div class="skill-fill h-full bg-gradient-to-r from-blue-400 to-purple-500 rounded-full relative w-0" data-width="80%">
-                                <div class="absolute inset-0 bg-white/30 animate-shimmer"></div>
-                            </div>
-                        </div>
+                <div class="glass-panel glass-card p-8 rounded-3xl reveal">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-palette text-purple-400"></i> <span data-i18n="skill_cat_front">Frontend</span></h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-tag">HTML5</span><span class="skill-tag">CSS3</span><span class="skill-tag">Tailwind</span><span class="skill-tag">JavaScript</span><span class="skill-tag">React</span><span class="skill-tag">Svelte</span>
                     </div>
                 </div>
-                
-                <!-- Colonna 2 -->
-                <div class="flex flex-col gap-6">
-                    <div class="glass-panel glass-card p-6 rounded-2xl reveal">
-                        <div class="flex justify-between items-center mb-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center text-red-500"><i class="fab fa-java text-xl"></i></div>
-                                <h3 class="text-lg font-semibold text-white">Java</h3>
-                            </div>
-                            <span class="text-purple-400 font-bold">85%</span>
-                        </div>
-                        <div class="h-2 w-full bg-darker rounded-full overflow-hidden">
-                            <div class="skill-fill h-full bg-gradient-to-r from-red-500 to-purple-500 rounded-full relative w-0" data-width="85%">
-                                <div class="absolute inset-0 bg-white/30 animate-shimmer"></div>
-                            </div>
-                        </div>
+                <div class="glass-panel glass-card p-8 rounded-3xl reveal" style="transition-delay: 100ms;">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-server text-indigo-400"></i> <span data-i18n="skill_cat_back">Backend & dati</span></h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-tag">Python</span><span class="skill-tag">Java</span><span class="skill-tag">PHP</span><span class="skill-tag">SQL</span><span class="skill-tag">REST API</span>
                     </div>
-                    
-                    <div class="glass-panel glass-card p-6 rounded-2xl reveal" style="transition-delay: 100ms;">
-                        <div class="flex justify-between items-center mb-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-teal-500/20 flex items-center justify-center text-teal-400"><i class="fas fa-database text-xl"></i></div>
-                                <h3 class="text-lg font-semibold text-white">SQL / NoSQL</h3>
-                            </div>
-                            <span class="text-purple-400 font-bold">75%</span>
-                        </div>
-                        <div class="h-2 w-full bg-darker rounded-full overflow-hidden">
-                            <div class="skill-fill h-full bg-gradient-to-r from-teal-400 to-purple-500 rounded-full relative w-0" data-width="75%">
-                                <div class="absolute inset-0 bg-white/30 animate-shimmer"></div>
-                            </div>
-                        </div>
+                </div>
+                <div class="glass-panel glass-card p-8 rounded-3xl reveal" style="transition-delay: 150ms;">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-tools text-fuchsia-400"></i> <span data-i18n="skill_cat_tools">Tools & workflow</span></h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-tag">Git</span><span class="skill-tag">GitHub</span><span class="skill-tag">Docker</span><span class="skill-tag">Vite</span><span class="skill-tag">VS Code</span>
                     </div>
-                    
-                    <div class="glass-panel glass-card p-6 rounded-2xl reveal" style="transition-delay: 200ms;">
-                        <div class="flex justify-between items-center mb-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-orange-600/20 flex items-center justify-center text-orange-500"><i class="fab fa-git-alt text-xl"></i></div>
-                                <h3 class="text-lg font-semibold text-white">Git & Version Control</h3>
-                            </div>
-                            <span class="text-purple-400 font-bold">90%</span>
-                        </div>
-                        <div class="h-2 w-full bg-darker rounded-full overflow-hidden">
-                            <div class="skill-fill h-full bg-gradient-to-r from-orange-500 to-purple-500 rounded-full relative w-0" data-width="90%">
-                                <div class="absolute inset-0 bg-white/30 animate-shimmer"></div>
-                            </div>
-                        </div>
+                </div>
+                <div class="glass-panel glass-card p-8 rounded-3xl reveal" style="transition-delay: 200ms;">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-rocket text-sky-400"></i> <span data-i18n="skill_cat_deliver">Delivery</span></h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-tag">SEO base</span><span class="skill-tag">GitHub Pages</span><span class="skill-tag">Responsive</span><span class="skill-tag">i18n</span><span class="skill-tag">Performance</span>
                     </div>
                 </div>
             </div>
@@ -433,61 +460,96 @@
 
         <!-- Projects Section -->
         <section id="projects" class="scroll-mt-32">
-            <h2 data-i18n="proj_title" class="text-3xl md:text-5xl font-bold text-center mb-16 reveal">
-                Alcuni miei <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">design</span>
+            <h2 data-i18n="proj_title" class="text-3xl md:text-5xl font-bold text-center mb-6 reveal">
+                Progetti <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">selezionati</span>
             </h2>
+            <p data-i18n="proj_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-16 reveal">Lavori reali e side project: stack, ruolo e link al demo live.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group">
-                    <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-                        <i class="fas fa-cube text-7xl text-white/50 group-hover:text-purple-400 group-hover:scale-125 transition-all duration-500 relative z-0"></i>
-                        <span data-i18n="tag_cube" class="absolute top-6 left-6 z-20 px-3 py-1 bg-purple-500/20 text-purple-300 backdrop-blur-md rounded-full text-xs font-bold border border-purple-500/30">Esperimento 3D</span>
+                <!-- Rent Boat Mondello - Cliente -->
+                <article class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group">
+                    <div class="project-thumb h-56 relative overflow-hidden bg-sky-950">
+                        <img src="https://www.rentboatmondello.it/wp-content/uploads/2020/02/Foto-ricordo_1.jpg" alt="Rent Boat Mondello — escursioni in barca a Mondello" class="w-full h-full object-cover" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent z-10"></div>
+                        <span data-i18n="tag_client" class="absolute top-4 left-4 z-20 px-3 py-1 bg-sky-500/30 text-sky-200 backdrop-blur-md rounded-full text-xs font-bold border border-sky-400/40">Progetto cliente</span>
                     </div>
-                    <div class="p-8 flex flex-col flex-grow relative z-20 -mt-6 bg-gradient-to-b from-dark/80 to-transparent backdrop-blur-sm rounded-t-3xl border-t border-white/10">
-                        <h3 class="text-2xl font-bold text-white mb-3">Liquid Cube</h3>
-                        <p data-i18n="proj1_desc" class="text-gray-400 mb-6 flex-grow text-sm">
-                            Simulazione interattiva e fluida di un cubo liquido, sviluppata per esplorare animazioni complesse e rendering avanzato.
+                    <div class="p-8 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold text-white mb-1">Rent Boat Mondello</h3>
+                        <p data-i18n="proj_role_client" class="text-sky-300/90 text-xs font-semibold uppercase tracking-wider mb-3">Full-stack · Sito vetrina + prenotazioni</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill-tag text-xs">PHP</span><span class="skill-tag text-xs">Tailwind</span><span class="skill-tag text-xs">SEO</span><span class="skill-tag text-xs">Multilingua</span>
+                        </div>
+                        <p data-i18n="proj3_desc" class="text-gray-400 mb-4 flex-grow text-sm leading-relaxed">
+                            Sito per noleggio gommoni ed escursioni a Mondello (Palermo): flotta, tour Capogallo/Zingaro, form contatti e SEO locale multilingua (IT/EN/DE…).
                         </p>
-                        <a href="https://onlyg4bb0.github.io/LiquidCube/" target="_blank" class="w-full py-3 rounded-xl bg-white/10 hover:bg-purple-600 border border-white/20 hover:border-purple-500 text-center font-semibold transition-all duration-300">
-                            <span data-i18n="proj_explore">Esplora</span> <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                        </a>
+                        <ul class="text-gray-500 text-xs space-y-1 mb-6 list-disc list-inside" data-i18n="proj3_bullets">
+                            <li>Pagine PHP strutturate (home, flotta, escursioni, contatti)</li>
+                            <li>Schema.org, hreflang e meta per ricerca locale</li>
+                            <li>Deploy su VPS Azure</li>
+                        </ul>
+                        <div class="flex flex-col gap-2 mt-auto">
+                            <a href="http://130.110.2.57/index.php" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-sky-600/80 hover:bg-sky-500 border border-sky-400/40 text-center font-semibold transition-all duration-300">
+                                <span data-i18n="proj_visit">Visita il sito</span> <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                </article>
+
+                <article class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group" style="transition-delay: 150ms;">
+                    <div class="project-thumb h-56 relative overflow-hidden bg-gradient-to-br from-purple-900 to-indigo-950">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-cube text-6xl text-purple-300/40"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent z-10"></div>
+                        <span data-i18n="tag_cube" class="absolute top-4 left-4 z-20 px-3 py-1 bg-purple-500/20 text-purple-300 backdrop-blur-md rounded-full text-xs font-bold border border-purple-500/30">Esperimento 3D</span>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold text-white mb-1">Liquid Cube</h3>
+                        <p data-i18n="proj_role_cube" class="text-purple-300/90 text-xs font-semibold uppercase tracking-wider mb-3">Side project · Creative coding</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill-tag text-xs">JavaScript</span><span class="skill-tag text-xs">Canvas/WebGL</span><span class="skill-tag text-xs">Animazioni</span>
+                        </div>
+                        <p data-i18n="proj1_desc" class="text-gray-400 mb-6 flex-grow text-sm leading-relaxed">
+                            Simulazione interattiva di un cubo liquido: esplorazione di animazioni fluide e rendering in tempo reale nel browser.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-2 mt-auto">
+                            <a href="https://onlyg4bb0.github.io/LiquidCube/" target="_blank" rel="noopener noreferrer" class="flex-1 py-3 rounded-xl bg-white/10 hover:bg-purple-600 border border-white/20 text-center font-semibold transition-all text-sm">
+                                <span data-i18n="proj_demo">Demo</span> <i class="fas fa-external-link-alt ml-1"></i>
+                            </a>
+                            <a href="https://github.com/OnlyG4BB0/LiquidCube" target="_blank" rel="noopener noreferrer" class="flex-1 py-3 rounded-xl glass-panel border border-white/10 hover:border-purple-500 text-center font-semibold transition-all text-sm">
+                                <i class="fab fa-github mr-1"></i> <span data-i18n="proj_code">Codice</span>
+                            </a>
+                        </div>
+                    </div>
+                </article>
                 
-                <div class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group" style="transition-delay: 150ms;">
-                    <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-                        <i class="fas fa-cloud-sun text-7xl text-white/50 group-hover:text-indigo-400 group-hover:scale-125 transition-all duration-500 relative z-0"></i>
-                        <span data-i18n="tag_webapp" class="absolute top-6 left-6 z-20 px-3 py-1 bg-indigo-500/20 text-indigo-300 backdrop-blur-md rounded-full text-xs font-bold border border-indigo-500/30">Web App</span>
+                <article class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group" style="transition-delay: 300ms;">
+                    <div class="project-thumb h-56 relative overflow-hidden bg-gradient-to-br from-indigo-900 to-slate-900">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-cloud-sun text-6xl text-indigo-300/40"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent z-10"></div>
+                        <span data-i18n="tag_webapp" class="absolute top-4 left-4 z-20 px-3 py-1 bg-indigo-500/20 text-indigo-300 backdrop-blur-md rounded-full text-xs font-bold border border-indigo-500/30">Web App</span>
                     </div>
-                    <div class="p-8 flex flex-col flex-grow relative z-20 -mt-6 bg-gradient-to-b from-dark/80 to-transparent backdrop-blur-sm rounded-t-3xl border-t border-white/10">
-                        <h3 class="text-2xl font-bold text-white mb-3">Weatherflow</h3>
-                        <p data-i18n="proj2_desc" class="text-gray-400 mb-6 flex-grow text-sm">
-                            App di previsioni meteo dinamica costruita con Svelte e Python, che offre aggiornamenti in tempo reale e un'interfaccia pulita.
+                    <div class="p-8 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold text-white mb-1">Weatherflow</h3>
+                        <p data-i18n="proj_role_weather" class="text-indigo-300/90 text-xs font-semibold uppercase tracking-wider mb-3">Side project · Full-stack</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill-tag text-xs">Svelte</span><span class="skill-tag text-xs">Python</span><span class="skill-tag text-xs">API meteo</span>
+                        </div>
+                        <p data-i18n="proj2_desc" class="text-gray-400 mb-6 flex-grow text-sm leading-relaxed">
+                            App meteo con aggiornamenti in tempo reale, UI pulita e backend Python per dati e logica applicativa.
                         </p>
-                        <a href="https://onlyg4bb0.github.io/WeatherFlow/" target="_blank" class="w-full py-3 rounded-xl bg-white/10 hover:bg-indigo-600 border border-white/20 hover:border-indigo-500 text-center font-semibold transition-all duration-300">
-                            <span data-i18n="proj_explore">Esplora</span> <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                        </a>
+                        <div class="flex flex-col sm:flex-row gap-2 mt-auto">
+                            <a href="https://onlyg4bb0.github.io/WeatherFlow/" target="_blank" rel="noopener noreferrer" class="flex-1 py-3 rounded-xl bg-white/10 hover:bg-indigo-600 border border-white/20 text-center font-semibold transition-all text-sm">
+                                <span data-i18n="proj_demo">Demo</span> <i class="fas fa-external-link-alt ml-1"></i>
+                            </a>
+                            <a href="https://github.com/OnlyG4BB0/WeatherFlow" target="_blank" rel="noopener noreferrer" class="flex-1 py-3 rounded-xl glass-panel border border-white/10 hover:border-indigo-500 text-center font-semibold transition-all text-sm">
+                                <i class="fab fa-github mr-1"></i> <span data-i18n="proj_code">Codice</span>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group" style="transition-delay: 300ms;">
-                    <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-                        <i class="fas fa-book-open text-7xl text-white/50 group-hover:text-fuchsia-400 group-hover:scale-125 transition-all duration-500 relative z-0"></i>
-                        <span data-i18n="tag_journal" class="absolute top-6 left-6 z-20 px-3 py-1 bg-fuchsia-500/20 text-fuchsia-300 backdrop-blur-md rounded-full text-xs font-bold border border-fuchsia-500/30">Web App</span>
-                    </div>
-                    <div class="p-8 flex flex-col flex-grow relative z-20 -mt-6 bg-gradient-to-b from-dark/80 to-transparent backdrop-blur-sm rounded-t-3xl border-t border-white/10">
-                        <h3 class="text-2xl font-bold text-white mb-3">Flux Journal</h3>
-                        <p data-i18n="proj3_desc" class="text-gray-400 mb-6 flex-grow text-sm">
-                            Un'applicazione web elegante e minimale per tenere traccia dei propri pensieri e attività quotidiane.
-                        </p>
-                        <a href="https://onlyg4bb0.github.io/flux-journal/" target="_blank" class="w-full py-3 rounded-xl bg-white/10 hover:bg-fuchsia-600 border border-white/20 hover:border-fuchsia-500 text-center font-semibold transition-all duration-300">
-                            <span data-i18n="proj_explore">Esplora</span> <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                        </a>
-                    </div>
-                </div>
+                </article>
             </div>
         </section>
 
@@ -499,13 +561,18 @@
                 
                 <div class="text-center relative z-10">
                     <h2 data-i18n="contact_title" class="text-3xl md:text-5xl font-bold mb-4">Lavoriamo <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">Insieme</span></h2>
-                    <p data-i18n="contact_sub" class="text-gray-400 mb-10 max-w-xl mx-auto">
+                    <p data-i18n="contact_sub" class="text-gray-400 mb-6 max-w-xl mx-auto">
                         Hai un'idea fantastica? Vuoi collaborare su un nuovo progetto o hai solo bisogno di una consulenza? Scrivimi!
                     </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">
+                        <a href="mailto:gabrielelazzara67@gmail.com" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-panel border border-purple-500/30 text-purple-200 hover:bg-white/10 transition-all text-sm font-medium">
+                            <i class="fas fa-envelope"></i> gabrielelazzara67@gmail.com
+                        </a>
+                        <button type="button" id="copy-email-btn" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white text-sm transition-all"><span data-i18n="contact_copy">Copia email</span></button>
+                    </div>
                 </div>
                 
-                <!-- Email integration -->
-                <form id="contact-form" class="space-y-6 relative z-10">
+                <form id="contact-form" class="space-y-6 relative z-10" novalidate>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label data-i18n="form_name" class="text-sm font-medium text-gray-300 ml-2">Il tuo Nome</label>
@@ -564,60 +631,92 @@
         // --- Dizionario delle Traduzioni ---
         const translations = {
             it: {
-                nav_home: "Home", nav_about: "About", nav_services: "Servizi", nav_skills: "Skills", nav_projects: "Progetti", nav_contact: "Contattami",
+                skip_main: "Vai al contenuto principale",
+                nav_home: "Home", nav_about: "About", nav_services: "Servizi", nav_process: "Processo", nav_skills: "Skills", nav_projects: "Progetti", nav_contact: "Contattami",
                 hero_badge: "Disponibile per nuovi progetti",
-                hero_desc: "Trasformo idee complesse in esperienze digitali eleganti e funzionali. Creo soluzioni web innovative combinando design accattivante e performance ottimali.",
-                hero_btn_projects: "Visualizza Progetti", hero_btn_contact: "Contattami",
+                hero_sub: "Palermo · Italia · Disponibile per progetti web e collaborazioni",
+                hero_desc: "Sviluppo siti e web app su misura — da landing page a progetti per clienti con prenotazioni, SEO e multilingua. Unisco UI curata, codice pulito e deploy affidabile.",
+                hero_btn_projects: "Vedi i progetti", hero_btn_contact: "Contattami", hero_btn_github: "GitHub",
                 about_title: "Chi <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Sono</span>",
-                about_p1: "Ciao, sono <span class='text-purple-400 font-bold'>Gabriel</span>, un full-stack developer appassionato con solida esperienza nel settore tech.",
-                about_p2: "Mi specializzo nella creazione di applicazioni web efficienti, scalabili e visivamente sorprendenti. Credo fermamente nel potere del <span class='text-white font-medium bg-white/10 px-2 py-1 rounded'>clean code</span> e nell'importanza di una user experience impeccabile.",
-                about_p3: "Che si tratti di sviluppare un sito web responsivo o di architettare un sistema backend robusto, metto creatività e precisione in ogni singolo progetto.",
+                about_p1: "Ciao, sono <span class='text-purple-400 font-bold'>Gabriel Lazzara</span>, full-stack developer con focus su siti professionali, web app interattive e progetti consegnati a clienti reali.",
+                about_p2: "Lavoro con <span class='text-white font-medium bg-white/10 px-2 py-1 rounded'>JavaScript · React · Python · PHP</span> e stack moderni (Tailwind, API REST, deploy su VPS e GitHub Pages). Ogni progetto parte da obiettivi chiari: visibilità online, conversioni e UX fluida su mobile.",
+                about_p3: "Dal prototipo al go-live: struttura SEO, performance, form di contatto e manutenzione. Esempio recente: sito completo per <span class='text-sky-300 font-medium'>Rent Boat Mondello</span> (noleggio barche, escursioni, prenotazioni).",
                 services_title: "I Miei <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Servizi</span>",
                 srv1_title: "Web Development", srv1_desc: "Da semplici landing page a complesse web application, costruisco soluzioni su misura per le tue esigenze con le ultime tecnologie.",
-                srv2_title: "Mobile Apps", srv2_desc: "Sviluppo app mobile cross-platform che offrono un'esperienza utente fluida e nativa su tutti i dispositivi.",
+                srv2_title: "Web responsive & PWA", srv2_desc: "Interfacce mobile-first, veloci e accessibili: il tuo sito funziona al meglio su smartphone, tablet e desktop senza app nativa separata.",
                 srv3_title: "UI/UX Design", srv3_desc: "Progetto interfacce intuitive e visivamente accattivanti, mettendo sempre l'utente al centro dell'esperienza digitale.",
-                skills_title: "Tech <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Skills</span>",
-                proj_title: "Alcuni miei <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>design</span>",
-                proj_explore: "Esplora",
-                tag_cube: "Esperimento 3D", tag_webapp: "Web App", tag_journal: "Web App",
-                proj1_desc: "Simulazione interattiva e fluida di un cubo liquido, sviluppata per esplorare animazioni complesse e rendering avanzato.",
-                proj2_desc: "App di previsioni meteo dinamica costruita con Svelte e Python, che offre aggiornamenti in tempo reale e un'interfaccia pulita.",
-                proj3_desc: "Un'applicazione web elegante e minimale per tenere traccia dei propri pensieri e attività quotidiane.",
+                process_title: "Come <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>lavoro</span>",
+                process_sub: "Dal brief al deploy: un flusso chiaro per consegnare progetti solidi, anche per clienti senza team tecnico.",
+                proc1_title: "Brief & obiettivi", proc1_desc: "Capisco attività, target e priorità (lead, prenotazioni, SEO locale).",
+                proc2_title: "UI & struttura", proc2_desc: "Wireframe, sezioni chiave e copy orientato alla conversione.",
+                proc3_title: "Sviluppo", proc3_desc: "Codice modulare, responsive, form, integrazioni e test su dispositivi reali.",
+                proc4_title: "Deploy & SEO", proc4_desc: "Pubblicazione (VPS, GitHub Pages), meta tag, performance e handoff al cliente.",
+                skills_title: "Tech <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Stack</span>",
+                skills_sub: "Competenze raggruppate per area — senza percentuali arbitrarie, con focus su ciò che uso nei progetti.",
+                skill_cat_front: "Frontend", skill_cat_back: "Backend & dati", skill_cat_tools: "Tools & workflow", skill_cat_deliver: "Delivery",
+                proj_title: "Progetti <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>selezionati</span>",
+                proj_sub: "Lavori reali e side project: stack, ruolo e link al demo live.",
+                proj_visit: "Visita il sito", proj_demo: "Demo", proj_code: "Codice",
+                proj_role_client: "Full-stack · Sito vetrina + prenotazioni",
+                proj_role_cube: "Side project · Creative coding",
+                proj_role_weather: "Side project · Full-stack",
+                tag_client: "Progetto cliente", tag_cube: "Esperimento 3D", tag_webapp: "Web App",
+                proj1_desc: "Simulazione interattiva di un cubo liquido: esplorazione di animazioni fluide e rendering in tempo reale nel browser.",
+                proj2_desc: "App meteo con aggiornamenti in tempo reale, UI pulita e backend Python per dati e logica applicativa.",
+                proj3_desc: "Sito per noleggio gommoni ed escursioni a Mondello (Palermo): flotta, tour Capogallo/Zingaro, form contatti e SEO locale multilingua (IT/EN/DE…).",
+                proj3_bullets: "<li>Pagine PHP strutturate (home, flotta, escursioni, contatti)</li><li>Schema.org, hreflang e meta per ricerca locale</li><li>Deploy su VPS Azure</li>",
                 contact_title: "Lavoriamo <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Insieme</span>",
-                contact_sub: "Hai un'idea fantastica? Vuoi collaborare su un nuovo progetto o hai solo bisogno di una consulenza? Scrivimi!",
+                contact_sub: "Hai un'idea o un progetto in mente? Collaborazioni, freelance e consulenze — rispondo entro 48 ore.",
+                contact_copy: "Copia email", contact_copied: "Copiata!",
                 form_name: "Il tuo Nome", form_email: "La tua Email", form_msg: "Il tuo Messaggio",
                 form_name_ph: "Mario Rossi", form_email_ph: "mario@example.com", form_msg_ph: "Parlami del tuo progetto...",
                 form_btn: "Invia Messaggio",
                 footer_credits: "Progettato e sviluppato con <i class='fas fa-heart text-purple-500 mx-1'></i> da Gabriel Lazzara.<br>&copy; 2026 Tutti i diritti riservati.",
-                email_opening: "Apertura App Email..."
+                email_opening: "Apertura client email..."
             },
             en: {
-                nav_home: "Home", nav_about: "About", nav_services: "Services", nav_skills: "Skills", nav_projects: "Projects", nav_contact: "Let's Talk",
+                skip_main: "Skip to main content",
+                nav_home: "Home", nav_about: "About", nav_services: "Services", nav_process: "Process", nav_skills: "Skills", nav_projects: "Projects", nav_contact: "Let's Talk",
                 hero_badge: "Available for new projects",
-                hero_desc: "I transform complex ideas into elegant and functional digital experiences. I create innovative web solutions combining captivating design and optimal performance.",
-                hero_btn_projects: "View Projects", hero_btn_contact: "Contact Me",
+                hero_sub: "Palermo · Italy · Open to web projects and collaborations",
+                hero_desc: "I build tailored websites and web apps — from landing pages to client projects with booking flows, SEO and multilingual support. Clean UI, solid code, reliable deploys.",
+                hero_btn_projects: "View projects", hero_btn_contact: "Contact me", hero_btn_github: "GitHub",
                 about_title: "About <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Me</span>",
-                about_p1: "Hi, I'm <span class='text-purple-400 font-bold'>Gabriel</span>, a passionate full-stack developer with solid experience in the tech industry.",
-                about_p2: "I specialize in creating efficient, scalable, and visually stunning web applications. I firmly believe in the power of <span class='text-white font-medium bg-white/10 px-2 py-1 rounded'>clean code</span> and the importance of a flawless user experience.",
-                about_p3: "Whether it's developing a responsive website or architecting a robust backend system, I bring creativity and precision to every single project.",
+                about_p1: "Hi, I'm <span class='text-purple-400 font-bold'>Gabriel Lazzara</span>, a full-stack developer focused on professional websites, interactive web apps and real client deliveries.",
+                about_p2: "I work with <span class='text-white font-medium bg-white/10 px-2 py-1 rounded'>JavaScript · React · Python · PHP</span> and modern stacks (Tailwind, REST APIs, VPS and GitHub Pages deploys). Every project starts with clear goals: visibility, conversions and smooth mobile UX.",
+                about_p3: "From prototype to go-live: SEO structure, performance, contact forms and maintenance. Recent example: full site for <span class='text-sky-300 font-medium'>Rent Boat Mondello</span> (boat rental, tours, bookings).",
                 services_title: "My <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Services</span>",
-                srv1_title: "Web Development", srv1_desc: "From simple landing pages to complex web applications, I build tailored solutions for your needs using the latest technologies.",
-                srv2_title: "Mobile Apps", srv2_desc: "I develop cross-platform mobile apps that offer a fluid and native user experience across all devices.",
-                srv3_title: "UI/UX Design", srv3_desc: "I design intuitive and visually appealing interfaces, always putting the user at the center of the digital experience.",
-                skills_title: "Tech <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Skills</span>",
-                proj_title: "Some of my <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>designs</span>",
-                proj_explore: "Explore",
-                tag_cube: "3D Experiment", tag_webapp: "Web App", tag_journal: "Web App",
-                proj1_desc: "An interactive and fluid simulation of a liquid cube, developed to explore complex animations and advanced rendering.",
-                proj2_desc: "Dynamic weather forecast app built with Svelte and Python, offering real-time updates and a clean interface.",
-                proj3_desc: "An elegant and minimal web application to keep track of your daily thoughts and activities.",
+                srv1_title: "Web Development", srv1_desc: "From simple landing pages to complex web applications, I build tailored solutions using modern technologies.",
+                srv2_title: "Responsive web & PWA", srv2_desc: "Mobile-first, fast and accessible interfaces — your site works great on phones, tablets and desktop without a separate native app.",
+                srv3_title: "UI/UX Design", srv3_desc: "I design intuitive, visually appealing interfaces with the user at the center.",
+                process_title: "How I <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>work</span>",
+                process_sub: "From brief to deploy: a clear flow to ship solid projects, even for non-technical clients.",
+                proc1_title: "Brief & goals", proc1_desc: "I understand the business, audience and priorities (leads, bookings, local SEO).",
+                proc2_title: "UI & structure", proc2_desc: "Wireframes, key sections and conversion-oriented copy.",
+                proc3_title: "Development", proc3_desc: "Modular code, responsive layout, forms, integrations and real-device testing.",
+                proc4_title: "Deploy & SEO", proc4_desc: "Launch (VPS, GitHub Pages), meta tags, performance and client handoff.",
+                skills_title: "Tech <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Stack</span>",
+                skills_sub: "Skills grouped by area — no arbitrary percentages, focused on what I use in production.",
+                skill_cat_front: "Frontend", skill_cat_back: "Backend & data", skill_cat_tools: "Tools & workflow", skill_cat_deliver: "Delivery",
+                proj_title: "Selected <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>projects</span>",
+                proj_sub: "Client work and side projects: stack, role and live demo links.",
+                proj_visit: "Visit site", proj_demo: "Demo", proj_code: "Code",
+                proj_role_client: "Full-stack · Business site + bookings",
+                proj_role_cube: "Side project · Creative coding",
+                proj_role_weather: "Side project · Full-stack",
+                tag_client: "Client project", tag_cube: "3D Experiment", tag_webapp: "Web App",
+                proj1_desc: "Interactive liquid cube simulation: fluid animations and real-time browser rendering.",
+                proj2_desc: "Weather app with real-time updates, clean UI and Python backend for data and app logic.",
+                proj3_desc: "Boat rental and tours site in Mondello (Palermo): fleet, Capogallo/Zingaro tours, contact forms and multilingual local SEO (IT/EN/DE…).",
+                proj3_bullets: "<li>Structured PHP pages (home, fleet, tours, contact)</li><li>Schema.org, hreflang and local search meta</li><li>Deployed on Azure VPS</li>",
                 contact_title: "Let's Work <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Together</span>",
-                contact_sub: "Have a great idea? Want to collaborate on a new project or just need some advice? Hit me up!",
+                contact_sub: "Have an idea or project in mind? Collaborations, freelance and consulting — I reply within 48 hours.",
+                contact_copy: "Copy email", contact_copied: "Copied!",
                 form_name: "Your Name", form_email: "Your Email", form_msg: "Your Message",
                 form_name_ph: "John Doe", form_email_ph: "john@example.com", form_msg_ph: "Tell me about your project...",
                 form_btn: "Send Message",
                 footer_credits: "Designed and developed with <i class='fas fa-heart text-purple-500 mx-1'></i> by Gabriel Lazzara.<br>&copy; 2026 All rights reserved.",
-                email_opening: "Opening Email App..."
+                email_opening: "Opening email client..."
             }
         };
 
@@ -631,8 +730,8 @@
                 this.navLinks = document.querySelectorAll('.nav-link');
                 this.mobileLinks = document.querySelectorAll('.mobile-link');
                 this.revealElements = document.querySelectorAll('.reveal');
-                this.skillFills = document.querySelectorAll('.skill-fill');
-                this.langToggles = document.querySelectorAll('.lang-toggle'); 
+                this.langToggles = document.querySelectorAll('.lang-toggle');
+                this.copyEmailBtn = document.getElementById('copy-email-btn'); 
                 
                 // Stato
                 this.isMenuOpen = false;
@@ -648,6 +747,7 @@
                 this.setupIntersectionObservers();
                 this.setupScrollListener();
                 this.setupContactForm();
+                this.setupCopyEmail();
                 this.setupLanguageToggle();
                 this.applyLanguage(this.currentLang);
             }
@@ -686,6 +786,25 @@
                     const key = el.getAttribute('data-i18n-ph');
                     if (translations[lang][key]) {
                         el.setAttribute('placeholder', translations[lang][key]);
+                    }
+                });
+
+                document.querySelectorAll('[data-i18n="proj3_bullets"]').forEach(el => {
+                    if (translations[lang].proj3_bullets) el.innerHTML = translations[lang].proj3_bullets;
+                });
+            }
+
+            setupCopyEmail() {
+                if (!this.copyEmailBtn) return;
+                const email = 'gabrielelazzara67@gmail.com';
+                this.copyEmailBtn.addEventListener('click', async () => {
+                    try {
+                        await navigator.clipboard.writeText(email);
+                        const span = this.copyEmailBtn.querySelector('[data-i18n]') || this.copyEmailBtn;
+                        span.textContent = translations[this.currentLang].contact_copied;
+                        setTimeout(() => this.applyLanguage(this.currentLang), 2000);
+                    } catch {
+                        window.location.href = `mailto:${email}`;
                     }
                 });
             }
@@ -748,22 +867,6 @@
                 }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
 
                 this.revealElements.forEach(el => revealObserver.observe(el));
-
-                const skillObserver = new IntersectionObserver((entries, observer) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const bar = entry.target;
-                            const targetWidth = bar.getAttribute('data-width');
-                            setTimeout(() => {
-                                bar.style.width = targetWidth;
-                                bar.style.transition = "width 1.5s cubic-bezier(0.16, 1, 0.3, 1)";
-                            }, 300);
-                            observer.unobserve(bar);
-                        }
-                    });
-                }, { threshold: 0.5 });
-
-                this.skillFills.forEach(bar => skillObserver.observe(bar));
             }
 
             // --- 5. Eventi Scroll ---
