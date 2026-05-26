@@ -14,6 +14,7 @@
     <meta name="robots" content="index, follow">
     <meta name="google-site-verification" content="lyymIbVzK7B49E-pzw095UFG74sf_Gn6T4G6rZdV860" />
     <link rel="canonical" href="https://onlyg4bb0.github.io/GabrielLazzara/">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://onlyg4bb0.github.io/GabrielLazzara/sitemap.xml">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Gabriel Lazzara Portfolio">
     <meta property="og:title" content="Gabriel Lazzara | Full-Stack Web Developer">
@@ -65,7 +66,7 @@
             const theme = saved || (prefersLight ? 'light' : 'dark');
             document.documentElement.setAttribute('data-theme', theme);
             const meta = document.querySelector('meta[name="theme-color"]');
-            if (meta) meta.setAttribute('content', theme === 'light' ? '#f5f3fa' : '#08060f');
+            if (meta) meta.setAttribute('content', theme === 'light' ? '#f8f7fc' : '#08060f');
         })();
     </script>
     
@@ -149,7 +150,7 @@
     <div class="bg-mesh" aria-hidden="true"></div>
     <div class="bg-grid" aria-hidden="true"></div>
 
-  <div class="site-blobs fixed inset-0 pointer-events-none z-[-1] overflow-hidden" aria-hidden="true">
+  <div class="site-blobs" aria-hidden="true">
         <div class="blob absolute top-[-10%] left-[-5%] w-64 h-64 md:w-80 md:h-80 animate-blob"></div>
         <div class="blob blob--accent absolute top-[40%] left-[35%] w-48 h-48 md:w-64 md:h-64 animate-blob" style="animation-delay: 5s;"></div>
         <div class="blob absolute top-[25%] right-[-5%] w-56 h-56 md:w-72 md:h-72 animate-blob-reverse" style="animation-delay: 3s;"></div>
@@ -233,7 +234,7 @@
 
                     <p class="section-eyebrow reveal w-fit" data-i18n="hero_eyebrow">Portfolio · Palermo</p>
 
-                    <h1 id="hero-heading" class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 leading-[1.05] tracking-tight reveal" style="transition-delay: 80ms;">
+                    <h1 id="hero-heading" class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 tracking-tight reveal" style="transition-delay: 80ms;">
                         <span class="block text-white">Gabriel Lazzara</span>
                         <span class="gradient-text text-glow text-3xl sm:text-4xl md:text-5xl lg:text-6xl mt-2 block" data-i18n="hero_role">Sviluppatore Web Full-Stack</span>
                     </h1>
@@ -296,7 +297,7 @@
             </div>
 
             <div class="mt-14 flex justify-center reveal" style="transition-delay: 400ms;">
-                <a href="#about" class="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-purple-400 hover:text-white hover:bg-purple-600/50 transition-all" aria-label="Scorri verso About">
+                <a href="#about" class="hero-scroll-cue w-12 h-12 rounded-full glass-panel flex items-center justify-center text-purple-400 hover:text-white hover:bg-purple-600/50 transition-all" aria-label="Scorri verso About">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
                 </a>
             </div>
@@ -318,11 +319,11 @@
             </h2>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="glass-panel glass-card p-8 md:p-12 rounded-3xl relative reveal">
-                    <div class="absolute -top-5 -left-5 w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg transform -rotate-6">
+                <div class="glass-panel glass-card p-8 md:p-12 rounded-3xl relative reveal overflow-visible">
+                    <div class="about-quote-icon absolute w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg transform -rotate-6">
                         <i class="fas fa-quote-left text-2xl text-white"></i>
                     </div>
-                    <p data-i18n="about_p1" class="text-lg text-gray-300 mb-6 leading-relaxed pt-4">
+                    <p data-i18n="about_p1" class="text-lg text-gray-300 mb-6 leading-relaxed pt-10 sm:pt-12">
                         Ciao, sono <span class="text-purple-400 font-bold">Gabriel Lazzara</span>, full-stack developer con focus su siti professionali, web app interattive e progetti consegnati a clienti reali.
                     </p>
                     <p data-i18n="about_p2" class="text-lg text-gray-300 mb-6 leading-relaxed">
@@ -463,20 +464,20 @@
                 <article class="pkg-card glass-panel glass-card spotlight-card p-8 rounded-3xl reveal flex flex-col">
                     <h3 data-i18n="pkg1_name" class="text-xl font-bold text-white">Landing</h3>
                     <p data-i18n="pkg1_price" class="text-3xl font-display font-bold gradient-text mt-2 mb-6">da €400</p>
-                    <ul data-i18n="pkg1_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc list-inside pkg-features"></ul>
+                    <ul data-i18n="pkg1_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc content-list pkg-features"></ul>
                     <a href="#contact" data-i18n="pkg_cta" class="block text-center py-3 rounded-xl border border-white/20 hover:bg-white/10 font-semibold transition-all">Chiedi preventivo</a>
                 </article>
                 <article class="pkg-card pkg-featured glass-panel spotlight-card p-8 rounded-3xl reveal flex flex-col border-purple-500/40">
                     <span class="pkg-badge mb-2 block" data-i18n="pkg_popular">Più richiesto</span>
                     <h3 data-i18n="pkg2_name" class="text-xl font-bold text-white">Sito business</h3>
                     <p data-i18n="pkg2_price" class="text-3xl font-display font-bold gradient-text mt-2 mb-6">da €900</p>
-                    <ul data-i18n="pkg2_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc list-inside pkg-features"></ul>
+                    <ul data-i18n="pkg2_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc content-list pkg-features"></ul>
                     <a href="#contact" data-i18n="pkg_cta" class="btn-primary block text-center py-3 rounded-xl font-semibold text-white">Chiedi preventivo</a>
                 </article>
                 <article class="pkg-card glass-panel glass-card spotlight-card p-8 rounded-3xl reveal flex flex-col">
                     <h3 data-i18n="pkg3_name" class="text-xl font-bold text-white">Web app / custom</h3>
                     <p data-i18n="pkg3_price" class="text-3xl font-display font-bold gradient-text mt-2 mb-6">su preventivo</p>
-                    <ul data-i18n="pkg3_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc list-inside pkg-features"></ul>
+                    <ul data-i18n="pkg3_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc content-list pkg-features"></ul>
                     <a href="#contact" data-i18n="pkg_cta" class="block text-center py-3 rounded-xl border border-white/20 hover:bg-white/10 font-semibold transition-all">Chiedi preventivo</a>
                 </article>
             </div>
@@ -549,55 +550,6 @@
             </div>
         </section>
 
-        <!-- Case Study -->
-        <section id="case-study" class="scroll-mt-32" aria-labelledby="case-heading">
-            <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="case_eyebrow">Case study</p>
-            <h2 id="case-heading" data-i18n="case_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Rent Boat <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">Mondello</span></h2>
-            <p data-i18n="case_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Sito completo per noleggio gommoni ed escursioni — dal brief al deploy su VPS Oracle Cloud.</p>
-
-            <div class="case-study-grid">
-                <div class="case-visual reveal">
-                    <div class="case-mockup glass-panel rounded-3xl overflow-hidden border border-sky-500/20">
-                        <img src="https://onlyg4bb0.github.io/GabrielLazzara/assets/projects/rent-boat.jpg" alt="Screenshot Rent Boat Mondello" class="w-full h-64 md:h-80 object-cover" loading="lazy" width="800" height="500">
-                        <div class="p-6 border-t border-white/10">
-                            <p class="text-sky-300 text-sm font-semibold">rentboatmondello.it · VPS Oracle Cloud</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="case-content space-y-6 reveal" style="transition-delay: 120ms;">
-                    <article class="glass-panel p-6 rounded-2xl spotlight-card">
-                        <h3 data-i18n="case_challenge_title" class="font-bold text-white mb-2 flex items-center gap-2"><i class="fas fa-flag text-amber-400"></i> La sfida</h3>
-                        <p data-i18n="case_challenge" class="text-gray-400 text-sm leading-relaxed">Un'attività turistica a Mondello aveva bisogno di presenza online professionale: mostrare flotta e tour, farsi trovare su Google in più lingue e convertire visite in richieste.</p>
-                    </article>
-                    <article class="glass-panel p-6 rounded-2xl spotlight-card">
-                        <h3 data-i18n="case_solution_title" class="font-bold text-white mb-2 flex items-center gap-2"><i class="fas fa-lightbulb text-purple-400"></i> La soluzione</h3>
-                        <p data-i18n="case_solution" class="text-gray-400 text-sm leading-relaxed">Architettura PHP modulare, Tailwind, hreflang IT/EN/DE, Schema.org locale, form contatti e deploy su VPS.</p>
-                    </article>
-                    <div>
-                        <h3 data-i18n="case_result_title" class="font-bold text-white mb-4">Risultati</h3>
-                        <div class="case-metric-grid">
-                            <div class="case-metric glass-panel p-4 rounded-xl text-center">
-                                <strong data-i18n="case_m1" class="block text-sky-300 text-sm font-bold">Sito multilingua</strong>
-                                <span data-i18n="case_m1d" class="text-xs text-gray-500">IT · EN · DE</span>
-                            </div>
-                            <div class="case-metric glass-panel p-4 rounded-xl text-center">
-                                <strong data-i18n="case_m2" class="block text-purple-300 text-sm font-bold">SEO locale</strong>
-                                <span data-i18n="case_m2d" class="text-xs text-gray-500">Schema + hreflang</span>
-                            </div>
-                            <div class="case-metric glass-panel p-4 rounded-xl text-center">
-                                <strong data-i18n="case_m3" class="block text-indigo-300 text-sm font-bold">Deploy VPS</strong>
-                                <span data-i18n="case_m3d" class="text-xs text-gray-500">Oracle Cloud</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <a href="http://130.110.2.57/index.php" target="_blank" rel="noopener noreferrer" class="btn-primary flex-1 py-3 rounded-xl text-center font-semibold text-white"><span data-i18n="case_link">Visita il sito live</span> <i class="fas fa-external-link-alt ml-1 text-sm"></i></a>
-                        <a href="#projects" class="flex-1 py-3 rounded-xl glass-panel border border-white/15 text-center font-semibold text-gray-300 hover:text-white transition-all" data-i18n="case_read">Vedi anche nei progetti</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- Projects Section -->
         <section id="projects" class="scroll-mt-32" aria-labelledby="projects-heading">
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="proj_eyebrow">Portfolio</p>
@@ -629,7 +581,7 @@
                         <p data-i18n="proj3_desc" class="text-gray-400 mb-4 flex-grow text-sm leading-relaxed">
                             Sito per noleggio gommoni ed escursioni a Mondello (Palermo): flotta, tour Capogallo/Zingaro, form contatti e SEO locale multilingua (IT/EN/DE…).
                         </p>
-                        <ul class="text-gray-500 text-xs space-y-1 mb-6 list-disc list-inside" data-i18n="proj3_bullets">
+                        <ul class="text-gray-500 text-xs space-y-1 mb-6 list-disc content-list" data-i18n="proj3_bullets">
                             <li>Pagine PHP strutturate (home, flotta, escursioni, contatti)</li>
                             <li>Schema.org, hreflang e meta per ricerca locale</li>
                             <li>Deploy su VPS Oracle Cloud</li>
@@ -657,7 +609,7 @@
                         <p data-i18n="proj_luxury_desc" class="text-gray-400 mb-4 flex-grow text-sm leading-relaxed">
                             Shop online con catalogo, carrello, area utente, coupon e pannello admin per prodotti, ordini e newsletter.
                         </p>
-                        <ul class="text-gray-500 text-xs space-y-1 mb-6 list-disc list-inside" data-i18n="proj_luxury_bullets">
+                        <ul class="text-gray-500 text-xs space-y-1 mb-6 list-disc content-list" data-i18n="proj_luxury_bullets">
                             <li>Backend PHP modulare con API AJAX</li>
                             <li>Gestione ordini e autenticazione</li>
                             <li>Deploy e documentazione su GitHub</li>
@@ -795,6 +747,55 @@
             </div>
         </section>
 
+        <!-- Case Study -->
+        <section id="case-study" class="scroll-mt-32" aria-labelledby="case-heading">
+            <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="case_eyebrow">Case study</p>
+            <h2 id="case-heading" data-i18n="case_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Rent Boat <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">Mondello</span></h2>
+            <p data-i18n="case_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Sito completo per noleggio gommoni ed escursioni — dal brief al deploy su VPS Oracle Cloud.</p>
+
+            <div class="case-study-grid">
+                <div class="case-visual reveal">
+                    <div class="case-mockup glass-panel rounded-3xl overflow-hidden border border-sky-500/20">
+                        <img src="https://onlyg4bb0.github.io/GabrielLazzara/assets/projects/rent-boat.jpg" alt="Screenshot Rent Boat Mondello" class="w-full h-64 md:h-80 object-cover" loading="lazy" width="800" height="500">
+                        <div class="p-6 border-t border-white/10">
+                            <p class="text-sky-300 text-sm font-semibold">rentboatmondello.it · VPS Oracle Cloud</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="case-content space-y-6 reveal" style="transition-delay: 120ms;">
+                    <article class="glass-panel p-6 rounded-2xl spotlight-card">
+                        <h3 data-i18n="case_challenge_title" class="font-bold text-white mb-2 flex items-center gap-2"><i class="fas fa-flag text-amber-400"></i> La sfida</h3>
+                        <p data-i18n="case_challenge" class="text-gray-400 text-sm leading-relaxed">Un'attività turistica a Mondello aveva bisogno di presenza online professionale: mostrare flotta e tour, farsi trovare su Google in più lingue e convertire visite in richieste.</p>
+                    </article>
+                    <article class="glass-panel p-6 rounded-2xl spotlight-card">
+                        <h3 data-i18n="case_solution_title" class="font-bold text-white mb-2 flex items-center gap-2"><i class="fas fa-lightbulb text-purple-400"></i> La soluzione</h3>
+                        <p data-i18n="case_solution" class="text-gray-400 text-sm leading-relaxed">Architettura PHP modulare, Tailwind, hreflang IT/EN/DE, Schema.org locale, form contatti e deploy su VPS.</p>
+                    </article>
+                    <div>
+                        <h3 data-i18n="case_result_title" class="font-bold text-white mb-4">Risultati</h3>
+                        <div class="case-metric-grid">
+                            <div class="case-metric glass-panel p-4 rounded-xl text-center">
+                                <strong data-i18n="case_m1" class="block text-sky-300 text-sm font-bold">Sito multilingua</strong>
+                                <span data-i18n="case_m1d" class="text-xs text-gray-500">IT · EN · DE</span>
+                            </div>
+                            <div class="case-metric glass-panel p-4 rounded-xl text-center">
+                                <strong data-i18n="case_m2" class="block text-purple-300 text-sm font-bold">SEO locale</strong>
+                                <span data-i18n="case_m2d" class="text-xs text-gray-500">Schema + hreflang</span>
+                            </div>
+                            <div class="case-metric glass-panel p-4 rounded-xl text-center">
+                                <strong data-i18n="case_m3" class="block text-indigo-300 text-sm font-bold">Deploy VPS</strong>
+                                <span data-i18n="case_m3d" class="text-xs text-gray-500">Oracle Cloud</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="http://130.110.2.57/index.php" target="_blank" rel="noopener noreferrer" class="btn-primary flex-1 py-3 rounded-xl text-center font-semibold text-white"><span data-i18n="case_link">Visita il sito live</span> <i class="fas fa-external-link-alt ml-1 text-sm"></i></a>
+                        <a href="#projects" class="flex-1 py-3 rounded-xl glass-panel border border-white/15 text-center font-semibold text-gray-300 hover:text-white transition-all" data-i18n="case_read">Vedi anche nei progetti</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- FAQ Section -->
         <section id="faq" class="scroll-mt-32" aria-labelledby="faq-heading">
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="faq_eyebrow">FAQ</p>
@@ -857,9 +858,11 @@
 
         <!-- Contact Section -->
         <section id="contact" class="scroll-mt-32" aria-labelledby="contact-heading">
-            <div class="glass-panel p-8 md:p-16 rounded-[3rem] max-w-4xl mx-auto relative overflow-hidden reveal">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-purple-500/20 rounded-full filter blur-[80px] pointer-events-none"></div>
-                <div class="absolute bottom-0 left-0 w-64 h-64 bg-indigo-500/20 rounded-full filter blur-[80px] pointer-events-none"></div>
+            <div class="contact-panel glass-panel p-8 md:p-16 rounded-[3rem] max-w-4xl mx-auto relative reveal">
+                <div class="contact-panel__bg" aria-hidden="true">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-purple-500/20 rounded-full filter blur-[80px]"></div>
+                    <div class="absolute bottom-0 left-0 w-64 h-64 bg-indigo-500/20 rounded-full filter blur-[80px]"></div>
+                </div>
                 
                 <div class="text-center relative z-10">
                     <h2 id="contact-heading" data-i18n="contact_title" class="font-display text-3xl md:text-5xl font-bold mb-4">Lavoriamo <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">Insieme</span></h2>
@@ -893,8 +896,8 @@
                             class="glass-input w-full rounded-2xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 backdrop-blur-sm resize-none"></textarea>
                     </div>
                     
-                    <button type="submit" class="w-full md:w-64 h-14 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl font-bold text-white hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-300 flex items-center justify-center gap-2 mx-auto mt-8">
-                        <span data-i18n="form_btn" class="truncate">Invia Messaggio</span> <i class="fas fa-paper-plane ml-1"></i>
+                    <button type="submit" class="w-full md:w-64 h-14 bg-gradient-to-r from-emerald-600 to-green-600 rounded-2xl font-bold text-white hover:shadow-[0_0_20px_rgba(34,197,94,0.45)] transition-all duration-300 flex items-center justify-center gap-2 mx-auto mt-8">
+                        <span data-i18n="form_btn">Invia su WhatsApp</span> <i class="fab fa-whatsapp text-lg" aria-hidden="true"></i>
                     </button>
                 </form>
             </div>
@@ -912,8 +915,8 @@
                 <nav class="flex flex-col gap-2 reveal" style="transition-delay: 100ms;" aria-label="Link rapidi footer">
                     <span class="text-xs font-semibold uppercase tracking-wider text-purple-300 mb-1" data-i18n="footer_nav_label">Navigazione</span>
                     <a href="#about" class="footer-link" data-i18n="nav_about">About</a>
-                    <a href="#case-study" class="footer-link" data-i18n="nav_case">Case study</a>
                     <a href="#projects" class="footer-link" data-i18n="nav_work">Lavori</a>
+                    <a href="#case-study" class="footer-link" data-i18n="nav_case">Case study</a>
                     <a href="#services" class="footer-link" data-i18n="nav_services">Servizi</a>
                     <a href="#faq" class="footer-link">FAQ</a>
                     <a href="#contact" class="footer-link" data-i18n="nav_cta">Contatti</a>

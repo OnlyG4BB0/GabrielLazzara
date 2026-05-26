@@ -3,12 +3,12 @@ class PortfolioApp {
         this.navbar = document.getElementById('navbar');
         this.menuBtn = document.getElementById('mobile-menu-btn');
         this.mobileMenu = document.getElementById('mobile-menu');
-        this.sections = document.querySelectorAll('section');
         this.mainSections = document.querySelectorAll('.site-main > section');
         this.navLinks = document.querySelectorAll('.nav-link');
         this.mobileLinks = document.querySelectorAll('.mobile-link');
         this.revealElements = document.querySelectorAll('.reveal');
-        this.blobsLayer = document.querySelector('.site-blobs');
+        this.visibleSections = new Map();
+        this.activeSectionId = '';
         this.langToggles = document.querySelectorAll('.lang-toggle');
         this.copyEmailBtn = document.getElementById('copy-email-btn');
         this.projectCards = document.querySelectorAll('[data-project-category]');
@@ -19,6 +19,11 @@ class PortfolioApp {
         this.currentLang = localStorage.getItem('portfolio_lang') || 'it';
         this.currentFilter = 'all';
         this.currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!this.prefersReducedMotion) {
+            document.documentElement.classList.add('motion-enhanced');
+        }
 
         this.init();
     }
@@ -35,6 +40,8 @@ class PortfolioApp {
         this.setupLanguageToggle();
         this.setupProjectFilters();
         this.setupSpotlightCards();
+        this.setupPressFeedback();
+        this.setupFaqAnimations();
         this.applyLanguage(this.currentLang);
         this.applyProjectFilter(this.currentFilter, true);
     }
@@ -44,8 +51,12 @@ class PortfolioApp {
 
         this.themeToggle.addEventListener('click', () => {
             this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+            this.themeToggle.classList.remove('theme-spin');
+            void this.themeToggle.offsetWidth;
+            this.themeToggle.classList.add('theme-spin');
             this.applyTheme(this.currentTheme);
             localStorage.setItem('portfolio_theme', this.currentTheme);
+            setTimeout(() => this.themeToggle.classList.remove('theme-spin'), 550);
         });
     }
 
@@ -53,7 +64,7 @@ class PortfolioApp {
         document.documentElement.setAttribute('data-theme', theme);
         const meta = document.querySelector('meta[name="theme-color"]');
         if (meta) {
-            meta.setAttribute('content', theme === 'light' ? '#f5f3fa' : '#08060f');
+            meta.setAttribute('content', theme === 'light' ? '#f8f7fc' : '#08060f');
         }
         if (this.themeToggle) {
             const label = theme === 'dark'
@@ -123,7 +134,15 @@ class PortfolioApp {
             btn.addEventListener('click', () => {
                 const filter = btn.getAttribute('data-project-filter');
                 this.currentFilter = filter;
-                this.filterBtns.forEach((b) => b.classList.toggle('filter-active', b === btn));
+                this.filterBtns.forEach((b) => {
+                    const isActive = b === btn;
+                    b.classList.toggle('filter-active', isActive);
+                    if (isActive) {
+                        b.classList.remove('filter-pop');
+                        void b.offsetWidth;
+                        b.classList.add('filter-pop');
+                    }
+                });
                 this.applyProjectFilter(filter);
             });
         });
@@ -148,12 +167,28 @@ class PortfolioApp {
     }
 
     setupSpotlightCards() {
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+        let rafId = null;
+        let activeCard = null;
+        let clientX = 0;
+        let clientY = 0;
+
         document.querySelectorAll('.spotlight-card').forEach((card) => {
             card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                card.style.setProperty('--spot-x', `${e.clientX - rect.left}px`);
-                card.style.setProperty('--spot-y', `${e.clientY - rect.top}px`);
-            });
+                activeCard = card;
+                clientX = e.clientX;
+                clientY = e.clientY;
+                if (rafId) return;
+                rafId = requestAnimationFrame(() => {
+                    if (activeCard) {
+                        const rect = activeCard.getBoundingClientRect();
+                        activeCard.style.setProperty('--spot-x', `${clientX - rect.left}px`);
+                        activeCard.style.setProperty('--spot-y', `${clientY - rect.top}px`);
+                    }
+                    rafId = null;
+                });
+            }, { passive: true });
         });
     }
 
@@ -163,9 +198,15 @@ class PortfolioApp {
         this.copyEmailBtn.addEventListener('click', async () => {
             try {
                 await navigator.clipboard.writeText(email);
+                this.copyEmailBtn.classList.remove('is-copied');
+                void this.copyEmailBtn.offsetWidth;
+                this.copyEmailBtn.classList.add('is-copied');
                 const span = this.copyEmailBtn.querySelector('[data-i18n]') || this.copyEmailBtn;
                 span.textContent = translations[this.currentLang].contact_copied;
-                setTimeout(() => this.applyLanguage(this.currentLang), 2000);
+                setTimeout(() => {
+                    this.copyEmailBtn.classList.remove('is-copied');
+                    this.applyLanguage(this.currentLang);
+                }, 2000);
             } catch {
                 window.location.href = `mailto:${email}`;
             }
@@ -190,9 +231,11 @@ class PortfolioApp {
             this.mobileMenu.classList.add('flex');
             setTimeout(() => {
                 this.mobileMenu.classList.remove('opacity-0');
+                this.mobileMenu.classList.add('menu-visible');
                 document.body.style.overflow = 'hidden';
             }, 10);
         } else {
+            this.mobileMenu.classList.remove('menu-visible');
             this.mobileMenu.classList.add('opacity-0');
             document.body.style.overflow = '';
             setTimeout(() => {
@@ -241,45 +284,113 @@ class PortfolioApp {
             (entries) => {
                 entries.forEach((entry) => {
                     entry.target.classList.toggle('section-visible', entry.isIntersecting);
+                    const id = entry.target.getAttribute('id');
+                    if (!id) return;
+                    if (entry.isIntersecting) {
+                        this.visibleSections.set(id, entry.intersectionRatio);
+                    } else {
+                        this.visibleSections.delete(id);
+                    }
                 });
+                this.syncActiveNavFromSections();
             },
-            { threshold: 0.15, rootMargin: '-10% 0px -10% 0px' }
+            { threshold: [0, 0.2, 0.4, 0.6], rootMargin: '-40% 0px -50% 0px' }
         );
 
         this.mainSections.forEach((section) => sectionObserver.observe(section));
     }
 
+    syncActiveNavFromSections() {
+        let bestId = '';
+        let bestRatio = 0;
+        this.visibleSections.forEach((ratio, id) => {
+            if (ratio > bestRatio) {
+                bestRatio = ratio;
+                bestId = id;
+            }
+        });
+        if (bestId) this.updateActiveNavLink(bestId);
+    }
+
+    updateActiveNavLink(sectionId) {
+        if (sectionId === this.activeSectionId) return;
+        this.activeSectionId = sectionId;
+
+        this.navLinks.forEach((link) => {
+            const href = link.getAttribute('href');
+            const isActive = href === `#${sectionId}`;
+            link.classList.toggle('active-link', isActive);
+            link.classList.toggle('text-white', isActive);
+            link.classList.toggle('bg-white/10', isActive);
+            link.classList.toggle('text-gray-300', !isActive);
+        });
+    }
+
     setupScrollListener() {
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let ticking = false;
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                this.navbar.classList.add('navbar-scrolled');
-            } else {
-                this.navbar.classList.remove('navbar-scrolled');
-            }
-
-            if (!prefersReducedMotion && this.blobsLayer) {
-                const offset = window.scrollY * 0.06;
-                this.blobsLayer.style.transform = `translate3d(0, ${offset}px, 0)`;
-            }
-
-            let currentSectionId = '';
-            this.sections.forEach((section) => {
-                if (window.scrollY >= section.offsetTop - 280) {
-                    currentSectionId = section.getAttribute('id');
-                }
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                this.navbar.classList.toggle('navbar-scrolled', window.scrollY > 50);
+                ticking = false;
             });
+        };
 
-            this.navLinks.forEach((link) => {
-                const href = link.getAttribute('href');
-                const isActive = href === `#${currentSectionId}`;
-                link.classList.toggle('active-link', isActive);
-                link.classList.toggle('text-white', isActive);
-                link.classList.toggle('bg-white/10', isActive);
-                link.classList.toggle('text-gray-300', !isActive);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    }
+
+    setupPressFeedback() {
+        if (this.prefersReducedMotion) return;
+
+        const pressables = document.querySelectorAll(
+            '.btn-primary, .btn-ghost, .filter-btn, .theme-toggle, .lang-toggle, #contact-form button[type="submit"]'
+        );
+
+        pressables.forEach((el) => {
+            const onDown = () => el.classList.add('is-pressed');
+            const onUp = () => el.classList.remove('is-pressed');
+            el.addEventListener('pointerdown', onDown);
+            el.addEventListener('pointerup', onUp);
+            el.addEventListener('pointerleave', onUp);
+            el.addEventListener('pointercancel', onUp);
+        });
+    }
+
+    setupFaqAnimations() {
+        document.querySelectorAll('.faq-item').forEach((item) => {
+            item.addEventListener('toggle', () => {
+                if (!item.open || this.prefersReducedMotion) return;
+                const body = item.querySelector('p, .faq-answer');
+                if (!body) return;
+                body.classList.remove('faq-replay');
+                void body.offsetWidth;
+                body.classList.add('faq-replay');
             });
         });
+    }
+
+    getWhatsAppNumber() {
+        return [51, 57, 51, 57, 49, 52, 57, 52, 54, 56, 49, 51]
+            .map((code) => String.fromCharCode(code))
+            .join('');
+    }
+
+    buildWhatsAppMessage(name, email, message) {
+        const lang = this.currentLang;
+        const t = translations[lang] || translations.it;
+        const lines = [
+            t.whatsapp_intro,
+            '',
+            `${t.whatsapp_label_name} ${name.trim()}`,
+            `${t.whatsapp_label_email} ${email.trim()}`,
+            '',
+            t.whatsapp_label_message,
+            message.trim(),
+        ];
+        return lines.join('\n');
     }
 
     setupContactForm() {
@@ -289,18 +400,25 @@ class PortfolioApp {
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const name = contactForm.querySelector('input[name="name"]').value;
-            const email = contactForm.querySelector('input[name="email"]').value;
-            const message = contactForm.querySelector('textarea[name="message"]').value;
+            const nameInput = contactForm.querySelector('input[name="name"]');
+            const emailInput = contactForm.querySelector('input[name="email"]');
+            const messageInput = contactForm.querySelector('textarea[name="message"]');
 
-            const subject = encodeURIComponent(`Nuovo contatto dal Portfolio - ${name}`);
-            const body = encodeURIComponent(`${message}\n\n---\nRispondi a: ${email}`);
+            if (!contactForm.reportValidity()) return;
 
-            window.location.href = `mailto:gabrielelazzara67@gmail.com?subject=${subject}&body=${body}`;
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const message = messageInput.value.trim();
+
+            const text = encodeURIComponent(this.buildWhatsAppMessage(name, email, message));
+            const url = `https://wa.me/${this.getWhatsAppNumber()}?text=${text}`;
+
+            window.open(url, '_blank', 'noopener,noreferrer');
 
             const btn = contactForm.querySelector('button[type="submit"]');
             const originalHtml = btn.innerHTML;
-            btn.innerHTML = `${translations[this.currentLang].email_opening} <i class='fas fa-envelope ml-1'></i>`;
+            const t = translations[this.currentLang] || translations.it;
+            btn.innerHTML = `${t.whatsapp_opening} <i class="fab fa-whatsapp ml-1" aria-hidden="true"></i>`;
 
             setTimeout(() => {
                 btn.innerHTML = originalHtml;
