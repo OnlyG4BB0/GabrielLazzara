@@ -4,8 +4,8 @@
   "description": "Gabriel Lazzara — sviluppatore web full-stack a Palermo. Siti, web app e progetti cliente con SEO.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#030014",
-  "theme_color": "#9333ea",
+  "background_color": "#08060f",
+  "theme_color": "#8b5cf6",
   "lang": "it",
   "icons": [
     {
