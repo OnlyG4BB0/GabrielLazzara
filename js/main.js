@@ -107,7 +107,7 @@ class PortfolioApp {
             }
         });
 
-        ['proj3_bullets', 'pkg1_feat', 'pkg2_feat', 'pkg3_feat'].forEach((key) => {
+        ['proj3_bullets', 'proj_luxury_bullets', 'pkg1_feat', 'pkg2_feat', 'pkg3_feat'].forEach((key) => {
             document.querySelectorAll(`[data-i18n="${key}"]`).forEach((el) => {
                 if (translations[lang][key]) el.innerHTML = translations[lang][key];
             });

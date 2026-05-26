@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="Only Ball preview">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#sky)"/>
+  <ellipse cx="400" cy="380" rx="320" ry="40" fill="#22c55e" opacity="0.8"/>
+  <circle cx="400" cy="280" r="56" fill="#f97316" stroke="#fff" stroke-width="4"/>
+  <circle cx="385" cy="268" r="10" fill="#fff" opacity="0.35"/>
+  <text x="40" y="60" fill="#e0f2fe" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Only Ball</text>
+  <text x="40" y="400" fill="#bae6fd" font-family="Segoe UI, Arial, sans-serif" font-size="20">Three.js - Cannon.js - WebGL</text>
+</svg>

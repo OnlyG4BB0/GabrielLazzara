@@ -45,7 +45,7 @@
     {"@context":"https://schema.org","@type":"WebSite","name":"Gabriel Lazzara Portfolio","url":"https://onlyg4bb0.github.io/GabrielLazzara/","inLanguage":["it-IT","en-US"],"publisher":{"@type":"Person","name":"Gabriel Lazzara"}}
     </script>
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"ItemList","name":"Progetti portfolio","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"CreativeWork","name":"Rent Boat Mondello","url":"http://130.110.2.57/index.php","description":"Sito cliente per noleggio barche ed escursioni a Mondello"}},{"@type":"ListItem","position":2,"item":{"@type":"CreativeWork","name":"Liquid Cube","url":"https://onlyg4bb0.github.io/LiquidCube/"}},{"@type":"ListItem","position":3,"item":{"@type":"CreativeWork","name":"Weatherflow","url":"https://onlyg4bb0.github.io/WeatherFlow/"}}]}
+    {"@context":"https://schema.org","@type":"ItemList","name":"Progetti portfolio","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"CreativeWork","name":"Rent Boat Mondello","url":"http://130.110.2.57/index.php"}},{"@type":"ListItem","position":2,"item":{"@type":"CreativeWork","name":"Luxury Sofà","url":"https://github.com/OnlyG4BB0/Luxury-Sof-"}},{"@type":"ListItem","position":3,"item":{"@type":"CreativeWork","name":"Liquid Cube","url":"https://onlyg4bb0.github.io/LiquidCube/"}},{"@type":"ListItem","position":4,"item":{"@type":"CreativeWork","name":"Weatherflow","url":"https://onlyg4bb0.github.io/WeatherFlow/"}},{"@type":"ListItem","position":5,"item":{"@type":"CreativeWork","name":"Only Ball","url":"https://onlyg4bb0.github.io/onlyball/"}},{"@type":"ListItem","position":6,"item":{"@type":"CreativeWork","name":"ColorBlast","url":"https://onlyg4bb0.github.io/ColorBlast/"}},{"@type":"ListItem","position":7,"item":{"@type":"CreativeWork","name":"ReceiptVault","url":"https://github.com/OnlyG4BB0/ReceiptVault"}}]}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Quali servizi offri?","acceptedAnswer":{"@type":"Answer","text":"Realizzo siti web, landing page e web app responsive con SEO tecnica di base, integrazione form e deploy su GitHub Pages o VPS."}},{"@type":"Question","name":"In quanto tempo consegni un progetto?","acceptedAnswer":{"@type":"Answer","text":"Dipende dalla complessità: una landing può richiedere pochi giorni, un sito più strutturato da 1 a 3 settimane."}},{"@type":"Question","name":"Lavori con clienti fuori Palermo?","acceptedAnswer":{"@type":"Answer","text":"Sì, lavoro sia in presenza su Palermo sia da remoto con clienti in tutta Italia."}},{"@type":"Question","name":"Il sito sarà visibile su Google?","acceptedAnswer":{"@type":"Answer","text":"Sì: struttura semantica, meta tag, sitemap, robots.txt e dati strutturati Schema.org fanno parte del workflow di base."}},{"@type":"Question","name":"Offri manutenzione dopo il lancio?","acceptedAnswer":{"@type":"Answer","text":"Posso occuparmi di aggiornamenti contenuti, piccole modifiche e monitoraggio su accordo mensile o a richiesta."}}]}
@@ -145,9 +145,9 @@
     </div>
 
     <!-- Header Glass -->
-    <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 glass-panel border-x-0 border-t-0 py-4 px-6 md:px-12 flex justify-between items-center">
-        <div class="flex-1 flex justify-start">
-            <a href="#hero" class="flex items-center gap-3 group" aria-label="Gabriel Lazzara — torna all'inizio">
+    <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 glass-panel border-x-0 border-t-0">
+        <div class="site-shell navbar-inner">
+            <a href="#hero" class="flex items-center gap-3 group shrink-0" aria-label="Gabriel Lazzara — torna all'inizio">
                 <!-- Logo Corretto (x1/y1 con percentuali per compatibilità mobile SVG) -->
                 <svg class="w-11 h-11 drop-shadow-[0_0_12px_rgba(232,121,249,0.8)] group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
@@ -171,8 +171,7 @@
                 </svg>
                 <span class="font-display text-2xl font-bold tracking-wide site-logo-text">Gabriel<span class="gradient-text">.</span></span>
             </a>
-        </div>
-        
+
         <nav class="nav-pill hidden lg:flex items-center gap-1 p-1 rounded-full" aria-label="Navigazione principale">
             <a href="#hero" data-i18n="nav_home" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all active-link">Home</a>
             <a href="#about" data-i18n="nav_about" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">About</a>
@@ -181,7 +180,7 @@
             <a href="#contact" data-i18n="nav_cta" class="nav-link-cta ml-1 px-5 py-2 rounded-full text-sm font-semibold text-white btn-primary">Parliamone</a>
         </nav>
 
-        <div class="flex-1 flex justify-end items-center gap-2 sm:gap-3">
+        <div class="navbar-actions flex items-center gap-2 sm:gap-3 shrink-0">
             <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Attiva tema chiaro" data-i18n-aria="theme_toggle_aria">
                 <i class="fas fa-sun theme-icon-light" aria-hidden="true"></i>
                 <i class="fas fa-moon theme-icon-dark" aria-hidden="true"></i>
@@ -198,6 +197,7 @@
                 <span class="w-full h-0.5 hamburger-line line-3 rounded-full"></span>
             </button>
         </div>
+        </div>
     </header>
 
     <div id="mobile-menu" class="mobile-menu-panel fixed inset-0 flex-col items-center justify-center gap-6 z-40 hidden opacity-0 transition-opacity duration-300">
@@ -209,18 +209,18 @@
         <a href="#contact" data-i18n="nav_cta" class="mobile-link mobile-link-accent mt-2">Parliamone</a>
     </div>
 
-    <main class="site-main">
+    <main class="site-main site-shell">
 
         <!-- Hero Section -->
         <section id="hero" class="hero-section min-h-[88vh] flex flex-col justify-center relative pt-8 pb-12" aria-labelledby="hero-heading">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                <div class="text-center lg:text-left">
+            <div class="hero-grid grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div class="hero-copy">
                     <div class="glass-panel px-4 py-2 rounded-full mb-6 inline-flex items-center gap-2 reveal max-w-full">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" aria-hidden="true"></span>
                         <span data-i18n="hero_badge" class="text-text-muted text-sm font-medium tracking-wide text-gray-400">Disponibile per nuovi progetti</span>
                     </div>
 
-                    <p class="section-eyebrow reveal mx-auto lg:mx-0 w-fit" data-i18n="hero_eyebrow">Portfolio · Palermo</p>
+                    <p class="section-eyebrow reveal w-fit" data-i18n="hero_eyebrow">Portfolio · Palermo</p>
 
                     <h1 id="hero-heading" class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 leading-[1.05] tracking-tight reveal" style="transition-delay: 80ms;">
                         <span class="block text-white">Gabriel Lazzara</span>
@@ -230,7 +230,7 @@
                         Palermo, Sicilia · Progetti per clienti e side project open source
                     </p>
 
-                    <p data-i18n="hero_desc" class="text-base md:text-lg text-gray-400 mb-8 max-w-xl mx-auto lg:mx-0 font-light leading-relaxed reveal" style="transition-delay: 160ms;">
+                    <p data-i18n="hero_desc" class="text-base md:text-lg text-gray-400 mb-8 font-light leading-relaxed reveal" style="transition-delay: 160ms;">
                         Sviluppo siti e web app su misura — da landing page a progetti con prenotazioni, SEO locale e multilingua.
                         UI curata, codice pulito, deploy su VPS o GitHub Pages.
                     </p>
@@ -249,9 +249,9 @@
                         </a>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-3 mt-10 max-w-lg mx-auto lg:mx-0 reveal" style="transition-delay: 280ms;">
+                    <div class="hero-stats grid grid-cols-3 gap-3 mt-10 reveal" style="transition-delay: 280ms;">
                         <div class="hero-stat">
-                            <strong class="stat-value">3+</strong>
+                            <strong class="stat-value">7+</strong>
                             <span data-i18n="hero_stat1">Progetti live</span>
                         </div>
                         <div class="hero-stat">
@@ -294,8 +294,8 @@
         <!-- Tech marquee -->
         <div class="marquee-wrap reveal" aria-hidden="true">
             <div class="marquee-track">
-                <span class="marquee-item">React</span><span class="marquee-item">JavaScript</span><span class="marquee-item">Python</span><span class="marquee-item">PHP</span><span class="marquee-item">Tailwind CSS</span><span class="marquee-item">Svelte</span><span class="marquee-item">SEO</span><span class="marquee-item">Schema.org</span><span class="marquee-item">GitHub Pages</span><span class="marquee-item">Oracle Cloud</span>
-                <span class="marquee-item">React</span><span class="marquee-item">JavaScript</span><span class="marquee-item">Python</span><span class="marquee-item">PHP</span><span class="marquee-item">Tailwind CSS</span><span class="marquee-item">Svelte</span><span class="marquee-item">SEO</span><span class="marquee-item">Schema.org</span><span class="marquee-item">GitHub Pages</span><span class="marquee-item">Oracle Cloud</span>
+                <span class="marquee-item">React</span><span class="marquee-item">TypeScript</span><span class="marquee-item">JavaScript</span><span class="marquee-item">Python</span><span class="marquee-item">PHP</span><span class="marquee-item">Three.js</span><span class="marquee-item">Tailwind CSS</span><span class="marquee-item">Svelte</span><span class="marquee-item">MySQL</span><span class="marquee-item">SEO</span><span class="marquee-item">Schema.org</span><span class="marquee-item">GitHub Pages</span><span class="marquee-item">Oracle Cloud</span><span class="marquee-item">Expo</span>
+                <span class="marquee-item">React</span><span class="marquee-item">TypeScript</span><span class="marquee-item">JavaScript</span><span class="marquee-item">Python</span><span class="marquee-item">PHP</span><span class="marquee-item">Three.js</span><span class="marquee-item">Tailwind CSS</span><span class="marquee-item">Svelte</span><span class="marquee-item">MySQL</span><span class="marquee-item">SEO</span><span class="marquee-item">Schema.org</span><span class="marquee-item">GitHub Pages</span><span class="marquee-item">Oracle Cloud</span><span class="marquee-item">Expo</span>
             </div>
         </div>
 
@@ -448,7 +448,7 @@
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="pkg_eyebrow">Pacchetti</p>
             <h2 id="packages-heading" data-i18n="pkg_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Trasparenza su <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">cosa include</span></h2>
             <p data-i18n="pkg_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Ogni progetto è diverso — preventivo personalizzato dopo un breve call.</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="packages-grid grid grid-cols-1 md:grid-cols-3 gap-6">
                 <article class="pkg-card glass-panel glass-card spotlight-card p-8 rounded-3xl reveal flex flex-col">
                     <h3 data-i18n="pkg1_name" class="text-xl font-bold text-white">Landing</h3>
                     <p data-i18n="pkg1_price" class="text-3xl font-display font-bold gradient-text mt-2 mb-6">da €400</p>
@@ -603,9 +603,9 @@
             
             <div class="projects-bento">
                 <!-- Rent Boat Mondello -->
-                <article data-project-category="client" class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group project-card">
+                <article data-project-category="client" class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group project-card project-card--featured">
                     <div class="project-thumb h-56 relative overflow-hidden bg-sky-950">
-                        <img src="https://onlyg4bb0.github.io/GabrielLazzara/assets/projects/rent-boat.jpg" alt="Rent Boat Mondello — escursioni in barca a Mondello" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';">
+                        <img src="./assets/projects/rent-boat.jpg" alt="Rent Boat Mondello — escursioni in barca a Mondello" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';">
                         <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent z-10"></div>
                         <span data-i18n="tag_client" class="absolute top-4 left-4 z-20 px-3 py-1 bg-sky-500/30 text-sky-200 backdrop-blur-md rounded-full text-xs font-bold border border-sky-400/40">Progetto cliente</span>
                     </div>
@@ -631,9 +631,35 @@
                     </div>
                 </article>
 
+                <article data-project-category="client" class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group project-card">
+                    <div class="project-thumb project-thumb--luxury h-56 relative overflow-hidden bg-stone-900">
+                        <img src="./assets/projects/luxury-sofa.svg" alt="Luxury Sofà — e-commerce arredamento" class="w-full h-full object-cover" loading="lazy" decoding="async" width="800" height="450" onerror="this.onerror=null;this.style.display='none';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent z-10"></div>
+                        <span data-i18n="tag_ecommerce" class="absolute top-4 left-4 z-20 px-3 py-1 bg-stone-500/30 text-stone-200 backdrop-blur-md rounded-full text-xs font-bold border border-stone-400/40">E-commerce</span>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold text-white mb-1">Luxury Sofà</h3>
+                        <p data-i18n="proj_role_luxury" class="text-stone-300/90 text-xs font-semibold uppercase tracking-wider mb-3">E-commerce · Pannello admin</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill-tag text-xs">PHP</span><span class="skill-tag text-xs">MySQL</span><span class="skill-tag text-xs">REST API</span>
+                        </div>
+                        <p data-i18n="proj_luxury_desc" class="text-gray-400 mb-4 flex-grow text-sm leading-relaxed">
+                            Shop online con catalogo, carrello, area utente, coupon e pannello admin per prodotti, ordini e newsletter.
+                        </p>
+                        <ul class="text-gray-500 text-xs space-y-1 mb-6 list-disc list-inside" data-i18n="proj_luxury_bullets">
+                            <li>Backend PHP modulare con API AJAX</li>
+                            <li>Gestione ordini e autenticazione</li>
+                            <li>Deploy e documentazione su GitHub</li>
+                        </ul>
+                        <a href="https://github.com/OnlyG4BB0/Luxury-Sof-" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl glass-panel border border-white/15 hover:border-stone-400 text-center font-semibold transition-all text-sm mt-auto">
+                            <i class="fab fa-github mr-1"></i> <span data-i18n="proj_code">Codice</span>
+                        </a>
+                    </div>
+                </article>
+
                 <article data-project-category="side" class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group project-card" style="transition-delay: 150ms;">
                     <div class="project-thumb h-56 relative overflow-hidden bg-gradient-to-br from-purple-900 to-indigo-950">
-                        <img src="https://onlyg4bb0.github.io/GabrielLazzara/assets/projects/liquid-cube.svg" alt="Anteprima progetto Liquid Cube" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';">
+                        <img src="./assets/projects/liquid-cube.svg" alt="Anteprima progetto Liquid Cube" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';">
                         <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent z-10"></div>
                         <span data-i18n="tag_cube" class="absolute top-4 left-4 z-20 px-3 py-1 bg-purple-500/20 text-purple-300 backdrop-blur-md rounded-full text-xs font-bold border border-purple-500/30">Esperimento 3D</span>
                     </div>
@@ -659,7 +685,7 @@
                 
                 <article data-project-category="side" class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group project-card" style="transition-delay: 300ms;">
                     <div class="project-thumb h-56 relative overflow-hidden bg-gradient-to-br from-indigo-900 to-slate-900">
-                        <img src="https://onlyg4bb0.github.io/GabrielLazzara/assets/projects/weatherflow.svg" alt="Anteprima progetto Weatherflow" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';">
+                        <img src="./assets/projects/weatherflow.svg" alt="Anteprima progetto Weatherflow" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display='none';">
                         <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent z-10"></div>
                         <span data-i18n="tag_webapp" class="absolute top-4 left-4 z-20 px-3 py-1 bg-indigo-500/20 text-indigo-300 backdrop-blur-md rounded-full text-xs font-bold border border-indigo-500/30">Web App</span>
                     </div>
@@ -680,6 +706,79 @@
                                 <i class="fab fa-github mr-1"></i> <span data-i18n="proj_code">Codice</span>
                             </a>
                         </div>
+                    </div>
+                </article>
+
+                <article data-project-category="side" class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group project-card">
+                    <div class="project-thumb h-56 relative overflow-hidden bg-sky-950">
+                        <img src="./assets/projects/onlyball.svg" alt="Only Ball — gioco 3D nel browser" class="w-full h-full object-cover" loading="lazy" decoding="async">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent z-10"></div>
+                        <span data-i18n="tag_game" class="absolute top-4 left-4 z-20 px-3 py-1 bg-sky-500/25 text-sky-200 backdrop-blur-md rounded-full text-xs font-bold border border-sky-400/35">Gioco 3D</span>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold text-white mb-1">Only Ball</h3>
+                        <p data-i18n="proj_role_onlyball" class="text-sky-300/90 text-xs font-semibold uppercase tracking-wider mb-3">Side project · Three.js</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill-tag text-xs">Three.js</span><span class="skill-tag text-xs">Cannon.js</span><span class="skill-tag text-xs">WebGL</span>
+                        </div>
+                        <p data-i18n="proj_onlyball_desc" class="text-gray-400 mb-6 flex-grow text-sm leading-relaxed">
+                            Platform 3D con fisica realistica, checkpoint, personalizzazione pallina e controlli desktop/mobile (WASD, touch, gamepad).
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-2 mt-auto">
+                            <a href="https://onlyg4bb0.github.io/onlyball/" target="_blank" rel="noopener noreferrer" class="flex-1 py-3 rounded-xl bg-sky-600/80 hover:bg-sky-500 border border-sky-400/40 text-center font-semibold transition-all text-sm">
+                                <span data-i18n="proj_demo">Demo</span> <i class="fas fa-external-link-alt ml-1"></i>
+                            </a>
+                            <a href="https://github.com/OnlyG4BB0/onlyball" target="_blank" rel="noopener noreferrer" class="flex-1 py-3 rounded-xl glass-panel border border-white/10 hover:border-sky-500 text-center font-semibold transition-all text-sm">
+                                <i class="fab fa-github mr-1"></i> <span data-i18n="proj_code">Codice</span>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <article data-project-category="side" class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group project-card">
+                    <div class="project-thumb h-56 relative overflow-hidden bg-fuchsia-950">
+                        <img src="./assets/projects/colorblast.svg" alt="ColorBlast — gioco reflex" class="w-full h-full object-cover" loading="lazy" decoding="async">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent z-10"></div>
+                        <span data-i18n="tag_game" class="absolute top-4 left-4 z-20 px-3 py-1 bg-fuchsia-500/25 text-fuchsia-200 backdrop-blur-md rounded-full text-xs font-bold border border-fuchsia-400/35">Gioco</span>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold text-white mb-1">ColorBlast</h3>
+                        <p data-i18n="proj_role_colorblast" class="text-fuchsia-300/90 text-xs font-semibold uppercase tracking-wider mb-3">Side project · Arcade</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill-tag text-xs">JavaScript</span><span class="skill-tag text-xs">Canvas</span><span class="skill-tag text-xs">Game loop</span>
+                        </div>
+                        <p data-i18n="proj_colorblast_desc" class="text-gray-400 mb-6 flex-grow text-sm leading-relaxed">
+                            Reflex game neon: colpisci i target, combo, power-up e classifica — ottimizzato per sessioni rapide nel browser.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-2 mt-auto">
+                            <a href="https://onlyg4bb0.github.io/ColorBlast/" target="_blank" rel="noopener noreferrer" class="flex-1 py-3 rounded-xl bg-fuchsia-600/80 hover:bg-fuchsia-500 border border-fuchsia-400/40 text-center font-semibold transition-all text-sm">
+                                <span data-i18n="proj_demo">Demo</span> <i class="fas fa-external-link-alt ml-1"></i>
+                            </a>
+                            <a href="https://github.com/OnlyG4BB0/ColorBlast" target="_blank" rel="noopener noreferrer" class="flex-1 py-3 rounded-xl glass-panel border border-white/10 hover:border-fuchsia-500 text-center font-semibold transition-all text-sm">
+                                <i class="fab fa-github mr-1"></i> <span data-i18n="proj_code">Codice</span>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <article data-project-category="side" class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group project-card">
+                    <div class="project-thumb h-56 relative overflow-hidden bg-emerald-950">
+                        <img src="./assets/projects/receiptvault.svg" alt="ReceiptVault — app mobile scontrini" class="w-full h-full object-cover" loading="lazy" decoding="async">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent z-10"></div>
+                        <span data-i18n="tag_mobile" class="absolute top-4 left-4 z-20 px-3 py-1 bg-emerald-500/25 text-emerald-200 backdrop-blur-md rounded-full text-xs font-bold border border-emerald-400/35">App mobile</span>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold text-white mb-1">ReceiptVault</h3>
+                        <p data-i18n="proj_role_receipt" class="text-emerald-300/90 text-xs font-semibold uppercase tracking-wider mb-3">Side project · React Native</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill-tag text-xs">TypeScript</span><span class="skill-tag text-xs">Expo</span><span class="skill-tag text-xs">Mobile</span>
+                        </div>
+                        <p data-i18n="proj_receipt_desc" class="text-gray-400 mb-6 flex-grow text-sm leading-relaxed">
+                            App per archiviare e organizzare scontrini digitali: stack moderno TypeScript con build Android tramite Expo.
+                        </p>
+                        <a href="https://github.com/OnlyG4BB0/ReceiptVault" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl glass-panel border border-white/15 hover:border-emerald-500 text-center font-semibold transition-all text-sm mt-auto">
+                            <i class="fab fa-github mr-1"></i> <span data-i18n="proj_code">Codice</span>
+                        </a>
                     </div>
                 </article>
             </div>
@@ -793,8 +892,8 @@
 
     <!-- Footer Glass -->
     <footer class="border-t border-white/10 bg-dark/50 backdrop-blur-lg pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12 text-center md:text-left">
+        <div class="site-shell">
+            <div class="site-footer-inner">
                 <div>
                     <p class="font-display text-xl font-bold text-white mb-2">Gabriel Lazzara</p>
                     <p data-i18n="footer_tagline" class="text-gray-500 text-sm leading-relaxed">Full-stack developer · Palermo, Sicilia</p>

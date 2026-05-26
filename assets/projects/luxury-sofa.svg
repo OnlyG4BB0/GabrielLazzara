@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="Luxury Sofa preview">
+  <defs>
+    <linearGradient id="lux-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1c1917"/>
+      <stop offset="100%" stop-color="#292524"/>
+    </linearGradient>
+    <linearGradient id="lux-seat" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a8a29e"/>
+      <stop offset="100%" stop-color="#78716c"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#lux-bg)"/>
+  <rect x="160" y="210" width="480" height="130" rx="28" fill="url(#lux-seat)"/>
+  <rect x="185" y="185" width="430" height="55" rx="22" fill="#d6d3d1"/>
+  <rect x="210" y="160" width="90" height="70" rx="14" fill="#e7e5e4"/>
+  <rect x="500" y="160" width="90" height="70" rx="14" fill="#e7e5e4"/>
+  <circle cx="400" cy="120" r="6" fill="#d6d3d1" opacity="0.5"/>
+  <text x="40" y="58" fill="#fafaf9" font-family="system-ui, Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Luxury Sofa</text>
+  <text x="40" y="400" fill="#d6d3d1" font-family="system-ui, Segoe UI, Arial, sans-serif" font-size="20">PHP - MySQL - E-commerce</text>
+</svg>
