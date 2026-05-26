@@ -1436,6 +1436,21 @@ h3 {
     transform: translate3d(0, 0, 0);
 }
 
+/* Hero: no slide-up on every refresh */
+#hero .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+}
+
+/* Already in viewport on load (set by inline script / main.js) */
+.reveal.reveal-instant,
+.reveal.reveal-instant.active {
+    opacity: 1;
+    transform: none;
+    transition: none;
+}
+
 .reveal-scale.active {
     transform: translate3d(0, 0, 0) scale(1);
 }

@@ -273,11 +273,12 @@ class PortfolioApp {
         );
 
         this.revealElements.forEach((el) => {
-            revealObserver.observe(el);
             const rect = el.getBoundingClientRect();
-            if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
-                el.classList.add('active');
+            const inView = rect.top < window.innerHeight * 0.92 && rect.bottom > 0;
+            if (inView) {
+                el.classList.add('active', 'reveal-instant');
             }
+            revealObserver.observe(el);
         });
 
         const sectionObserver = new IntersectionObserver(
