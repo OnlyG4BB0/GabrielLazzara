@@ -1,0 +1,24 @@
+{
+  "name": "Gabriel Lazzara — Portfolio",
+  "short_name": "Gabriel.dev",
+  "description": "Portfolio full-stack developer: siti web, web app e progetti per clienti.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#030014",
+  "theme_color": "#9333ea",
+  "lang": "it",
+  "icons": [
+    {
+      "src": "assets/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

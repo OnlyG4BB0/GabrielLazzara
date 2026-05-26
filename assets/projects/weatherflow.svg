@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="Weatherflow preview">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#312e81"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#sky)"/>
+  <circle cx="620" cy="110" r="48" fill="#fde047" opacity="0.95"/>
+  <ellipse cx="220" cy="300" rx="140" ry="36" fill="#6366f1" opacity="0.35"/>
+  <ellipse cx="380" cy="280" rx="180" ry="44" fill="#818cf8" opacity="0.45"/>
+  <ellipse cx="540" cy="310" rx="120" ry="30" fill="#a5b4fc" opacity="0.35"/>
+  <text x="40" y="60" fill="#e0e7ff" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Weatherflow</text>
+  <text x="40" y="110" fill="#c7d2fe" font-family="Segoe UI, Arial, sans-serif" font-size="52" font-weight="800">24°C</text>
+  <text x="40" y="400" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="20">Svelte · Python · API meteo</text>
+</svg>

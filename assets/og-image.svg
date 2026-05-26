@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Gabriel Lazzara  Full-Stack Web Developer">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#030014"/>
+      <stop offset="50%" stop-color="#1e1033"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="75%" cy="30%" r="45%">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <polygon points="980,120 1040,200 920,210" fill="#d8b4fe" opacity="0.9"/>
+  <polygon points="1080,120 1020,200 1140,210" fill="#a855f7"/>
+  <polygon points="920,210 1040,200 1000,320" fill="#9333ea"/>
+  <polygon points="1140,210 1020,200 1000,320" fill="#4f46e5"/>
+  <polygon points="1040,200 1080,120 920,120" fill="#f0abfc" opacity="0.8"/>
+  <text x="80" y="280" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="72" font-weight="800">Gabriel Lazzara</text>
+  <text x="80" y="360" fill="url(#accent)" font-family="Segoe UI, Arial, sans-serif" font-size="44" font-weight="700">Full-Stack Web Developer</text>
+  <text x="80" y="430" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="28">Palermo · Siti web · Web app · Progetti cliente</text>
+  <rect x="80" y="480" width="420" height="56" rx="28" fill="url(#accent)"/>
+  <text x="290" y="517" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">onlyg4bb0.github.io/GabrielLazzara</text>
+</svg>
