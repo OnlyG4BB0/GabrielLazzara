@@ -4,21 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, follow">
+    <meta name="theme-color" content="#08060f">
     <title>Pagina non trovata | Gabriel Lazzara</title>
     <link rel="canonical" href="https://onlyg4bb0.github.io/GabrielLazzara/">
     <link rel="stylesheet" href="./css/main.css">
+    <script>
+        (function () {
+            const t = localStorage.getItem('portfolio_theme');
+            const theme = t === 'light' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
         body { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
-        h1 { font-size: 4rem; font-weight: 800; margin-bottom: 0.5rem; }
-        a { display: inline-block; margin-top: 1.5rem; padding: 0.75rem 1.5rem; border-radius: 9999px; background: linear-gradient(135deg, #9333ea, #4f46e5); color: white; font-weight: 600; text-decoration: none; }
+        h1 { font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 800; margin-bottom: 0.5rem; font-family: var(--font-display); }
+        a.btn-primary { display: inline-block; margin-top: 1.5rem; padding: 0.75rem 1.5rem; border-radius: 9999px; text-decoration: none; }
     </style>
 </head>
-<body class="bg-dark text-white">
+<body class="site-body">
     <main>
-        <p class="text-purple-300 text-sm font-semibold uppercase tracking-widest mb-2">404</p>
+        <p class="section-eyebrow mx-auto w-fit mb-4">404</p>
         <h1 class="gradient-text">Pagina non trovata</h1>
-        <p class="text-gray-400 max-w-md mx-auto mt-4">Il link che hai seguito non esiste o è stato spostato.</p>
-        <a href="./">Torna al portfolio</a>
+        <p class="section-lead max-w-md mx-auto mt-4 mb-0">Il link che hai seguito non esiste o è stato spostato.</p>
+        <a href="./" class="btn-primary">Torna al portfolio</a>
     </main>
 </body>
 </html>

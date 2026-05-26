@@ -11,15 +11,19 @@ class PortfolioApp {
         this.copyEmailBtn = document.getElementById('copy-email-btn');
         this.projectCards = document.querySelectorAll('[data-project-category]');
         this.filterBtns = document.querySelectorAll('[data-project-filter]');
+        this.themeToggle = document.getElementById('theme-toggle');
 
         this.isMenuOpen = false;
         this.currentLang = localStorage.getItem('portfolio_lang') || 'it';
         this.currentFilter = 'all';
+        this.currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
 
         this.init();
     }
 
     init() {
+        this.setupThemeToggle();
+        this.applyTheme(this.currentTheme);
         this.setupMobileMenu();
         this.setupSmoothScrolling();
         this.setupIntersectionObservers();
@@ -31,6 +35,30 @@ class PortfolioApp {
         this.setupSpotlightCards();
         this.applyLanguage(this.currentLang);
         this.applyProjectFilter(this.currentFilter);
+    }
+
+    setupThemeToggle() {
+        if (!this.themeToggle) return;
+
+        this.themeToggle.addEventListener('click', () => {
+            this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+            this.applyTheme(this.currentTheme);
+            localStorage.setItem('portfolio_theme', this.currentTheme);
+        });
+    }
+
+    applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) {
+            meta.setAttribute('content', theme === 'light' ? '#f5f3fa' : '#08060f');
+        }
+        if (this.themeToggle) {
+            const label = theme === 'dark'
+                ? (translations[this.currentLang]?.theme_toggle_light || 'Attiva tema chiaro')
+                : (translations[this.currentLang]?.theme_toggle_dark || 'Attiva tema scuro');
+            this.themeToggle.setAttribute('aria-label', label);
+        }
     }
 
     setupLanguageToggle() {
@@ -50,11 +78,19 @@ class PortfolioApp {
         const enTexts = document.querySelectorAll('.lang-en-text');
 
         if (lang === 'it') {
-            itTexts.forEach((el) => { el.className = 'lang-it-text font-bold text-purple-400 text-sm transition-all'; });
-            enTexts.forEach((el) => { el.className = 'lang-en-text text-gray-400 text-sm transition-all'; });
+            itTexts.forEach((el) => { el.className = 'lang-it-text lang-active text-sm transition-all'; });
+            enTexts.forEach((el) => { el.className = 'lang-en-text lang-inactive text-sm transition-all'; });
         } else {
-            itTexts.forEach((el) => { el.className = 'lang-it-text text-gray-400 text-sm transition-all'; });
-            enTexts.forEach((el) => { el.className = 'lang-en-text font-bold text-purple-400 text-sm transition-all'; });
+            itTexts.forEach((el) => { el.className = 'lang-it-text lang-inactive text-sm transition-all'; });
+            enTexts.forEach((el) => { el.className = 'lang-en-text lang-active text-sm transition-all'; });
+        }
+
+        if (this.themeToggle) {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const labelKey = theme === 'dark' ? 'theme_toggle_light' : 'theme_toggle_dark';
+            if (translations[lang][labelKey]) {
+                this.themeToggle.setAttribute('aria-label', translations[lang][labelKey]);
+            }
         }
 
         document.querySelectorAll('[data-i18n]').forEach((el) => {

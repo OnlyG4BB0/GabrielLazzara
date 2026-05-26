@@ -1,6 +1,8 @@
 const translations = {
     it: {
         skip_main: "Vai al contenuto principale",
+        theme_toggle_light: "Attiva tema chiaro",
+        theme_toggle_dark: "Attiva tema scuro",
         nav_home: "Home",
         nav_about: "About",
         nav_work: "Lavori",
@@ -163,6 +165,8 @@ const translations = {
     },
     en: {
         skip_main: "Skip to main content",
+        theme_toggle_light: "Switch to light theme",
+        theme_toggle_dark: "Switch to dark theme",
         nav_home: "Home",
         nav_about: "About",
         nav_work: "Work",

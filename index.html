@@ -57,6 +57,17 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="./css/main.css">
+
+    <script>
+        (function () {
+            const saved = localStorage.getItem('portfolio_theme');
+            const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+            const theme = saved || (prefersLight ? 'light' : 'dark');
+            document.documentElement.setAttribute('data-theme', theme);
+            const meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', theme === 'light' ? '#f5f3fa' : '#08060f');
+        })();
+    </script>
     
     <!-- Favicon SVG (Volpe) -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='fox-grad-main' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23e879f9' /%3E%3Cstop offset='100%25' stop-color='%23c084fc' /%3E%3C/linearGradient%3E%3ClinearGradient id='fox-grad-dark' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23c084fc' /%3E%3Cstop offset='100%25' stop-color='%236366f1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon points='25,15 40,40 10,45' fill='%23d8b4fe' /%3E%3Cpolygon points='75,15 60,40 90,45' fill='%23a855f7' /%3E%3Cpolygon points='10,45 40,40 50,85' fill='%239333ea' /%3E%3Cpolygon points='90,45 60,40 50,85' fill='%234f46e5' /%3E%3Cpolygon points='40,40 60,40 50,48' fill='%23f0abfc' /%3E%3Cpolygon points='40,40 50,48 50,85' fill='url(%23fox-grad-main)' /%3E%3Cpolygon points='60,40 50,48 50,85' fill='url(%23fox-grad-dark)' /%3E%3Cpolygon points='46,77 54,77 50,85' fill='%23ffffff' /%3E%3C/svg%3E" type="image/svg+xml">
@@ -122,7 +133,7 @@
 
 </head>
 
-<body class="bg-dark text-white antialiased selection:bg-accent/40 selection:text-white font-sans">
+<body class="site-body antialiased font-sans">
     <a href="#hero" class="skip-link" data-i18n="skip_main">Vai al contenuto principale</a>
 
     <div class="bg-mesh" aria-hidden="true"></div>
@@ -158,11 +169,11 @@
                     <polygon points="60,40 50,48 50,85" fill="url(#fox-grad-dark)" />
                     <polygon points="46,77 54,77 50,85" fill="#ffffff" />
                 </svg>
-                <span class="font-display text-2xl font-bold tracking-wide text-white">Gabriel<span class="gradient-text">.</span></span>
+                <span class="font-display text-2xl font-bold tracking-wide site-logo-text">Gabriel<span class="gradient-text">.</span></span>
             </a>
         </div>
         
-        <nav class="hidden lg:flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/10 backdrop-blur-md" aria-label="Navigazione principale">
+        <nav class="nav-pill hidden lg:flex items-center gap-1 p-1 rounded-full" aria-label="Navigazione principale">
             <a href="#hero" data-i18n="nav_home" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all active-link">Home</a>
             <a href="#about" data-i18n="nav_about" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">About</a>
             <a href="#projects" data-i18n="nav_work" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Lavori</a>
@@ -170,28 +181,32 @@
             <a href="#contact" data-i18n="nav_cta" class="nav-link-cta ml-1 px-5 py-2 rounded-full text-sm font-semibold text-white btn-primary">Parliamone</a>
         </nav>
 
-        <div class="flex-1 flex justify-end items-center gap-4">
-            <button class="lang-toggle w-[80px] py-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center justify-center gap-2 cursor-pointer">
+        <div class="flex-1 flex justify-end items-center gap-2 sm:gap-3">
+            <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Attiva tema chiaro" data-i18n-aria="theme_toggle_aria">
+                <i class="fas fa-sun theme-icon-light" aria-hidden="true"></i>
+                <i class="fas fa-moon theme-icon-dark" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="lang-toggle w-[4.5rem] sm:w-[5rem] py-1.5 rounded-full transition-all flex items-center justify-center gap-2 cursor-pointer">
                 <span class="lang-it-text font-bold text-purple-400 text-sm">IT</span>
                 <span class="text-gray-600 text-xs">|</span>
                 <span class="lang-en-text text-gray-400 text-sm">EN</span>
             </button>
             
             <button id="mobile-menu-btn" class="lg:hidden w-8 h-8 flex flex-col justify-center gap-1.5 z-50 relative cursor-pointer">
-                <span class="w-full h-0.5 bg-white hamburger-line line-1 rounded-full"></span>
-                <span class="w-full h-0.5 bg-white hamburger-line line-2 rounded-full"></span>
-                <span class="w-full h-0.5 bg-white hamburger-line line-3 rounded-full"></span>
+                <span class="w-full h-0.5 hamburger-line line-1 rounded-full"></span>
+                <span class="w-full h-0.5 hamburger-line line-2 rounded-full"></span>
+                <span class="w-full h-0.5 hamburger-line line-3 rounded-full"></span>
             </button>
         </div>
     </header>
 
-    <div id="mobile-menu" class="fixed inset-0 glass-panel bg-dark/90 backdrop-blur-2xl flex-col items-center justify-center gap-8 z-40 hidden opacity-0 transition-opacity duration-300 pt-20">
+    <div id="mobile-menu" class="mobile-menu-panel fixed inset-0 flex-col items-center justify-center gap-6 z-40 hidden opacity-0 transition-opacity duration-300">
         <a href="#hero" data-i18n="nav_home" class="mobile-link text-3xl font-bold text-gray-300 hover:text-white transition-all">Home</a>
         <a href="#about" data-i18n="nav_about" class="mobile-link text-3xl font-bold text-gray-300 hover:text-white transition-all">About</a>
         <a href="#projects" data-i18n="nav_work" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 transition-all">Lavori</a>
         <a href="#case-study" data-i18n="nav_case" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 transition-all">Case study</a>
         <a href="#services" data-i18n="nav_services" class="mobile-link text-2xl font-semibold text-gray-500 hover:text-purple-300 transition-all">Servizi</a>
-        <a href="#contact" data-i18n="nav_cta" class="mobile-link text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 mt-4">Parliamone</a>
+        <a href="#contact" data-i18n="nav_cta" class="mobile-link mobile-link-accent mt-2">Parliamone</a>
     </div>
 
     <main class="site-main">
@@ -350,7 +365,7 @@
         <section id="values" class="scroll-mt-32" aria-labelledby="values-heading">
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="values_eyebrow">Perché me</p>
             <h2 id="values-heading" data-i18n="values_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Cosa porto al <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">tuo progetto</span></h2>
-            <p data-i18n="values_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-12 reveal">Non solo codice: strategia, cura del dettaglio e consegna pronta per il web.</p>
+            <p data-i18n="values_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Non solo codice: strategia, cura del dettaglio e consegna pronta per il web.</p>
             <div class="bento-grid">
                 <article class="bento-item bento-span-2 glass-panel glass-card spotlight-card p-8 rounded-3xl reveal">
                     <i class="fas fa-bullseye text-3xl text-purple-400 mb-4"></i>
@@ -379,7 +394,7 @@
         <section id="experience" class="scroll-mt-32" aria-labelledby="exp-heading">
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="exp_eyebrow">Percorso</p>
             <h2 id="exp-heading" data-i18n="exp_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Esperienza & <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">formazione</span></h2>
-            <p data-i18n="exp_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-12 reveal">Crescita continua tra progetti cliente, open source e sperimentazione.</p>
+            <p data-i18n="exp_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Crescita continua tra progetti cliente, open source e sperimentazione.</p>
             <div class="timeline max-w-3xl mx-auto space-y-0">
                 <article class="timeline-item reveal">
                     <span class="timeline-period" data-i18n="exp1_period">2024 — oggi</span>
@@ -403,7 +418,7 @@
         <section id="services" class="scroll-mt-32" aria-labelledby="services-heading">
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="services_eyebrow">Servizi</p>
             <h2 id="services-heading" data-i18n="services_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Soluzioni <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">su misura</span></h2>
-            <p data-i18n="services_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-12 reveal">Dal sito vetrina alla web app: scegli il livello giusto per la tua attività.</p>
+            <p data-i18n="services_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Dal sito vetrina alla web app: scegli il livello giusto per la tua attività.</p>
             <div class="bento-grid bento-services">
                 <article class="bento-item bento-tall glass-panel glass-card spotlight-card p-8 rounded-3xl reveal">
                     <i class="fas fa-laptop-code text-4xl text-purple-400 mb-5"></i>
@@ -432,7 +447,7 @@
         <section id="packages" class="scroll-mt-32" aria-labelledby="packages-heading">
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="pkg_eyebrow">Pacchetti</p>
             <h2 id="packages-heading" data-i18n="pkg_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Trasparenza su <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">cosa include</span></h2>
-            <p data-i18n="pkg_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-12 reveal">Ogni progetto è diverso — preventivo personalizzato dopo un breve call.</p>
+            <p data-i18n="pkg_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Ogni progetto è diverso — preventivo personalizzato dopo un breve call.</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <article class="pkg-card glass-panel glass-card spotlight-card p-8 rounded-3xl reveal flex flex-col">
                     <h3 data-i18n="pkg1_name" class="text-xl font-bold text-white">Landing</h3>
@@ -462,7 +477,7 @@
             <h2 id="process-heading" data-i18n="process_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-6 reveal">
                 Come <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">lavoro</span>
             </h2>
-            <p data-i18n="process_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-14 reveal">Dal brief al deploy: un flusso chiaro per consegnare progetti solidi, anche per clienti senza team tecnico.</p>
+            <p data-i18n="process_sub" class="section-lead text-center max-w-2xl mx-auto mb-14 reveal">Dal brief al deploy: un flusso chiaro per consegnare progetti solidi, anche per clienti senza team tecnico.</p>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="glass-panel glass-card process-step p-6 rounded-2xl reveal">
                     <span class="text-purple-400 font-bold text-sm">01</span>
@@ -493,7 +508,7 @@
             <h2 id="skills-heading" data-i18n="skills_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-6 reveal">
                 Tech <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">Stack</span>
             </h2>
-            <p data-i18n="skills_sub" class="text-center text-gray-400 max-w-xl mx-auto mb-14 reveal">Competenze raggruppate per area — senza percentuali arbitrarie, con focus su ciò che uso nei progetti.</p>
+            <p data-i18n="skills_sub" class="section-lead text-center max-w-xl mx-auto mb-14 reveal">Competenze raggruppate per area — senza percentuali arbitrarie, con focus su ciò che uso nei progetti.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="glass-panel glass-card p-8 rounded-3xl reveal">
@@ -527,7 +542,7 @@
         <section id="case-study" class="scroll-mt-32" aria-labelledby="case-heading">
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="case_eyebrow">Case study</p>
             <h2 id="case-heading" data-i18n="case_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Rent Boat <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">Mondello</span></h2>
-            <p data-i18n="case_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-12 reveal">Sito completo per noleggio gommoni ed escursioni — dal brief al deploy su VPS Oracle Cloud.</p>
+            <p data-i18n="case_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Sito completo per noleggio gommoni ed escursioni — dal brief al deploy su VPS Oracle Cloud.</p>
 
             <div class="case-study-grid">
                 <div class="case-visual reveal">
@@ -578,7 +593,7 @@
             <h2 id="projects-heading" data-i18n="proj_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">
                 Tutti i <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">lavori</span>
             </h2>
-            <p data-i18n="proj_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-8 reveal">Filtra per tipo: progetti cliente e side project open source.</p>
+            <p data-i18n="proj_sub" class="section-lead text-center max-w-2xl mx-auto mb-8 reveal">Filtra per tipo: progetti cliente e side project open source.</p>
 
             <div class="project-filters flex flex-wrap justify-center gap-2 mb-12 reveal" role="tablist" aria-label="Filtra progetti">
                 <button type="button" data-project-filter="all" class="filter-btn filter-active" data-i18n="filter_all">Tutti</button>
@@ -676,7 +691,7 @@
             <h2 id="faq-heading" data-i18n="faq_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-6 reveal">
                 Domande <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">frequenti</span>
             </h2>
-            <p data-i18n="faq_sub" class="text-center text-gray-400 max-w-2xl mx-auto mb-14 reveal">
+            <p data-i18n="faq_sub" class="section-lead text-center max-w-2xl mx-auto mb-14 reveal">
                 Risposte rapide per capire se possiamo lavorare bene insieme.
             </p>
             <div class="max-w-4xl mx-auto space-y-4">
