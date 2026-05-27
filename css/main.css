@@ -1213,19 +1213,23 @@ h3 {
 /* Mobile menu */
 .mobile-menu-panel,
 #mobile-menu {
+    position: fixed;
     top: var(--header-h);
     left: 0;
     right: 0;
     bottom: 0;
-    width: 100%;
+    width: 100vw;
+    max-width: 100vw;
     height: calc(100dvh - var(--header-h));
     max-height: calc(100dvh - var(--header-h));
+    margin: 0;
     padding-top: 0.5rem;
     padding-left: var(--container-pad);
     padding-right: var(--container-pad);
     padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box;
     overflow: hidden;
-    background: var(--c-glass-strong);
+    background: var(--c-mobile-menu);
     -webkit-backdrop-filter: var(--glass-filter-strong);
     backdrop-filter: var(--glass-filter-strong);
     box-shadow: var(--glass-shadow);
@@ -1234,8 +1238,10 @@ h3 {
 #mobile-menu.flex {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
+    width: 100vw;
+    max-width: 100vw;
     min-height: 0;
 }
 
@@ -1246,10 +1252,10 @@ h3 {
     justify-content: space-evenly;
     flex: 1 1 auto;
     width: 100%;
-    max-width: 16rem;
+    max-width: none;
     min-height: 0;
     max-height: 100%;
-    margin-inline: auto;
+    margin: 0;
     gap: 0;
     padding-block: 0.25rem;
     overflow-y: auto;
@@ -1285,10 +1291,6 @@ h3 {
 }
 
 @media (max-height: 640px) {
-    .mobile-menu-nav {
-        max-width: 15rem;
-    }
-
     .mobile-link {
         height: clamp(1.625rem, 5.5vh, 2.125rem);
         font-size: clamp(0.875rem, 2.4vh, 1.0625rem) !important;
@@ -2080,8 +2082,8 @@ article p.text-gray-400 {
 
 [data-theme="light"] .mobile-menu-panel,
 [data-theme="light"] #mobile-menu {
-    background: rgba(255, 255, 255, 0.78);
-    border-bottom: 1px solid var(--c-glass-border);
+    background: var(--c-mobile-menu);
+    border-top: 1px solid var(--c-glass-border);
     -webkit-backdrop-filter: blur(24px) saturate(1.4);
     backdrop-filter: blur(24px) saturate(1.4);
 }
