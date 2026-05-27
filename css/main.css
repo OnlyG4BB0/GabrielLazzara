@@ -1213,15 +1213,18 @@ h3 {
 /* Mobile menu */
 .mobile-menu-panel,
 #mobile-menu {
-    padding-top: calc(var(--header-h) + 0.5rem);
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: calc(100dvh - var(--header-h));
+    max-height: calc(100dvh - var(--header-h));
+    padding-top: 0.5rem;
     padding-left: var(--container-pad);
     padding-right: var(--container-pad);
     padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
-    max-height: 100dvh;
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
     background: var(--c-glass-strong);
     -webkit-backdrop-filter: var(--glass-filter-strong);
     backdrop-filter: var(--glass-filter-strong);
@@ -1232,18 +1235,26 @@ h3 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
+    min-height: 0;
 }
 
 .mobile-menu-nav {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(0.15rem, 0.9vh, 0.45rem);
+    justify-content: space-evenly;
+    flex: 1 1 auto;
     width: 100%;
-    max-width: 18rem;
+    max-width: 16rem;
+    min-height: 0;
+    max-height: 100%;
     margin-inline: auto;
-    padding-bottom: 0.25rem;
+    gap: 0;
+    padding-block: 0.25rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
 }
 
 #mobile-menu.flex .mobile-link {
@@ -1262,28 +1273,29 @@ h3 {
 #mobile-menu.flex .mobile-link:nth-child(10) { animation-delay: 0.3s; }
 
 .mobile-link {
-    min-height: clamp(2rem, 5.25vh, 2.5rem);
+    min-height: 0;
+    height: clamp(1.75rem, 6vh, 2.5rem);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.1rem 0.5rem;
-    line-height: 1.15;
-    font-size: clamp(1.0625rem, 3.6vw, 1.3125rem) !important;
+    padding: 0 0.5rem;
+    line-height: 1.1;
+    font-size: clamp(0.9375rem, 2.6vh, 1.1875rem) !important;
     flex-shrink: 0;
 }
 
-@media (max-height: 700px) {
+@media (max-height: 640px) {
     .mobile-menu-nav {
-        gap: 0.15rem;
+        max-width: 15rem;
     }
 
     .mobile-link {
-        min-height: 1.875rem;
-        font-size: 1rem !important;
+        height: clamp(1.625rem, 5.5vh, 2.125rem);
+        font-size: clamp(0.875rem, 2.4vh, 1.0625rem) !important;
     }
 
     .mobile-link-accent {
-        font-size: 1.0625rem !important;
+        font-size: clamp(0.9375rem, 2.6vh, 1.125rem) !important;
     }
 }
 
@@ -1742,9 +1754,9 @@ h3 {
 .mobile-link:hover { color: var(--c-text); }
 
 .mobile-link-accent {
-    font-size: clamp(1.125rem, 3.9vw, 1.375rem) !important;
+    font-size: clamp(1rem, 2.8vh, 1.25rem) !important;
     color: var(--c-accent) !important;
-    margin-top: clamp(0.1rem, 0.6vh, 0.3rem);
+    margin-top: 0;
 }
 
 .mobile-link-accent:hover { color: var(--c-accent-hover) !important; }
