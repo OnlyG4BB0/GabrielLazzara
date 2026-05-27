@@ -161,7 +161,7 @@
     <!-- Header Glass -->
     <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 glass-panel glass-strong border-x-0 border-t-0">
         <div class="site-shell navbar-inner">
-            <a href="#hero" class="navbar-brand flex items-center gap-3 group shrink-0" aria-label="Gabriel Lazzara — torna all'inizio">
+            <a href="#hero" class="navbar-brand flex items-center gap-4 group shrink-0" aria-label="Gabriel Lazzara — torna all'inizio">
                 <!-- Logo Corretto (x1/y1 con percentuali per compatibilità mobile SVG) -->
                 <svg class="w-11 h-11 drop-shadow-[0_0_12px_rgba(232,121,249,0.8)] group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
@@ -189,8 +189,13 @@
             <nav class="navbar-nav nav-pill items-center gap-1 p-1 rounded-full" aria-label="Navigazione principale">
                 <a href="#hero" data-i18n="nav_home" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all active-link">Home</a>
                 <a href="#about" data-i18n="nav_about" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">About</a>
+                <a href="#services" data-i18n="nav_services" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Servizi</a>
+                <a href="#packages" data-i18n="nav_packages" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Pacchetti</a>
+                <a href="#process" data-i18n="nav_process" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Metodo</a>
+                <a href="#skills" data-i18n="nav_skills" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Competenze</a>
                 <a href="#projects" data-i18n="nav_work" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Lavori</a>
                 <a href="#case-study" data-i18n="nav_case" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Case study</a>
+                <a href="#faq" data-i18n="nav_faq" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">FAQ</a>
                 <a href="#contact" data-i18n="nav_cta" class="nav-link-cta ml-1 px-5 py-2 rounded-full text-sm font-semibold text-white btn-primary">Parliamone</a>
             </nav>
 
@@ -214,13 +219,19 @@
         </div>
     </header>
 
-    <div id="mobile-menu" class="mobile-menu-panel fixed inset-0 flex-col items-center justify-center gap-6 z-40 hidden opacity-0 transition-opacity duration-300">
-        <a href="#hero" data-i18n="nav_home" class="mobile-link text-3xl font-bold text-gray-300 hover:text-white transition-all">Home</a>
-        <a href="#about" data-i18n="nav_about" class="mobile-link text-3xl font-bold text-gray-300 hover:text-white transition-all">About</a>
-        <a href="#projects" data-i18n="nav_work" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 transition-all">Lavori</a>
-        <a href="#case-study" data-i18n="nav_case" class="mobile-link text-3xl font-bold text-gray-300 hover:text-purple-400 transition-all">Case study</a>
-        <a href="#services" data-i18n="nav_services" class="mobile-link text-2xl font-semibold text-gray-500 hover:text-purple-300 transition-all">Servizi</a>
-        <a href="#contact" data-i18n="nav_cta" class="mobile-link mobile-link-accent mt-2">Parliamone</a>
+    <div id="mobile-menu" class="mobile-menu-panel fixed inset-0 z-40 hidden opacity-0 transition-opacity duration-300" aria-hidden="true">
+        <nav class="mobile-menu-nav" aria-label="Navigazione mobile">
+            <a href="#hero" data-i18n="nav_home" class="mobile-link">Home</a>
+            <a href="#about" data-i18n="nav_about" class="mobile-link">About</a>
+            <a href="#services" data-i18n="nav_services" class="mobile-link">Servizi</a>
+            <a href="#packages" data-i18n="nav_packages" class="mobile-link">Pacchetti</a>
+            <a href="#process" data-i18n="nav_process" class="mobile-link">Metodo</a>
+            <a href="#skills" data-i18n="nav_skills" class="mobile-link">Competenze</a>
+            <a href="#projects" data-i18n="nav_work" class="mobile-link">Lavori</a>
+            <a href="#case-study" data-i18n="nav_case" class="mobile-link">Case study</a>
+            <a href="#faq" data-i18n="nav_faq" class="mobile-link">FAQ</a>
+            <a href="#contact" data-i18n="nav_cta" class="mobile-link mobile-link-accent">Parliamone</a>
+        </nav>
     </div>
 
     <main class="site-main site-shell">
@@ -744,6 +755,29 @@
                         <a href="https://github.com/OnlyG4BB0/ReceiptVault" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl glass-panel border border-white/15 hover:border-emerald-500 text-center font-semibold transition-all text-sm mt-auto">
                             <i class="fab fa-github mr-1"></i> <span data-i18n="proj_code">Codice</span>
                         </a>
+                    </div>
+                </article>
+
+                <article data-project-category="side" class="glass-panel glass-card rounded-3xl overflow-hidden flex flex-col h-full reveal group project-card" style="transition-delay: 180ms;">
+                    <div class="project-thumb h-56 relative overflow-hidden bg-indigo-950">
+                        <img src="./assets/projects/discord-bot.svg" alt="Discord Bot — automazioni e comandi" class="w-full h-full object-cover" loading="lazy" decoding="async" width="800" height="450" onerror="this.onerror=null;this.style.display='none';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent z-10"></div>
+                        <span class="absolute top-4 left-4 z-20 px-3 py-1 bg-indigo-500/25 text-indigo-200 backdrop-blur-md rounded-full text-xs font-bold border border-indigo-400/30">Bot</span>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold text-white mb-1">Discord Bot</h3>
+                        <p class="text-indigo-300/90 text-xs font-semibold uppercase tracking-wider mb-3">Side project · Discord</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill-tag text-xs">Discord</span><span class="skill-tag text-xs">Comandi</span><span class="skill-tag text-xs">Automazioni</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 flex-grow text-sm leading-relaxed">
+                            Bot Discord con comandi personalizzati e automazioni per il tuo server. Inizia subito con l'invito OAuth2.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-2 mt-auto">
+                            <a href="https://discord.com/oauth2/authorize?client_id=1503701790703751261&permissions=8&integration_type=0&scope=bot" target="_blank" rel="noopener noreferrer" class="flex-1 py-3 rounded-xl bg-indigo-600/80 hover:bg-indigo-500 border border-indigo-400/30 text-center font-semibold transition-all text-sm">
+                                <span>Invita bot</span> <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                            </a>
+                        </div>
                     </div>
                 </article>
             </div>

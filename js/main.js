@@ -229,6 +229,7 @@ class PortfolioApp {
         if (this.isMenuOpen) {
             this.mobileMenu.classList.remove('hidden');
             this.mobileMenu.classList.add('flex');
+            this.mobileMenu.setAttribute('aria-hidden', 'false');
             setTimeout(() => {
                 this.mobileMenu.classList.remove('opacity-0');
                 this.mobileMenu.classList.add('menu-visible');
@@ -237,6 +238,7 @@ class PortfolioApp {
         } else {
             this.mobileMenu.classList.remove('menu-visible');
             this.mobileMenu.classList.add('opacity-0');
+            this.mobileMenu.setAttribute('aria-hidden', 'true');
             document.body.style.overflow = '';
             setTimeout(() => {
                 this.mobileMenu.classList.add('hidden');
