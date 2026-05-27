@@ -230,14 +230,12 @@ class PortfolioApp {
             this.mobileMenu.classList.remove('hidden');
             this.mobileMenu.classList.add('flex');
             this.mobileMenu.setAttribute('aria-hidden', 'false');
-            setTimeout(() => {
-                this.mobileMenu.classList.remove('opacity-0');
+            requestAnimationFrame(() => {
                 this.mobileMenu.classList.add('menu-visible');
                 document.body.style.overflow = 'hidden';
-            }, 10);
+            });
         } else {
             this.mobileMenu.classList.remove('menu-visible');
-            this.mobileMenu.classList.add('opacity-0');
             this.mobileMenu.setAttribute('aria-hidden', 'true');
             document.body.style.overflow = '';
             setTimeout(() => {
