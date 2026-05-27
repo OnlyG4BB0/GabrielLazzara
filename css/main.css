@@ -712,9 +712,20 @@ h3 {
 
 @media (min-width: 1024px) {
     .hero-actions {
-        align-items: flex-start;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
         justify-content: flex-start;
         max-width: none;
+        gap: 0.625rem;
+    }
+
+    .hero-actions a {
+        width: auto;
+        flex: 0 0 auto;
+        white-space: nowrap;
+        padding-left: 1.125rem;
+        padding-right: 1.125rem;
     }
 }
 
