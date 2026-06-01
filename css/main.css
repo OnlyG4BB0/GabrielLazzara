@@ -1600,6 +1600,274 @@ h3 {
 .reveal-stagger > .reveal:nth-child(11) { transition-delay: 550ms; }
 .reveal-stagger > .reveal:nth-child(12) { transition-delay: 605ms; }
 
+/* ---------- Motion enhanced (più animazioni) ---------- */
+html.motion-enhanced .bg-mesh::after {
+    animation: meshPulse 14s ease-in-out infinite;
+}
+
+html.motion-enhanced .bg-grid {
+    animation: gridDrift 48s linear infinite;
+}
+
+html.motion-enhanced .site-blobs .blob {
+    animation-duration: 11s, 13s;
+    translate: 0 var(--parallax-y, 0);
+}
+
+html.motion-enhanced .hero-scroll-cue {
+    animation: scrollCue 2s var(--ease-smooth) infinite, cueRing 2.8s ease-in-out infinite;
+}
+
+html.motion-enhanced .hero-visual-card {
+    animation: float 6s ease-in-out infinite, cardGlow 5s ease-in-out infinite;
+}
+
+html.motion-enhanced .about-float-badge {
+    animation: float 4s ease-in-out infinite, badgePulse 3.5s ease-in-out infinite;
+}
+
+html.motion-enhanced #contact-form input,
+html.motion-enhanced #contact-form textarea {
+    transition:
+        border-color var(--duration-normal) var(--ease-smooth),
+        box-shadow var(--duration-normal) var(--ease-smooth),
+        transform var(--duration-normal) var(--ease-out);
+}
+
+html.motion-enhanced #contact-form input:focus,
+html.motion-enhanced #contact-form textarea:focus {
+    transform: translate3d(0, -2px, 0);
+    box-shadow: 0 8px 24px var(--c-accent-glow);
+}
+
+@keyframes cueRing {
+    0%, 100% { box-shadow: 0 0 0 0 transparent; }
+    50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--c-accent) 25%, transparent); }
+}
+
+@keyframes cardGlow {
+    0%, 100% { box-shadow: var(--glass-shadow); }
+    50% { box-shadow: 0 16px 48px var(--c-accent-glow); }
+}
+
+html.motion-enhanced .gradient-text,
+html.motion-enhanced h1 .gradient-text,
+html.motion-enhanced h2.font-display span[class*="bg-clip-text"] {
+    background-size: 220% auto !important;
+    animation: gradientShift 7s ease-in-out infinite;
+}
+
+html.motion-enhanced .hero-availability {
+    animation: badgePulse 3.5s ease-in-out infinite;
+}
+
+html.motion-enhanced .glass-card.reveal.active,
+html.motion-enhanced .spotlight-card.reveal.active {
+    animation: cardFloat 7s ease-in-out infinite;
+    transform-style: preserve-3d;
+    transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition:
+        opacity var(--duration-slow) var(--ease-out),
+        transform var(--duration-slow) var(--ease-out),
+        box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+html.motion-enhanced .glass-card.reveal.active:nth-child(2n),
+html.motion-enhanced .spotlight-card.reveal.active:nth-child(2n) {
+    animation-delay: -2.5s;
+}
+
+html.motion-enhanced .glass-card.reveal.active:hover,
+html.motion-enhanced .spotlight-card.reveal.active:hover {
+    animation-play-state: paused;
+}
+
+html.motion-enhanced #skills.section-visible .skill-tag.reveal.active {
+    animation: tagPop 0.55s var(--ease-out) backwards;
+}
+
+html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(1) { animation-delay: 0.04s; }
+html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(2) { animation-delay: 0.08s; }
+html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(3) { animation-delay: 0.12s; }
+html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(4) { animation-delay: 0.16s; }
+html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(5) { animation-delay: 0.2s; }
+html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(6) { animation-delay: 0.24s; }
+html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(7) { animation-delay: 0.28s; }
+html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(8) { animation-delay: 0.32s; }
+
+html.motion-enhanced .section-visible .process-step.reveal.active > i {
+    display: inline-block;
+    animation: iconBob 2.8s ease-in-out infinite;
+}
+
+html.motion-enhanced .bento-item i,
+html.motion-enhanced .values-heading i {
+    animation: iconBob 3.2s ease-in-out infinite;
+}
+
+html.motion-enhanced .btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+
+html.motion-enhanced .btn-primary::after {
+    content: "";
+    position: absolute;
+    inset: -40% auto -40% -60%;
+    width: 45%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: skewX(-18deg);
+    animation: btnShimmer 3.5s ease-in-out infinite;
+}
+
+html.motion-enhanced .nav-link:not(.nav-link-cta) {
+    position: relative;
+}
+
+html.motion-enhanced .nav-link:not(.nav-link-cta)::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0.35rem;
+    width: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--c-accent);
+    transition: width var(--duration-normal) var(--ease-out), left var(--duration-normal) var(--ease-out);
+}
+
+html.motion-enhanced .nav-link:not(.nav-link-cta):hover::after,
+html.motion-enhanced .nav-link:not(.nav-link-cta).active-link::after {
+    left: 20%;
+    width: 60%;
+}
+
+html.motion-enhanced .nav-link-cta {
+    animation: ctaGlow 3s ease-in-out infinite;
+}
+
+html.motion-enhanced .hero-stat {
+    animation: statFloat 5s ease-in-out infinite;
+}
+
+html.motion-enhanced .hero-stat:nth-child(2) { animation-delay: -1.2s; }
+html.motion-enhanced .hero-stat:nth-child(3) { animation-delay: -2.4s; }
+
+html.motion-enhanced .project-card:hover .project-thumb img {
+    transform: scale3d(1.08, 1.08, 1) rotate(0.6deg);
+}
+
+html.motion-enhanced .faq-item[open] {
+    animation: faqOpen 0.45s var(--ease-out);
+}
+
+html.motion-enhanced .faq-item summary i {
+    transition: transform var(--duration-normal) var(--ease-out), color var(--duration-normal) var(--ease-smooth);
+}
+
+html.motion-enhanced .faq-item:hover summary i {
+    transform: scale(1.12);
+    color: var(--c-accent);
+}
+
+html.motion-enhanced .footer-link {
+    transition: transform var(--duration-normal) var(--ease-out), color var(--duration-normal) var(--ease-smooth);
+}
+
+html.motion-enhanced .footer-link:hover {
+    transform: translate3d(4px, 0, 0);
+}
+
+html.motion-enhanced .marquee-item {
+    animation: marqueeGlow 4s ease-in-out infinite;
+}
+
+html.motion-enhanced .pkg-featured {
+    animation: cardFloat 6s ease-in-out infinite, pkgGlow 4s ease-in-out infinite;
+}
+
+@keyframes meshPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.92; transform: scale(1.03); }
+}
+
+@keyframes gridDrift {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 40px 40px, 40px 40px; }
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+}
+
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 0 0 transparent; transform: scale(1); }
+    50% { box-shadow: 0 0 20px var(--c-accent-glow); transform: scale(1.02); }
+}
+
+@keyframes cardFloat {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -8px; }
+}
+
+@keyframes tagPop {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 10px, 0) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes stepRise {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 18px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes iconBob {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -4px, 0); }
+}
+
+@keyframes btnShimmer {
+    0% { left: -80%; }
+    45%, 100% { left: 140%; }
+}
+
+@keyframes ctaGlow {
+    0%, 100% { box-shadow: 0 4px 16px var(--c-accent-glow); }
+    50% { box-shadow: 0 8px 28px var(--c-accent-glow); }
+}
+
+@keyframes statFloat {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -5px, 0); }
+}
+
+@keyframes faqOpen {
+    from { transform: scale(0.99); }
+    to { transform: scale(1.01); }
+}
+
+@keyframes marqueeGlow {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; text-shadow: 0 0 12px var(--c-accent-glow); }
+}
+
+@keyframes pkgGlow {
+    0%, 100% { box-shadow: var(--glass-shadow); }
+    50% { box-shadow: 0 12px 40px var(--c-accent-glow); }
+}
+
 @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-16px); }

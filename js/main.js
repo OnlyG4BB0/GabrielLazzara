@@ -33,6 +33,7 @@ class PortfolioApp {
         this.applyTheme(this.currentTheme);
         this.setupMobileMenu();
         this.setupSmoothScrolling();
+        this.enhanceRevealTargets();
         this.setupIntersectionObservers();
         this.setupScrollListener();
         this.setupContactForm();
@@ -42,6 +43,7 @@ class PortfolioApp {
         this.setupSpotlightCards();
         this.setupPressFeedback();
         this.setupFaqAnimations();
+        this.setupAmbientMotion();
         this.applyLanguage(this.currentLang);
         this.applyProjectFilter(this.currentFilter, true);
     }
@@ -189,11 +191,48 @@ class PortfolioApp {
                         const rect = activeCard.getBoundingClientRect();
                         activeCard.style.setProperty('--spot-x', `${clientX - rect.left}px`);
                         activeCard.style.setProperty('--spot-y', `${clientY - rect.top}px`);
+                        if (!this.prefersReducedMotion) {
+                            const cx = rect.left + rect.width / 2;
+                            const cy = rect.top + rect.height / 2;
+                            const rotateY = ((clientX - cx) / rect.width) * 6;
+                            const rotateX = ((cy - clientY) / rect.height) * 6;
+                            activeCard.style.setProperty('--tilt-x', `${rotateX}deg`);
+                            activeCard.style.setProperty('--tilt-y', `${rotateY}deg`);
+                        }
                     }
                     rafId = null;
                 });
             }, { passive: true });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.setProperty('--tilt-x', '0deg');
+                card.style.setProperty('--tilt-y', '0deg');
+            });
         });
+    }
+
+    setupAmbientMotion() {
+        if (this.prefersReducedMotion) return;
+
+        const blobs = document.querySelectorAll('.site-blobs .blob');
+        if (!blobs.length) return;
+
+        let ticking = false;
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                const y = window.scrollY;
+                blobs.forEach((blob, index) => {
+                    const offset = y * (0.02 + index * 0.015);
+                    blob.style.setProperty('--parallax-y', `${offset}px`);
+                });
+                ticking = false;
+            });
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
     }
 
     setupCopyEmail() {
@@ -263,6 +302,35 @@ class PortfolioApp {
         });
     }
 
+    enhanceRevealTargets() {
+        if (this.prefersReducedMotion) return;
+
+        const selectors = [
+            '.section-lead:not(.reveal)',
+            '.skill-tag:not(.reveal)',
+            '.timeline-item:not(.reveal)',
+            '.faq-item:not(.reveal)',
+            '.footer-link:not(.reveal)',
+            '.case-metric-grid > div:not(.reveal)',
+            '.about-float-badge:not(.reveal)',
+            '.hero-scroll-cue:not(.reveal)',
+            '.filter-btn:not(.reveal)',
+            '.cta-band:not(.reveal)',
+            '.marquee-item:not(.reveal)',
+        ];
+
+        let delayIndex = 0;
+        selectors.forEach((selector) => {
+            document.querySelectorAll(selector).forEach((el) => {
+                el.classList.add('reveal', 'reveal-fade');
+                el.style.transitionDelay = `${(delayIndex % 12) * 45}ms`;
+                delayIndex += 1;
+            });
+        });
+
+        this.revealElements = document.querySelectorAll('.reveal');
+    }
+
     setupIntersectionObservers() {
         const revealObserver = new IntersectionObserver(
             (entries, observer) => {
@@ -273,7 +341,7 @@ class PortfolioApp {
                     }
                 });
             },
-            { threshold: 0.08, rootMargin: '0px 0px -5% 0px' }
+            { threshold: 0.05, rootMargin: '0px 0px -2% 0px' }
         );
 
         this.revealElements.forEach((el) => {
