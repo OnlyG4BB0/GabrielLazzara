@@ -1,0 +1,10 @@
+/* TEAM */
+Developer: Gabriel Lazzara
+Site: https://onlyg4bb0.github.io/GabrielLazzara/
+Location: Palermo, Sicily, Italy
+Role: Web Developer, Full-Stack Developer
+Contact: gabrielelazzara67@gmail.com
+GitHub: https://github.com/OnlyG4BB0
+
+/* THANKS */
+Google Search Console, Schema.org, GitHub Pages

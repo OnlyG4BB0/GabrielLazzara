@@ -1,8 +1,9 @@
 {
-  "name": "Gabriel Lazzara — Portfolio",
+  "name": "Gabriel Lazzara — Web Developer Portfolio",
   "short_name": "Gabriel.dev",
-  "description": "Gabriel Lazzara — sviluppatore web full-stack a Palermo. Siti, web app e progetti cliente con SEO.",
-  "start_url": "./",
+  "description": "Gabriel Lazzara — web developer e sviluppatore full-stack a Palermo. Siti web, landing page, web app, SEO.",
+  "start_url": "https://onlyg4bb0.github.io/GabrielLazzara/",
+  "id": "https://onlyg4bb0.github.io/GabrielLazzara/",
   "display": "standalone",
   "background_color": "#08060f",
   "theme_color": "#8b5cf6",
