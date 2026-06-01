@@ -1234,7 +1234,7 @@ h3 {
 
 .cta-band {
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     border-radius: var(--radius-xl);
     padding: clamp(2rem, 5vw, 3rem) clamp(1.25rem, 4vw, 2rem);
 }
@@ -1551,41 +1551,71 @@ h3 {
 }
 
 .reveal {
+    --reveal-y: 16px;
+    --reveal-x: 0;
+    --reveal-scale: 1;
     opacity: 0;
-    transform: translate3d(0, 22px, 0);
+    transform: translate3d(var(--reveal-x), var(--reveal-y), 0) scale(var(--reveal-scale));
     transition:
-        opacity var(--duration-slow) var(--ease-out),
-        transform var(--duration-slow) var(--ease-out);
+        opacity 0.7s var(--ease-out),
+        transform 0.7s var(--ease-out);
+    will-change: opacity, transform;
+    backface-visibility: hidden;
 }
 
 .reveal.active {
+    --reveal-y: 0;
+    --reveal-x: 0;
+    --reveal-scale: 1;
     opacity: 1;
-    transform: translate3d(0, 0, 0);
-}
-
-/* Hero: no slide-up on every refresh */
-#hero .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-}
-
-/* Already in viewport on load (set by inline script / main.js) */
-.reveal.reveal-instant,
-.reveal.reveal-instant.active {
-    opacity: 1;
-    transform: none;
-    transition: none;
-}
-
-.reveal-scale.active {
     transform: translate3d(0, 0, 0) scale(1);
 }
 
-.reveal-fade { transform: none; }
-.reveal-scale { transform: translate3d(0, 16px, 0) scale(0.97); }
-.reveal-left { transform: translate3d(-20px, 0, 0); }
-.reveal-right { transform: translate3d(20px, 0, 0); }
+body.page-loaded #hero .reveal {
+    transition-duration: 0.85s;
+}
+
+.reveal.reveal-instant,
+.reveal.reveal-instant.active {
+    transition-duration: 0.01ms;
+}
+
+.reveal-scale.active {
+    --reveal-scale: 1;
+}
+
+.reveal-fade {
+    --reveal-y: 0;
+}
+
+.reveal-scale {
+    --reveal-y: 14px;
+    --reveal-scale: 0.96;
+}
+
+.reveal-left {
+    --reveal-x: -18px;
+    --reveal-y: 0;
+}
+
+.reveal-right {
+    --reveal-x: 18px;
+    --reveal-y: 0;
+}
+
+.site-main > section {
+    overflow: visible;
+}
+
+.glass-card.reveal,
+.spotlight-card.reveal,
+.project-card.reveal,
+.bento-item.reveal,
+.faq-item.reveal,
+.cta-band.reveal,
+.process-step.reveal {
+    contain: none;
+}
 
 .reveal-stagger > .reveal:nth-child(1) { transition-delay: 0ms; }
 .reveal-stagger > .reveal:nth-child(2) { transition-delay: 55ms; }
@@ -1661,39 +1691,16 @@ html.motion-enhanced .hero-availability {
     animation: badgePulse 3.5s ease-in-out infinite;
 }
 
-html.motion-enhanced .glass-card.reveal.active,
 html.motion-enhanced .spotlight-card.reveal.active {
-    animation: cardFloat 7s ease-in-out infinite;
-    transform-style: preserve-3d;
-    transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
     transition:
-        opacity var(--duration-slow) var(--ease-out),
-        transform var(--duration-slow) var(--ease-out),
+        opacity 0.7s var(--ease-out),
+        transform 0.7s var(--ease-out),
         box-shadow var(--duration-normal) var(--ease-smooth);
 }
 
-html.motion-enhanced .glass-card.reveal.active:nth-child(2n),
-html.motion-enhanced .spotlight-card.reveal.active:nth-child(2n) {
-    animation-delay: -2.5s;
-}
-
-html.motion-enhanced .glass-card.reveal.active:hover,
 html.motion-enhanced .spotlight-card.reveal.active:hover {
-    animation-play-state: paused;
+    transform: perspective(900px) translate3d(0, 0, 0) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
 }
-
-html.motion-enhanced #skills.section-visible .skill-tag.reveal.active {
-    animation: tagPop 0.55s var(--ease-out) backwards;
-}
-
-html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(1) { animation-delay: 0.04s; }
-html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(2) { animation-delay: 0.08s; }
-html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(3) { animation-delay: 0.12s; }
-html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(4) { animation-delay: 0.16s; }
-html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(5) { animation-delay: 0.2s; }
-html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(6) { animation-delay: 0.24s; }
-html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(7) { animation-delay: 0.28s; }
-html.motion-enhanced #skills.section-visible .skill-tag.reveal.active:nth-child(8) { animation-delay: 0.32s; }
 
 html.motion-enhanced .section-visible .process-step.reveal.active > i {
     display: inline-block;
@@ -1746,12 +1753,12 @@ html.motion-enhanced .nav-link-cta {
     animation: ctaGlow 3s ease-in-out infinite;
 }
 
-html.motion-enhanced .hero-stat {
+html.motion-enhanced .hero-stat.reveal.active {
     animation: statFloat 5s ease-in-out infinite;
 }
 
-html.motion-enhanced .hero-stat:nth-child(2) { animation-delay: -1.2s; }
-html.motion-enhanced .hero-stat:nth-child(3) { animation-delay: -2.4s; }
+html.motion-enhanced .hero-stat.reveal.active:nth-child(2) { animation-delay: -1.2s; }
+html.motion-enhanced .hero-stat.reveal.active:nth-child(3) { animation-delay: -2.4s; }
 
 html.motion-enhanced .project-card:hover .project-thumb img {
     transform: scale3d(1.08, 1.08, 1) rotate(0.6deg);
@@ -1849,8 +1856,8 @@ html.motion-enhanced .pkg-featured {
 }
 
 @keyframes statFloat {
-    0%, 100% { transform: translate3d(0, 0, 0); }
-    50% { transform: translate3d(0, -5px, 0); }
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -5px; }
 }
 
 @keyframes faqOpen {
@@ -1909,6 +1916,10 @@ html.motion-enhanced .pkg-featured {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+.seo-visible-block {
+    overflow: visible;
 }
 
 .hamburger-line { transition: all 0.3s ease; }

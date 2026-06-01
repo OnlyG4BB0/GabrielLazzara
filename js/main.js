@@ -45,6 +45,7 @@ class PortfolioApp {
         this.setupFaqAnimations();
         this.setupAmbientMotion();
         this.applyLanguage(this.currentLang);
+        requestAnimationFrame(() => document.body.classList.add('page-loaded'));
         this.applyProjectFilter(this.currentFilter, true);
     }
 
@@ -306,8 +307,6 @@ class PortfolioApp {
         if (this.prefersReducedMotion) return;
 
         const selectors = [
-            '.section-lead:not(.reveal)',
-            '.skill-tag:not(.reveal)',
             '.timeline-item:not(.reveal)',
             '.faq-item:not(.reveal)',
             '.footer-link:not(.reveal)',
@@ -315,8 +314,7 @@ class PortfolioApp {
             '.about-float-badge:not(.reveal)',
             '.hero-scroll-cue:not(.reveal)',
             '.filter-btn:not(.reveal)',
-            '.cta-band:not(.reveal)',
-            '.marquee-item:not(.reveal)',
+            '.seo-visible-block:not(.reveal)',
         ];
 
         let delayIndex = 0;
@@ -333,23 +331,18 @@ class PortfolioApp {
 
     setupIntersectionObservers() {
         const revealObserver = new IntersectionObserver(
-            (entries, observer) => {
+            (entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
-                    }
+                    entry.target.classList.toggle('active', entry.isIntersecting);
                 });
             },
-            { threshold: 0.05, rootMargin: '0px 0px -2% 0px' }
+            {
+                threshold: [0, 0.12, 0.28],
+                rootMargin: '10% 0px 10% 0px',
+            }
         );
 
         this.revealElements.forEach((el) => {
-            const rect = el.getBoundingClientRect();
-            const inView = rect.top < window.innerHeight * 0.92 && rect.bottom > 0;
-            if (inView) {
-                el.classList.add('active', 'reveal-instant');
-            }
             revealObserver.observe(el);
         });
 
