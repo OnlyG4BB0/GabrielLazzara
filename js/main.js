@@ -33,8 +33,10 @@ class PortfolioApp {
         this.applyTheme(this.currentTheme);
         this.setupMobileMenu();
         this.setupSmoothScrolling();
+        this.setupSectionMotion();
         this.enhanceRevealTargets();
         this.setupIntersectionObservers();
+        this.setupInteractiveMotion();
         this.setupScrollListener();
         this.setupContactForm();
         this.setupCopyEmail();
@@ -57,38 +59,78 @@ class PortfolioApp {
             this.themeToggle.classList.remove('theme-spin');
             void this.themeToggle.offsetWidth;
             this.themeToggle.classList.add('theme-spin');
-            this.applyTheme(this.currentTheme);
+            this.applyTheme(this.currentTheme, true);
             localStorage.setItem('portfolio_theme', this.currentTheme);
             setTimeout(() => this.themeToggle.classList.remove('theme-spin'), 550);
         });
     }
 
-    applyTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        const meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) {
-            meta.setAttribute('content', theme === 'light' ? '#f8f7fc' : '#08060f');
-        }
-        if (this.themeToggle) {
-            const label = theme === 'dark'
-                ? (translations[this.currentLang]?.theme_toggle_light || 'Attiva tema chiaro')
-                : (translations[this.currentLang]?.theme_toggle_dark || 'Attiva tema scuro');
-            this.themeToggle.setAttribute('aria-label', label);
+    applyTheme(theme, animate = false) {
+        const update = () => {
+            document.documentElement.setAttribute('data-theme', theme);
+            const meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) {
+                meta.setAttribute('content', theme === 'light' ? '#f8f7fc' : '#08060f');
+            }
+            if (this.themeToggle) {
+                const label = theme === 'dark'
+                    ? (translations[this.currentLang]?.theme_toggle_light || 'Attiva tema chiaro')
+                    : (translations[this.currentLang]?.theme_toggle_dark || 'Attiva tema scuro');
+                this.themeToggle.setAttribute('aria-label', label);
+            }
+        };
+
+        if (animate && !this.prefersReducedMotion) {
+            document.documentElement.classList.add('theme-transitioning');
+            if (typeof document.startViewTransition === 'function') {
+                document.startViewTransition(update).finished.finally(() => {
+                    document.documentElement.classList.remove('theme-transitioning');
+                });
+            } else {
+                update();
+                setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 420);
+            }
+        } else {
+            update();
         }
     }
 
     setupLanguageToggle() {
         this.langToggles.forEach((toggle) => {
             toggle.addEventListener('click', () => {
-                this.currentLang = this.currentLang === 'it' ? 'en' : 'it';
-                localStorage.setItem('portfolio_lang', this.currentLang);
-                this.applyLanguage(this.currentLang);
+                const nextLang = this.currentLang === 'it' ? 'en' : 'it';
+                if (this.prefersReducedMotion) {
+                    this.currentLang = nextLang;
+                    localStorage.setItem('portfolio_lang', nextLang);
+                    this.applyLanguage(nextLang);
+                    return;
+                }
+
+                this.langToggles.forEach((btn) => {
+                    btn.classList.remove('lang-pop');
+                    void btn.offsetWidth;
+                    btn.classList.add('lang-pop');
+                });
+
+                document.documentElement.classList.add('lang-transitioning');
+
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        this.currentLang = nextLang;
+                        localStorage.setItem('portfolio_lang', nextLang);
+                        this.applyLanguage(nextLang);
+                        document.documentElement.classList.remove('lang-transitioning');
+                        document.documentElement.classList.add('lang-entered');
+                        setTimeout(() => document.documentElement.classList.remove('lang-entered'), 450);
+                    }, 130);
+                });
             });
         });
     }
 
     applyLanguage(lang) {
         document.documentElement.lang = lang === 'it' ? 'it' : 'en';
+        document.documentElement.setAttribute('data-lang', lang);
 
         const itTexts = document.querySelectorAll('.lang-it-text');
         const enTexts = document.querySelectorAll('.lang-en-text');
@@ -303,10 +345,20 @@ class PortfolioApp {
         });
     }
 
+    setupSectionMotion() {
+        if (this.prefersReducedMotion) return;
+
+        this.mainSections.forEach((section) => {
+            section.classList.add('motion-section');
+        });
+    }
+
     enhanceRevealTargets() {
         if (this.prefersReducedMotion) return;
 
         const selectors = [
+            '.section-eyebrow:not(.reveal)',
+            '.section-lead:not(.reveal)',
             '.timeline-item:not(.reveal)',
             '.faq-item:not(.reveal)',
             '.footer-link:not(.reveal)',
@@ -315,42 +367,71 @@ class PortfolioApp {
             '.hero-scroll-cue:not(.reveal)',
             '.filter-btn:not(.reveal)',
             '.seo-visible-block:not(.reveal)',
+            '.pkg-card:not(.reveal)',
+            '.mobile-link:not(.reveal)',
+            '.project-card .project-card-actions a:not(.reveal)',
+            '.marquee-item:not(.reveal)',
         ];
 
         let delayIndex = 0;
         selectors.forEach((selector) => {
             document.querySelectorAll(selector).forEach((el) => {
                 el.classList.add('reveal', 'reveal-fade');
-                el.style.transitionDelay = `${(delayIndex % 12) * 45}ms`;
+                el.style.transitionDelay = `${(delayIndex % 12) * 40}ms`;
                 delayIndex += 1;
             });
+        });
+
+        document.querySelectorAll('#skills .skill-tag').forEach((tag, index) => {
+            tag.style.setProperty('--stagger', `${(index % 12) * 35}ms`);
         });
 
         this.revealElements = document.querySelectorAll('.reveal');
     }
 
     setupIntersectionObservers() {
+        const pending = new Map();
+        let revealRaf = null;
+
+        const flushReveal = () => {
+            pending.forEach((isActive, el) => {
+                el.classList.toggle('active', isActive);
+            });
+            pending.clear();
+            revealRaf = null;
+        };
+
         const revealObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    entry.target.classList.toggle('active', entry.isIntersecting);
+                    pending.set(entry.target, entry.isIntersecting);
                 });
+                if (!revealRaf) {
+                    revealRaf = requestAnimationFrame(flushReveal);
+                }
             },
             {
-                threshold: [0, 0.12, 0.28],
-                rootMargin: '10% 0px 10% 0px',
+                threshold: 0.1,
+                rootMargin: '8% 0px 8% 0px',
             }
         );
 
-        this.revealElements.forEach((el) => {
-            revealObserver.observe(el);
-        });
+        this.revealElements.forEach((el) => revealObserver.observe(el));
 
         const sectionObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    entry.target.classList.toggle('section-visible', entry.isIntersecting);
-                    const id = entry.target.getAttribute('id');
+                    const section = entry.target;
+                    section.classList.toggle('section-visible', entry.isIntersecting);
+
+                    if (entry.isIntersecting && section.id === 'skills' && !section.dataset.staggered) {
+                        section.querySelectorAll('.skill-tag').forEach((tag) => {
+                            tag.classList.add('tag-motion');
+                        });
+                        section.dataset.staggered = '1';
+                    }
+
+                    const id = section.getAttribute('id');
                     if (!id) return;
                     if (entry.isIntersecting) {
                         this.visibleSections.set(id, entry.intersectionRatio);
@@ -360,10 +441,35 @@ class PortfolioApp {
                 });
                 this.syncActiveNavFromSections();
             },
-            { threshold: [0, 0.2, 0.4, 0.6], rootMargin: '-40% 0px -50% 0px' }
+            { threshold: [0, 0.15, 0.35], rootMargin: '-12% 0px -12% 0px' }
         );
 
         this.mainSections.forEach((section) => sectionObserver.observe(section));
+    }
+
+    setupInteractiveMotion() {
+        if (this.prefersReducedMotion) return;
+
+        const interactiveSelector = [
+            'a.btn-primary',
+            'a.btn-ghost',
+            'a.hero-action-btn',
+            'button.btn-primary',
+            '.filter-btn',
+            '.nav-link-cta',
+            '.mobile-link-accent',
+            '.project-card a[class*="rounded"]',
+            '#contact-form button[type="submit"]',
+            '#copy-email-btn',
+            'footer.site-footer a.rounded-full',
+            '.faq-item summary',
+            '.nav-link',
+            '.mobile-link',
+        ].join(', ');
+
+        document.querySelectorAll(interactiveSelector).forEach((el) => {
+            el.classList.add('motion-interactive');
+        });
     }
 
     syncActiveNavFromSections() {
@@ -412,7 +518,7 @@ class PortfolioApp {
         if (this.prefersReducedMotion) return;
 
         const pressables = document.querySelectorAll(
-            '.btn-primary, .btn-ghost, .filter-btn, .theme-toggle, .lang-toggle, #contact-form button[type="submit"]'
+            '.motion-interactive, .theme-toggle, .lang-toggle'
         );
 
         pressables.forEach((el) => {

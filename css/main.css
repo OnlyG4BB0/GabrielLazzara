@@ -1557,15 +1557,14 @@ h3 {
 }
 
 .reveal {
-    --reveal-y: 16px;
+    --reveal-y: 14px;
     --reveal-x: 0;
     --reveal-scale: 1;
     opacity: 0;
     transform: translate3d(var(--reveal-x), var(--reveal-y), 0) scale(var(--reveal-scale));
     transition:
-        opacity 0.7s var(--ease-out),
-        transform 0.7s var(--ease-out);
-    will-change: opacity, transform;
+        opacity 0.55s var(--ease-out),
+        transform 0.55s var(--ease-out);
     backface-visibility: hidden;
 }
 
@@ -1578,7 +1577,7 @@ h3 {
 }
 
 body.page-loaded #hero .reveal {
-    transition-duration: 0.85s;
+    transition-duration: 0.7s;
 }
 
 .reveal.reveal-instant,
@@ -1797,6 +1796,194 @@ html.motion-enhanced .marquee-item {
 
 html.motion-enhanced .pkg-featured {
     animation: cardFloat 6s ease-in-out infinite, pkgGlow 4s ease-in-out infinite;
+}
+
+/* — Sezioni: entrata/uscita leggera (solo transform, no opacity globale) — */
+html.motion-enhanced .motion-section {
+    transition: transform 0.55s var(--ease-out);
+    transform: translate3d(0, 0, 0);
+}
+
+html.motion-enhanced .motion-section:not(.section-visible) {
+    transform: translate3d(0, 18px, 0);
+}
+
+html.motion-enhanced #hero.motion-section:not(.section-visible) {
+    transform: translate3d(0, 10px, 0);
+}
+
+/* — Pulsanti e link interattivi — */
+html.motion-enhanced .motion-interactive {
+    transition:
+        transform 0.22s var(--ease-out),
+        box-shadow 0.22s var(--ease-smooth),
+        color 0.22s var(--ease-smooth),
+        background-color 0.22s var(--ease-smooth),
+        border-color 0.22s var(--ease-smooth);
+}
+
+html.motion-enhanced .motion-interactive:hover:not(:active):not(.is-pressed) {
+    transform: translate3d(0, -2px, 0);
+}
+
+html.motion-enhanced .motion-interactive:active,
+html.motion-enhanced .motion-interactive.is-pressed {
+    transform: translate3d(0, 0, 0) scale(0.97);
+    transition-duration: 0.1s;
+}
+
+html.motion-enhanced .nav-link-cta.motion-interactive:hover:not(:active) {
+    transform: translate3d(0, -2px, 0) scale(1.02);
+}
+
+/* — Skill tag stagger (una volta, senza centinaia di observer) — */
+html.motion-enhanced .skill-tag.tag-motion {
+    animation: tagPop 0.45s var(--ease-out) backwards;
+    animation-delay: var(--stagger, 0ms);
+}
+
+html.motion-enhanced #process.section-visible .process-step.reveal.active {
+    animation: stepRise 0.5s var(--ease-out) backwards;
+}
+
+html.motion-enhanced #process.section-visible .process-step.reveal.active:nth-child(1) { animation-delay: 0.05s; }
+html.motion-enhanced #process.section-visible .process-step.reveal.active:nth-child(2) { animation-delay: 0.1s; }
+html.motion-enhanced #process.section-visible .process-step.reveal.active:nth-child(3) { animation-delay: 0.15s; }
+html.motion-enhanced #process.section-visible .process-step.reveal.active:nth-child(4) { animation-delay: 0.2s; }
+
+html.motion-enhanced #experience.section-visible .timeline-item.reveal.active {
+    animation: stepRise 0.5s var(--ease-out) backwards;
+}
+
+html.motion-enhanced #experience.section-visible .timeline-item.reveal.active:nth-child(1) { animation-delay: 0.05s; }
+html.motion-enhanced #experience.section-visible .timeline-item.reveal.active:nth-child(2) { animation-delay: 0.12s; }
+html.motion-enhanced #experience.section-visible .timeline-item.reveal.active:nth-child(3) { animation-delay: 0.19s; }
+
+/* — Cambio tema — */
+html.theme-transitioning,
+html.theme-transitioning body {
+    transition:
+        background-color 0.42s var(--ease-smooth),
+        color 0.32s var(--ease-smooth);
+}
+
+html.theme-transitioning .glass-panel,
+html.theme-transitioning .glass-card,
+html.theme-transitioning .glass-input,
+html.theme-transitioning .nav-pill,
+html.theme-transitioning .theme-toggle,
+html.theme-transitioning .lang-toggle {
+    transition:
+        background-color 0.42s var(--ease-smooth),
+        border-color 0.42s var(--ease-smooth),
+        color 0.32s var(--ease-smooth),
+        box-shadow 0.42s var(--ease-smooth);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.42s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(root) {
+    animation-name: themeFadeOut;
+}
+
+::view-transition-new(root) {
+    animation-name: themeFadeIn;
+}
+
+@keyframes themeFadeOut {
+    to { opacity: 0; }
+}
+
+@keyframes themeFadeIn {
+    from { opacity: 0; }
+}
+
+.theme-toggle i {
+    transition:
+        opacity 0.32s var(--ease-out),
+        transform 0.4s var(--ease-out),
+        visibility 0.32s;
+}
+
+html.theme-transitioning .theme-toggle i {
+    transform: translate(-50%, -50%) rotate(90deg) scale(0.6);
+}
+
+html.theme-transitioning .theme-toggle.theme-spin i {
+    animation: themeIconSpin 0.55s var(--ease-out);
+}
+
+/* — Cambio lingua — */
+html.lang-transitioning .site-main,
+html.lang-transitioning #navbar {
+    opacity: 0.82;
+    transform: translate3d(0, 5px, 0);
+    transition: opacity 0.13s ease, transform 0.13s ease;
+}
+
+html.lang-entered .site-main,
+html.lang-entered #navbar {
+    animation: langContentIn 0.42s var(--ease-out) forwards;
+}
+
+@keyframes langContentIn {
+    from {
+        opacity: 0.82;
+        transform: translate3d(0, 8px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+html.motion-enhanced .lang-toggle {
+    position: relative;
+    isolation: isolate;
+}
+
+html.motion-enhanced .lang-toggle::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 26%;
+    width: 2.1rem;
+    height: 1.55rem;
+    border-radius: 999px;
+    background: var(--c-accent-soft);
+    border: 0.5px solid color-mix(in srgb, var(--c-accent) 35%, transparent);
+    transform: translate(-50%, -50%);
+    transition: left 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 0;
+    pointer-events: none;
+}
+
+html[data-lang="en"] .lang-toggle::before {
+    left: 74%;
+}
+
+html.motion-enhanced .lang-toggle > span {
+    position: relative;
+    z-index: 1;
+    transition: color 0.28s var(--ease-smooth), transform 0.28s var(--ease-out);
+}
+
+html.motion-enhanced .lang-toggle.lang-pop {
+    animation: langTogglePop 0.42s var(--ease-out);
+}
+
+html.motion-enhanced .lang-active {
+    transform: scale(1.06);
+}
+
+@keyframes langTogglePop {
+    0% { transform: scale(1); }
+    45% { transform: scale(0.94); }
+    100% { transform: scale(1); }
 }
 
 @keyframes meshPulse {
@@ -2068,6 +2255,10 @@ html.motion-enhanced .pkg-featured {
     justify-content: center;
     margin: 0;
     pointer-events: none;
+    transition:
+        opacity 0.32s var(--ease-out),
+        transform 0.4s var(--ease-out),
+        visibility 0.32s;
 }
 
 .theme-toggle:hover,
@@ -2085,12 +2276,14 @@ html.motion-enhanced .pkg-featured {
 [data-theme="light"] .theme-icon-light {
     opacity: 0;
     visibility: hidden;
+    transform: translate(-50%, -50%) rotate(-90deg) scale(0.5);
 }
 
 [data-theme="dark"] .theme-icon-light,
 [data-theme="light"] .theme-icon-dark {
     opacity: 1;
     visibility: visible;
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
 }
 
 .site-logo-text { color: var(--c-text); }
@@ -2476,6 +2669,14 @@ article p.text-gray-400 {
     .reveal.active {
         opacity: 1;
         transform: none;
+    }
+    .motion-section,
+    .motion-section:not(.section-visible) {
+        transform: none;
+    }
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none !important;
     }
     .marquee-track { animation: none; }
     .hero-visual-card { animation: none; }
