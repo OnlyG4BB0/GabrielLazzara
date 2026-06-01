@@ -1631,6 +1631,18 @@ h3 {
 
 .skip-link:focus { left: var(--container-pad); }
 
+.seo-fallback {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 .hamburger-line { transition: all 0.3s ease; }
 .menu-open .line-1 { transform: translateY(8px) rotate(45deg); }
 .menu-open .line-2 { opacity: 0; }

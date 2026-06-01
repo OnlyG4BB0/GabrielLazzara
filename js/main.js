@@ -125,6 +125,10 @@ class PortfolioApp {
                 if (translations[lang][key]) el.innerHTML = translations[lang][key];
             });
         });
+
+        if (typeof applySeoLanguage === 'function') {
+            applySeoLanguage(lang);
+        }
     }
 
     setupProjectFilters() {
