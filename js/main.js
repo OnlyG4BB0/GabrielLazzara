@@ -136,11 +136,11 @@ class PortfolioApp {
         const enTexts = document.querySelectorAll('.lang-en-text');
 
         if (lang === 'it') {
-            itTexts.forEach((el) => { el.className = 'lang-it-text lang-active text-sm transition-all'; });
-            enTexts.forEach((el) => { el.className = 'lang-en-text lang-inactive text-sm transition-all'; });
+            itTexts.forEach((el) => { el.className = 'lang-it-text lang-active'; });
+            enTexts.forEach((el) => { el.className = 'lang-en-text lang-inactive'; });
         } else {
-            itTexts.forEach((el) => { el.className = 'lang-it-text lang-inactive text-sm transition-all'; });
-            enTexts.forEach((el) => { el.className = 'lang-en-text lang-active text-sm transition-all'; });
+            itTexts.forEach((el) => { el.className = 'lang-it-text lang-inactive'; });
+            enTexts.forEach((el) => { el.className = 'lang-en-text lang-active'; });
         }
 
         if (this.themeToggle) {

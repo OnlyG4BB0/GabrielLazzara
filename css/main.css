@@ -1941,43 +1941,65 @@ html.lang-entered #navbar {
     }
 }
 
-html.motion-enhanced .lang-toggle {
+.lang-toggle {
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+    width: 5rem;
+    height: 2.75rem;
+    padding: 3px;
+    gap: 0;
     position: relative;
     isolation: isolate;
+    flex-shrink: 0;
 }
 
-html.motion-enhanced .lang-toggle::before {
+.lang-toggle::before {
     content: "";
     position: absolute;
-    top: 50%;
-    left: 26%;
-    width: 2.1rem;
-    height: 1.55rem;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc(50% - 4px);
     border-radius: 999px;
-    background: var(--c-accent-soft);
-    border: 0.5px solid color-mix(in srgb, var(--c-accent) 35%, transparent);
-    transform: translate(-50%, -50%);
-    transition: left 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    background: linear-gradient(
+        165deg,
+        color-mix(in srgb, var(--c-accent-hover) 92%, white 8%),
+        color-mix(in srgb, var(--c-accent) 86%, #120a1f)
+    );
+    box-shadow:
+        0 2px 10px color-mix(in srgb, var(--c-accent) 45%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, 0.26);
     z-index: 0;
     pointer-events: none;
+    transform: translateX(0);
 }
 
 html[data-lang="en"] .lang-toggle::before {
-    left: 74%;
+    transform: translateX(calc(100% + 4px));
+}
+
+html.motion-enhanced .lang-toggle::before {
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lang-toggle > span {
+    position: relative;
+    z-index: 1;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    transition: color 0.28s var(--ease-smooth), opacity 0.28s var(--ease-smooth);
 }
 
 html.motion-enhanced .lang-toggle > span {
-    position: relative;
-    z-index: 1;
-    transition: color 0.28s var(--ease-smooth), transform 0.28s var(--ease-out);
+    transition: color 0.28s var(--ease-smooth), opacity 0.28s var(--ease-smooth), transform 0.28s var(--ease-out);
 }
 
 html.motion-enhanced .lang-toggle.lang-pop {
     animation: langTogglePop 0.42s var(--ease-out);
-}
-
-html.motion-enhanced .lang-active {
-    transform: scale(1.06);
 }
 
 @keyframes langTogglePop {
@@ -2193,8 +2215,7 @@ html.motion-enhanced .lang-active {
     50% { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c-accent) 35%, transparent); }
 }
 
-.theme-toggle,
-.lang-toggle {
+.theme-toggle {
     min-width: 2.75rem;
     min-height: 2.75rem;
     display: inline-flex;
@@ -2209,8 +2230,18 @@ html.motion-enhanced .lang-active {
         box-shadow var(--duration-normal) var(--ease-smooth);
 }
 
-.theme-toggle:hover,
-.lang-toggle:hover {
+.lang-toggle {
+    min-width: 5rem;
+    min-height: 2.75rem;
+    border-radius: 9999px;
+    color: var(--c-text-muted);
+    cursor: pointer;
+    transition:
+        transform var(--duration-normal) var(--ease-out),
+        box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+.theme-toggle:hover {
     transform: scale(1.08);
     color: var(--c-text);
 }
@@ -2261,16 +2292,40 @@ html.motion-enhanced .lang-active {
         visibility 0.32s;
 }
 
-.theme-toggle:hover,
-.lang-toggle:hover {
+.theme-toggle:hover {
     color: var(--c-accent);
     transform: scale(1.04);
 }
 
-.lang-toggle { width: auto; padding: 0 0.75rem; gap: 0.35rem; }
+.lang-toggle:hover {
+    transform: scale(1.04);
+}
 
-.lang-active { color: var(--c-accent) !important; font-weight: 700; }
-.lang-inactive { color: var(--c-text-muted) !important; font-weight: 500; }
+.lang-toggle:hover .lang-inactive {
+    opacity: 0.72;
+}
+
+.lang-active {
+    color: #fff !important;
+    font-weight: 700 !important;
+}
+
+.lang-inactive {
+    color: var(--c-text-muted) !important;
+    font-weight: 500 !important;
+    opacity: 0.5;
+}
+
+[data-theme="light"] .lang-toggle::before {
+    background: linear-gradient(
+        165deg,
+        color-mix(in srgb, var(--c-accent) 90%, white 10%),
+        color-mix(in srgb, var(--c-accent-hover) 82%, #1e1040)
+    );
+    box-shadow:
+        0 2px 8px color-mix(in srgb, var(--c-accent) 30%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
 
 [data-theme="dark"] .theme-icon-dark,
 [data-theme="light"] .theme-icon-light {
