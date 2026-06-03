@@ -48,6 +48,8 @@ class PortfolioApp {
         this.setupMobileMenu();
         this.setupSmoothScrolling();
         this.enhanceRevealTargets();
+        this.setupHeroPanelTypewriter();
+        this.applyLanguage(this.currentLang);
         this.setupIntersectionObservers();
         this.setupNavScrollSpy();
         this.setupInteractiveMotion();
@@ -59,8 +61,6 @@ class PortfolioApp {
         this.setupSpotlightCards();
         this.setupPressFeedback();
         this.setupCaseMetricMotion();
-        this.setupHeroPanelTypewriter();
-        this.applyLanguage(this.currentLang);
         requestAnimationFrame(() => {
             document.body.classList.add('page-loaded');
             document.documentElement.classList.add('page-ready');
@@ -486,6 +486,9 @@ class PortfolioApp {
                             tag.classList.add('tag-motion');
                         });
                     }
+                    if (el.classList.contains('hero-visual-col')) {
+                        this.startHeroPanelTypewriterIfNeeded();
+                    }
                     observer.unobserve(el);
                 });
             },
@@ -891,11 +894,30 @@ class PortfolioApp {
         this.heroPanelHasPlayed = false;
         const motionOk = !this.prefersReducedMotion && this.motionTier !== 'none';
         this.heroHeadingEnabled = Boolean(this.heroHeadingLines && motionOk);
-        this.heroPanelEnabled = Boolean(
-            this.heroPanelCode
-            && motionOk
-            && window.matchMedia('(min-width: 1024px)').matches
-        );
+        this.heroVisualCol = document.querySelector('.hero-visual-col');
+        this.heroPanelEnabled = Boolean(this.heroPanelCode && motionOk);
+        this.heroPanelMobileMq = window.matchMedia('(max-width: 1023px)');
+    }
+
+    isHeroPanelMobile() {
+        return this.heroPanelMobileMq?.matches ?? false;
+    }
+
+    prepareHeroPanelForReveal() {
+        if (!this.heroPanelCode) return;
+        this.heroPanelRoot?.classList.remove('is-done');
+        this.heroPanelCode.innerHTML = '';
+        if (this.heroPanelCursor) {
+            this.heroPanelCursor.textContent = '';
+            this.heroPanelCursor.classList.add('is-on');
+        }
+    }
+
+    startHeroPanelTypewriterIfNeeded() {
+        if (!this.heroPanelEnabled || this.heroPanelHasPlayed) return;
+        this.heroPanelHasPlayed = true;
+        const startDelay = this.isHeroPanelMobile() ? 320 : 520;
+        this.playHeroPanelCode(startDelay);
     }
 
     parkHeroHeadingCursor() {
@@ -987,9 +1009,13 @@ class PortfolioApp {
         }
 
         if (!this.heroPanelHasPlayed) {
-            this.heroPanelHasPlayed = true;
-            this.playHeroPanelCode();
-        } else {
+            if (this.isHeroPanelMobile()) {
+                this.prepareHeroPanelForReveal();
+            } else {
+                this.heroPanelHasPlayed = true;
+                this.playHeroPanelCode(520);
+            }
+        } else if (this.heroPanelRoot?.classList.contains('is-done')) {
             this.renderHeroPanelInstant();
         }
     }
@@ -1003,7 +1029,7 @@ class PortfolioApp {
         });
     }
 
-    async playHeroPanelCode() {
+    async playHeroPanelCode(startDelay = 520) {
         if (!this.heroPanelEnabled) {
             this.renderHeroPanelInstant();
             return;
@@ -1016,7 +1042,7 @@ class PortfolioApp {
             rootEl: this.heroPanelRoot,
             segments: this.getHeroPanelCodeSegments(),
             isStale: () => gen !== this.heroPanelGen,
-            startDelay: 520,
+            startDelay,
         });
     }
 
