@@ -76,7 +76,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/main.css?v=3">
 
     <script>
         (function () {
@@ -206,7 +206,7 @@
                 <a href="#hero" data-i18n="nav_home" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all active-link">Home</a>
                 <a href="#about" data-i18n="nav_about" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">About</a>
                 <a href="#services" data-i18n="nav_services" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Servizi</a>
-                <a href="#packages" data-i18n="nav_packages" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Pacchetti</a>
+                <a href="#scope" data-i18n="nav_scope" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Cosa include</a>
                 <a href="#process" data-i18n="nav_process" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Metodo</a>
                 <a href="#skills" data-i18n="nav_skills" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Competenze</a>
                 <a href="#projects" data-i18n="nav_work" class="nav-link px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">Lavori</a>
@@ -217,12 +217,17 @@
 
             <div class="navbar-actions">
             <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Attiva tema chiaro" data-i18n-aria="theme_toggle_aria">
-                <i class="fas fa-sun theme-icon-light" aria-hidden="true"></i>
-                <i class="fas fa-moon theme-icon-dark" aria-hidden="true"></i>
+                <span class="theme-toggle__scene" aria-hidden="true">
+                    <i class="fas fa-sun theme-icon-light"></i>
+                    <i class="fas fa-moon theme-icon-dark"></i>
+                </span>
             </button>
             <button type="button" class="lang-toggle" aria-label="Cambia lingua">
-                <span class="lang-it-text lang-active">IT</span>
-                <span class="lang-en-text lang-inactive">EN</span>
+                <span class="lang-toggle__track">
+                    <span class="lang-toggle__pill" aria-hidden="true"></span>
+                    <span class="lang-it-text lang-active">IT</span>
+                    <span class="lang-en-text lang-inactive">EN</span>
+                </span>
             </button>
             
             <button id="mobile-menu-btn" class="lg:hidden w-8 h-8 flex flex-col justify-center gap-1.5 z-50 relative cursor-pointer">
@@ -239,7 +244,7 @@
             <a href="#hero" data-i18n="nav_home" class="mobile-link">Home</a>
             <a href="#about" data-i18n="nav_about" class="mobile-link">About</a>
             <a href="#services" data-i18n="nav_services" class="mobile-link">Servizi</a>
-            <a href="#packages" data-i18n="nav_packages" class="mobile-link">Pacchetti</a>
+            <a href="#scope" data-i18n="nav_scope" class="mobile-link">Cosa include</a>
             <a href="#process" data-i18n="nav_process" class="mobile-link">Metodo</a>
             <a href="#skills" data-i18n="nav_skills" class="mobile-link">Competenze</a>
             <a href="#projects" data-i18n="nav_work" class="mobile-link">Lavori</a>
@@ -256,15 +261,15 @@
             <div class="hero-grid grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                 <div class="hero-copy">
                     <div class="hero-availability glass-panel px-4 py-2 rounded-full mb-6 inline-flex items-center gap-2 reveal max-w-full">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" aria-hidden="true"></span>
+                        <span class="hero-status-led" aria-hidden="true"></span>
                         <span data-i18n="hero_badge" class="text-text-muted text-sm font-medium tracking-wide text-gray-400">Disponibile per nuovi progetti</span>
                     </div>
 
                     <p class="section-eyebrow reveal w-fit" data-i18n="hero_eyebrow">Portfolio · Palermo</p>
 
-                    <h1 id="hero-heading" class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 tracking-tight reveal" style="transition-delay: 80ms;">
-                        <span class="block text-white">Gabriel Lazzara</span>
-                        <span class="gradient-text text-glow text-3xl sm:text-4xl md:text-5xl lg:text-6xl mt-2 block" data-i18n="hero_role">Sviluppatore Web Full-Stack</span>
+                    <h1 id="hero-heading" class="hero-heading font-display font-extrabold mb-4 tracking-tight reveal" style="transition-delay: 80ms;" aria-label="Gabriel Lazzara — Web Developer · Sviluppatore Full-Stack">
+                        <span id="hero-heading-lines"></span>
+                        <span class="hero-heading__cursor" id="hero-heading-cursor" aria-hidden="true"></span>
                     </h1>
                     <p data-i18n="hero_sub" class="text-purple-300/90 text-sm md:text-base font-medium tracking-wide mb-5 reveal" style="transition-delay: 120ms;">
                         Palermo, Sicilia · Progetti per clienti e side project open source
@@ -313,20 +318,16 @@
                             <span class="w-3 h-3 rounded-full bg-green-400/80"></span>
                             <span class="ml-2 font-mono">portfolio.ts</span>
                         </div>
-                        <pre class="hero-code" aria-hidden="true"><code><span class="tok-key">const</span> <span class="tok-fn">developer</span> = {
-  <span class="tok-key">name</span>: <span class="tok-str">"Gabriel Lazzara"</span>,
-  <span class="tok-key">location</span>: <span class="tok-str">"Palermo, IT"</span>,
-  <span class="tok-key">stack</span>: [<span class="tok-str">"React"</span>, <span class="tok-str">"Python"</span>, <span class="tok-str">"PHP"</span>],
-  <span class="tok-key">focus</span>: [<span class="tok-str">"SEO"</span>, <span class="tok-str">"UX"</span>, <span class="tok-str">"deploy"</span>]
-};
-<span class="tok-fn">build</span>(developer); <span class="text-emerald-400">// ready ✓</span></code></pre>
+                        <pre class="hero-code hero-panel-typewriter" id="hero-panel-typewriter" aria-hidden="true"><code id="hero-panel-code"></code><span class="hero-panel-cursor" id="hero-panel-cursor" aria-hidden="true"></span></pre>
                     </div>
                 </div>
             </div>
 
             <div class="mt-14 flex justify-center reveal" style="transition-delay: 400ms;">
-                <a href="#about" class="hero-scroll-cue w-12 h-12 rounded-full glass-panel flex items-center justify-center text-purple-400 hover:text-white hover:bg-purple-600/50 transition-all" aria-label="Scorri verso About">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                <a href="#about" class="hero-scroll-cue w-12 h-12 rounded-full glass-panel flex items-center justify-center text-purple-400 hover:text-white hover:bg-purple-600/50 transition-all motion-interactive" aria-label="Scorri verso About">
+                    <span class="hero-scroll-cue__icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                    </span>
                 </a>
             </div>
         </section>
@@ -363,10 +364,11 @@
                     </p>
                 </div>
                 
-                <div class="flex justify-center reveal about-visual" style="transition-delay: 200ms;">
-                    <div class="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 max-w-[min(100%,20rem)] mx-auto">
-                        <div class="ring absolute inset-0 border-2 rounded-full animate-[spin_20s_linear_infinite]"></div>
-                        <div class="ring absolute inset-4 border-2 rounded-full animate-[spin_28s_linear_infinite_reverse]"></div>
+                <div class="flex justify-center items-center reveal about-visual" style="transition-delay: 200ms;">
+                    <div class="about-visual-stage mx-auto">
+                    <div class="about-visual-orbit relative shrink-0">
+                        <div class="ring ring--outer absolute inset-0 border-2 rounded-full"></div>
+                        <div class="ring ring--inner absolute inset-4 border-2 rounded-full"></div>
                         <div class="absolute inset-8 glass-panel rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(168,85,247,0.2)] animate-float">
                             <!-- Logo Corretto anche qui -->
                             <svg class="w-32 h-32 md:w-40 md:h-40 drop-shadow-[0_0_20px_rgba(232,121,249,0.6)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -396,6 +398,7 @@
                         <div class="about-float-badge absolute bottom-6 left-0 sm:bottom-10 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-lg animate-float" style="animation-delay: 2s;">
                             <i class="fas fa-magic mr-1"></i> UI/UX
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -433,20 +436,20 @@
         <!-- Experience -->
         <section id="experience" class="scroll-mt-32" aria-labelledby="exp-heading">
             <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="exp_eyebrow">Percorso</p>
-            <h2 id="exp-heading" data-i18n="exp_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Esperienza & <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">formazione</span></h2>
+            <h2 id="exp-heading" data-i18n="exp_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal reveal-fade">Esperienza & <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">formazione</span></h2>
             <p data-i18n="exp_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Crescita continua tra progetti cliente, open source e sperimentazione.</p>
-            <div class="timeline max-w-3xl mx-auto space-y-0 reveal-stagger">
-                <article class="timeline-item reveal">
+            <div class="timeline timeline--exp max-w-3xl mx-auto space-y-0 reveal-stagger">
+                <article class="timeline-item reveal reveal-left">
                     <span class="timeline-period" data-i18n="exp1_period">2024 — oggi</span>
                     <h3 data-i18n="exp1_role" class="text-lg font-bold text-white mt-1">Full-Stack Developer · Freelance</h3>
                     <p data-i18n="exp1_desc" class="text-gray-400 text-sm mt-2 leading-relaxed">Sviluppo siti e web app per clienti, side project su GitHub Pages e deploy su VPS cloud.</p>
                 </article>
-                <article class="timeline-item reveal">
+                <article class="timeline-item reveal reveal-left">
                     <span class="timeline-period" data-i18n="exp2_period">2022 — 2024</span>
                     <h3 data-i18n="exp2_role" class="text-lg font-bold text-white mt-1">Sviluppo web & automazione</h3>
                     <p data-i18n="exp2_desc" class="text-gray-400 text-sm mt-2 leading-relaxed">React, Python, PHP e UI moderne; Liquid Cube e Weatherflow per portfolio.</p>
                 </article>
-                <article class="timeline-item reveal">
+                <article class="timeline-item reveal reveal-left">
                     <span class="timeline-period" data-i18n="exp3_period">Foundations</span>
                     <h3 data-i18n="exp3_role" class="text-lg font-bold text-white mt-1">Stack fondamentali</h3>
                     <p data-i18n="exp3_desc" class="text-gray-400 text-sm mt-2 leading-relaxed">HTML, CSS, JavaScript, SQL, Git applicati a progetti reali.</p>
@@ -483,32 +486,29 @@
             </div>
         </section>
 
-        <!-- Packages -->
-        <section id="packages" class="scroll-mt-32" aria-labelledby="packages-heading">
-            <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="pkg_eyebrow">Pacchetti</p>
-            <h2 id="packages-heading" data-i18n="pkg_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Trasparenza su <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">cosa include</span></h2>
-            <p data-i18n="pkg_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Ogni progetto è diverso — preventivo personalizzato dopo un breve call.</p>
-            <div class="packages-grid grid grid-cols-1 md:grid-cols-3 gap-6 reveal-stagger">
-                <article class="pkg-card glass-panel glass-card spotlight-card p-8 rounded-3xl reveal flex flex-col">
-                    <h3 data-i18n="pkg1_name" class="text-xl font-bold text-white">Landing</h3>
-                    <p data-i18n="pkg1_price" class="text-3xl font-display font-bold gradient-text mt-2 mb-6">da €400</p>
-                    <ul data-i18n="pkg1_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc content-list pkg-features"></ul>
-                    <a href="#contact" data-i18n="pkg_cta" class="block text-center py-3 rounded-xl border border-white/20 hover:bg-white/10 font-semibold transition-all">Chiedi preventivo</a>
-                </article>
-                <article class="pkg-card pkg-featured glass-panel spotlight-card p-8 rounded-3xl reveal flex flex-col border-purple-500/40">
-                    <span class="pkg-badge mb-2 block" data-i18n="pkg_popular">Più richiesto</span>
-                    <h3 data-i18n="pkg2_name" class="text-xl font-bold text-white">Sito business</h3>
-                    <p data-i18n="pkg2_price" class="text-3xl font-display font-bold gradient-text mt-2 mb-6">da €900</p>
-                    <ul data-i18n="pkg2_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc content-list pkg-features"></ul>
-                    <a href="#contact" data-i18n="pkg_cta" class="btn-primary block text-center py-3 rounded-xl font-semibold text-white">Chiedi preventivo</a>
-                </article>
-                <article class="pkg-card glass-panel glass-card spotlight-card p-8 rounded-3xl reveal flex flex-col">
-                    <h3 data-i18n="pkg3_name" class="text-xl font-bold text-white">Web app / custom</h3>
-                    <p data-i18n="pkg3_price" class="text-3xl font-display font-bold gradient-text mt-2 mb-6">su preventivo</p>
-                    <ul data-i18n="pkg3_feat" class="text-gray-400 text-sm space-y-2 mb-8 flex-grow list-disc content-list pkg-features"></ul>
-                    <a href="#contact" data-i18n="pkg_cta" class="block text-center py-3 rounded-xl border border-white/20 hover:bg-white/10 font-semibold transition-all">Chiedi preventivo</a>
-                </article>
-            </div>
+        <!-- Scope / cosa include -->
+        <section id="scope" class="scroll-mt-32" aria-labelledby="scope-heading">
+            <p class="section-eyebrow reveal mx-auto w-fit" data-i18n="pkg_eyebrow">Trasparenza</p>
+            <h2 id="scope-heading" data-i18n="pkg_title" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 reveal">Trasparenza su <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">cosa include</span></h2>
+            <p data-i18n="pkg_sub" class="section-lead text-center max-w-2xl mx-auto mb-12 reveal">Nessun listino fisso: una panoramica chiara su cosa posso realizzare. Raccontami il progetto e preparo un preventivo su misura.</p>
+
+            <article class="packages-unified glass-panel glass-card spotlight-card reveal max-w-4xl mx-auto w-full p-8 md:p-10 rounded-3xl">
+                <header class="packages-unified__header text-center max-w-2xl mx-auto">
+                    <p data-i18n="pkg_price_label" class="pkg-price-label text-2xl md:text-3xl font-display font-bold gradient-text">Preventivo su richiesta</p>
+                    <p data-i18n="pkg_price_note" class="text-sm md:text-base text-gray-400 mt-3 leading-relaxed">Il costo si definisce dopo aver capito obiettivi e scope — contattami per un preventivo personalizzato.</p>
+                    <p data-i18n="pkg_unified_intro" class="text-gray-300/90 text-sm md:text-base mt-5 leading-relaxed">Un solo percorso: raccontami obiettivi e vincoli, poi definiamo insieme scope e preventivo.</p>
+                </header>
+
+                <div class="packages-unified__body">
+                    <p data-i18n="pkg_unified_narrative" class="packages-unified__narrative">Che tu parta da una <strong class="text-purple-400">landing</strong> per servizio, evento o campagna, da un <strong class="text-purple-400">sito business</strong> multipagina per attività e professionisti <span class="pkg-badge pkg-badge--inline" data-i18n="pkg_popular">Più richiesto</span>, o da una <strong class="text-purple-400">web app</strong> con prenotazioni, dashboard e integrazioni: il metodo resta lo stesso — brief, proposta chiara e consegna online. La complessità cresce con te: da una pagina focalizzata fino a funzionalità su misura, senza cambiare interlocutore né processo.</p>
+                    <ul data-i18n="pkg_unified_includes" class="packages-unified__includes content-list list-disc"></ul>
+                </div>
+
+                <footer class="packages-unified__footer">
+                    <p data-i18n="pkg_unified_footer" class="text-gray-400 text-sm text-center mb-5 leading-relaxed">Tempistiche, revisioni e manutenzione si concordano nel preventivo — niente sorprese.</p>
+                    <a href="#contact" data-i18n="pkg_cta" class="btn-primary packages-unified__cta">Chiedi preventivo</a>
+                </footer>
+            </article>
         </section>
 
         <!-- Process Section -->
@@ -518,24 +518,24 @@
                 Come <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">lavoro</span>
             </h2>
             <p data-i18n="process_sub" class="section-lead text-center max-w-2xl mx-auto mb-14 reveal">Dal brief al deploy: un flusso chiaro per consegnare progetti solidi, anche per clienti senza team tecnico.</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 reveal-stagger">
+            <div class="process-grid process-grid--flow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 reveal-stagger">
                 <div class="glass-panel glass-card process-step p-6 rounded-2xl reveal">
-                    <span class="text-purple-400 font-bold text-sm">01</span>
+                    <span class="process-step__num text-purple-400 font-bold text-sm" aria-hidden="true">01</span>
                     <h3 data-i18n="proc1_title" class="text-xl font-bold text-white mt-2 mb-2">Brief & obiettivi</h3>
                     <p data-i18n="proc1_desc" class="text-gray-400 text-sm leading-relaxed">Capisco attività, target e priorità (lead, prenotazioni, SEO locale).</p>
                 </div>
                 <div class="glass-panel glass-card process-step p-6 rounded-2xl reveal">
-                    <span class="text-purple-400 font-bold text-sm">02</span>
+                    <span class="process-step__num text-purple-400 font-bold text-sm" aria-hidden="true">02</span>
                     <h3 data-i18n="proc2_title" class="text-xl font-bold text-white mt-2 mb-2">UI & struttura</h3>
                     <p data-i18n="proc2_desc" class="text-gray-400 text-sm leading-relaxed">Wireframe, sezioni chiave e copy orientato alla conversione.</p>
                 </div>
                 <div class="glass-panel glass-card process-step p-6 rounded-2xl reveal">
-                    <span class="text-purple-400 font-bold text-sm">03</span>
+                    <span class="process-step__num text-purple-400 font-bold text-sm" aria-hidden="true">03</span>
                     <h3 data-i18n="proc3_title" class="text-xl font-bold text-white mt-2 mb-2">Sviluppo</h3>
                     <p data-i18n="proc3_desc" class="text-gray-400 text-sm leading-relaxed">Codice modulare, responsive, form, integrazioni e test su dispositivi reali.</p>
                 </div>
                 <div class="glass-panel glass-card process-step p-6 rounded-2xl reveal">
-                    <span class="text-purple-400 font-bold text-sm">04</span>
+                    <span class="process-step__num text-purple-400 font-bold text-sm" aria-hidden="true">04</span>
                     <h3 data-i18n="proc4_title" class="text-xl font-bold text-white mt-2 mb-2">Deploy & SEO</h3>
                     <p data-i18n="proc4_desc" class="text-gray-400 text-sm leading-relaxed">Pubblicazione (VPS, GitHub Pages), meta tag, performance e handoff al cliente.</p>
                 </div>
@@ -550,26 +550,26 @@
             </h2>
             <p data-i18n="skills_sub" class="section-lead text-center max-w-xl mx-auto mb-14 reveal">Competenze raggruppate per area — senza percentuali arbitrarie, con focus su ciò che uso nei progetti.</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal-stagger">
-                <div class="glass-panel glass-card p-8 rounded-3xl reveal">
+            <div class="skills-grid grid grid-cols-1 md:grid-cols-2 gap-6 reveal-stagger">
+                <div class="skill-card glass-panel glass-card p-8 rounded-3xl reveal reveal-scale">
                     <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-palette text-purple-400"></i> <span data-i18n="skill_cat_front">Frontend</span></h3>
                     <div class="flex flex-wrap gap-2">
                         <span class="skill-tag">HTML5</span><span class="skill-tag">CSS3</span><span class="skill-tag">Tailwind</span><span class="skill-tag">JavaScript</span><span class="skill-tag">React</span><span class="skill-tag">Svelte</span>
                     </div>
                 </div>
-                <div class="glass-panel glass-card p-8 rounded-3xl reveal">
+                <div class="skill-card glass-panel glass-card p-8 rounded-3xl reveal reveal-scale">
                     <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-server text-indigo-400"></i> <span data-i18n="skill_cat_back">Backend & dati</span></h3>
                     <div class="flex flex-wrap gap-2">
                         <span class="skill-tag">Python</span><span class="skill-tag">Java</span><span class="skill-tag">PHP</span><span class="skill-tag">SQL</span><span class="skill-tag">REST API</span>
                     </div>
                 </div>
-                <div class="glass-panel glass-card p-8 rounded-3xl reveal">
+                <div class="skill-card glass-panel glass-card p-8 rounded-3xl reveal reveal-scale">
                     <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-tools text-fuchsia-400"></i> <span data-i18n="skill_cat_tools">Tools & workflow</span></h3>
                     <div class="flex flex-wrap gap-2">
                         <span class="skill-tag">Git</span><span class="skill-tag">GitHub</span><span class="skill-tag">Docker</span><span class="skill-tag">Vite</span><span class="skill-tag">VS Code</span>
                     </div>
                 </div>
-                <div class="glass-panel glass-card p-8 rounded-3xl reveal">
+                <div class="skill-card glass-panel glass-card p-8 rounded-3xl reveal reveal-scale">
                     <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-rocket text-sky-400"></i> <span data-i18n="skill_cat_deliver">Delivery</span></h3>
                     <div class="flex flex-wrap gap-2">
                         <span class="skill-tag">SEO base</span><span class="skill-tag">GitHub Pages</span><span class="skill-tag">Responsive</span><span class="skill-tag">i18n</span><span class="skill-tag">Performance</span>
@@ -790,7 +790,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="case-content space-y-6 reveal" style="transition-delay: 120ms;">
+                <div class="case-content space-y-6">
                     <article class="glass-panel p-6 rounded-2xl spotlight-card">
                         <h3 data-i18n="case_challenge_title" class="font-bold text-white mb-2 flex items-center gap-2"><i class="fas fa-flag text-amber-400"></i> La sfida</h3>
                         <p data-i18n="case_challenge" class="text-gray-400 text-sm leading-relaxed">Un'attività turistica a Mondello aveva bisogno di presenza online professionale: mostrare flotta e tour, farsi trovare su Google in più lingue e convertire visite in richieste.</p>
@@ -801,24 +801,24 @@
                     </article>
                     <div>
                         <h3 data-i18n="case_result_title" class="font-bold text-white mb-4">Risultati</h3>
-                        <div class="case-metric-grid">
-                            <div class="case-metric glass-panel p-4 rounded-xl text-center">
+                        <div class="case-metric-grid reveal-stagger">
+                            <div class="case-metric glass-panel p-4 rounded-xl text-center reveal">
                                 <strong data-i18n="case_m1" class="block text-sky-300 text-sm font-bold">Sito multilingua</strong>
                                 <span data-i18n="case_m1d" class="text-xs text-gray-500">IT · EN · DE</span>
                             </div>
-                            <div class="case-metric glass-panel p-4 rounded-xl text-center">
+                            <div class="case-metric glass-panel p-4 rounded-xl text-center reveal">
                                 <strong data-i18n="case_m2" class="block text-purple-300 text-sm font-bold">SEO locale</strong>
                                 <span data-i18n="case_m2d" class="text-xs text-gray-500">Schema + hreflang</span>
                             </div>
-                            <div class="case-metric glass-panel p-4 rounded-xl text-center">
+                            <div class="case-metric glass-panel p-4 rounded-xl text-center reveal">
                                 <strong data-i18n="case_m3" class="block text-indigo-300 text-sm font-bold">Deploy VPS</strong>
                                 <span data-i18n="case_m3d" class="text-xs text-gray-500">Oracle Cloud</span>
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <a href="http://130.110.14.101/index.php" target="_blank" rel="noopener noreferrer" class="btn-primary flex-1 py-3 rounded-xl text-center font-semibold text-white"><span data-i18n="case_link">Visita il sito live</span> <i class="fas fa-external-link-alt ml-1 text-sm"></i></a>
-                        <a href="#projects" class="flex-1 py-3 rounded-xl glass-panel border border-white/15 text-center font-semibold text-gray-300 hover:text-white transition-all" data-i18n="case_read">Vedi anche nei progetti</a>
+                    <div class="case-actions flex flex-col sm:flex-row gap-3 reveal-stagger">
+                        <a href="http://130.110.14.101/index.php" target="_blank" rel="noopener noreferrer" class="btn-primary flex-1 min-w-0 py-3 rounded-xl text-center font-semibold text-white reveal motion-interactive"><span data-i18n="case_link">Visita il sito live</span> <i class="fas fa-external-link-alt ml-1 text-sm"></i></a>
+                        <a href="#projects" class="case-cta-secondary flex-1 min-w-0 py-3 rounded-xl glass-panel text-center font-semibold text-gray-300 hover:text-white transition-all reveal motion-interactive" data-i18n="case_read">Vedi anche nei progetti</a>
                     </div>
                 </div>
             </div>
@@ -833,48 +833,60 @@
             <p data-i18n="faq_sub" class="section-lead text-center max-w-2xl mx-auto mb-14 reveal">
                 Risposte rapide per capire se possiamo lavorare bene insieme.
             </p>
-            <div class="max-w-4xl mx-auto space-y-4">
-                <details class="faq-item glass-panel rounded-2xl p-5 reveal">
+            <div class="faq-list max-w-4xl mx-auto space-y-4 reveal-stagger">
+                <details class="faq-item glass-panel rounded-2xl p-5 reveal reveal-scale">
                     <summary class="flex items-center justify-between gap-4 text-white font-semibold">
                         <span data-i18n="faq_q1">Quali servizi offri?</span>
-                        <i class="fas fa-chevron-down faq-chevron text-purple-300 transition-transform"></i>
+                        <i class="fas fa-chevron-down faq-chevron text-purple-300" aria-hidden="true"></i>
                     </summary>
-                    <p data-i18n="faq_a1" class="text-gray-400 mt-3 leading-relaxed">Realizzo siti web, landing page e web app responsive con SEO tecnica di base, integrazione form e deploy su GitHub Pages o VPS.</p>
+                    <div class="faq-answer">
+                        <p data-i18n="faq_a1" class="text-gray-400 leading-relaxed">Realizzo siti web, landing page e web app responsive con SEO tecnica di base, integrazione form e deploy su GitHub Pages o VPS.</p>
+                    </div>
                 </details>
-                <details class="faq-item glass-panel rounded-2xl p-5 reveal" style="transition-delay: 120ms;">
+                <details class="faq-item glass-panel rounded-2xl p-5 reveal reveal-scale">
                     <summary class="flex items-center justify-between gap-4 text-white font-semibold">
                         <span data-i18n="faq_q2">In quanto tempo consegni un progetto?</span>
-                        <i class="fas fa-chevron-down faq-chevron text-purple-300 transition-transform"></i>
+                        <i class="fas fa-chevron-down faq-chevron text-purple-300" aria-hidden="true"></i>
                     </summary>
-                    <p data-i18n="faq_a2" class="text-gray-400 mt-3 leading-relaxed">Dipende dalla complessità: una landing può richiedere pochi giorni, un sito più strutturato da 1 a 3 settimane.</p>
+                    <div class="faq-answer">
+                        <p data-i18n="faq_a2" class="text-gray-400 leading-relaxed">Dipende dalla complessità: una landing può richiedere pochi giorni, un sito più strutturato da 1 a 3 settimane.</p>
+                    </div>
                 </details>
-                <details class="faq-item glass-panel rounded-2xl p-5 reveal" style="transition-delay: 240ms;">
+                <details class="faq-item glass-panel rounded-2xl p-5 reveal reveal-scale">
                     <summary class="flex items-center justify-between gap-4 text-white font-semibold">
                         <span data-i18n="faq_q3">Lavori anche da remoto?</span>
-                        <i class="fas fa-chevron-down faq-chevron text-purple-300 transition-transform"></i>
+                        <i class="fas fa-chevron-down faq-chevron text-purple-300" aria-hidden="true"></i>
                     </summary>
-                    <p data-i18n="faq_a3" class="text-gray-400 mt-3 leading-relaxed">Sì, collaboro sia in presenza su Palermo sia da remoto con clienti in tutta Italia.</p>
+                    <div class="faq-answer">
+                        <p data-i18n="faq_a3" class="text-gray-400 leading-relaxed">Sì, collaboro sia in presenza su Palermo sia da remoto con clienti in tutta Italia.</p>
+                    </div>
                 </details>
-                <details class="faq-item glass-panel rounded-2xl p-5 reveal" style="transition-delay: 360ms;">
+                <details class="faq-item glass-panel rounded-2xl p-5 reveal reveal-scale">
                     <summary class="flex items-center justify-between gap-4 text-white font-semibold">
                         <span data-i18n="faq_q4">Il sito sarà visibile su Google?</span>
-                        <i class="fas fa-chevron-down faq-chevron text-purple-300 transition-transform" aria-hidden="true"></i>
+                        <i class="fas fa-chevron-down faq-chevron text-purple-300" aria-hidden="true"></i>
                     </summary>
-                    <p data-i18n="faq_a4" class="text-gray-400 mt-3 leading-relaxed">Sì: struttura semantica, meta tag, sitemap, robots.txt e dati strutturati (Schema.org) sono parte del mio workflow di base.</p>
+                    <div class="faq-answer">
+                        <p data-i18n="faq_a4" class="text-gray-400 leading-relaxed">Sì: struttura semantica, meta tag, sitemap, robots.txt e dati strutturati (Schema.org) sono parte del mio workflow di base.</p>
+                    </div>
                 </details>
-                <details class="faq-item glass-panel rounded-2xl p-5 reveal" style="transition-delay: 480ms;">
+                <details class="faq-item glass-panel rounded-2xl p-5 reveal reveal-scale">
                     <summary class="flex items-center justify-between gap-4 text-white font-semibold">
                         <span data-i18n="faq_q5">Offri manutenzione dopo il lancio?</span>
-                        <i class="fas fa-chevron-down faq-chevron text-purple-300 transition-transform" aria-hidden="true"></i>
+                        <i class="fas fa-chevron-down faq-chevron text-purple-300" aria-hidden="true"></i>
                     </summary>
-                    <p data-i18n="faq_a5" class="text-gray-400 mt-3 leading-relaxed">Posso occuparmi di aggiornamenti contenuti, piccole modifiche e monitoraggio base su accordo mensile o a richiesta.</p>
+                    <div class="faq-answer">
+                        <p data-i18n="faq_a5" class="text-gray-400 leading-relaxed">Posso occuparmi di aggiornamenti contenuti, piccole modifiche e monitoraggio base su accordo mensile o a richiesta.</p>
+                    </div>
                 </details>
-                <details class="faq-item glass-panel rounded-2xl p-5 reveal" style="transition-delay: 600ms;">
+                <details class="faq-item glass-panel rounded-2xl p-5 reveal reveal-scale">
                     <summary class="flex items-center justify-between gap-4 text-white font-semibold">
                         <span data-i18n="faq_q6">Come trovare un web developer a Palermo?</span>
-                        <i class="fas fa-chevron-down faq-chevron text-purple-300 transition-transform" aria-hidden="true"></i>
+                        <i class="fas fa-chevron-down faq-chevron text-purple-300" aria-hidden="true"></i>
                     </summary>
-                    <p data-i18n="faq_a6" class="text-gray-400 mt-3 leading-relaxed">Sono Gabriel Lazzara, web developer full-stack con base a Palermo: qui trovi portfolio, case study e form contatti per preventivi su siti e web app.</p>
+                    <div class="faq-answer">
+                        <p data-i18n="faq_a6" class="text-gray-400 leading-relaxed">Sono Gabriel Lazzara, web developer full-stack con base a Palermo: qui trovi portfolio, case study e form contatti per preventivi su siti e web app.</p>
+                    </div>
                 </details>
             </div>
         </section>
@@ -950,9 +962,22 @@
     <footer class="site-footer border-t border-white/10 pt-16 pb-8">
         <div class="site-shell">
             <div class="site-footer-inner">
-                <div class="reveal">
-                    <p class="font-display text-xl font-bold text-white mb-2">Gabriel Lazzara</p>
-                    <p data-i18n="footer_tagline" class="text-gray-500 text-sm leading-relaxed">Full-stack developer · Palermo, Sicilia</p>
+                <div class="footer-brand reveal">
+                    <a href="#hero" class="footer-brand-mark group" aria-label="Gabriel Lazzara — torna all'inizio">
+                        <img
+                            src="./assets/logo-pfp-1024.png"
+                            srcset="./assets/logo-pfp-1024.png 1024w, ./assets/logo-pfp-1080.png 1080w, ./assets/logo-pfp-2048.png 2048w"
+                            sizes="(max-width: 767px) 72px, 88px"
+                            width="88"
+                            height="88"
+                            class="footer-brand-logo"
+                            alt="Logo Gabriel Lazzara"
+                            loading="lazy"
+                            decoding="async"
+                        >
+                    </a>
+                    <p class="font-display text-xl font-bold text-white mb-2 mt-4">Gabriel Lazzara</p>
+                    <p data-i18n="footer_tagline" class="text-gray-500 text-sm leading-relaxed">Web developer · Full-stack · Palermo, Sicilia</p>
                 </div>
                 <nav class="flex flex-col gap-2 reveal" style="transition-delay: 100ms;" aria-label="Link rapidi footer">
                     <span class="text-xs font-semibold uppercase tracking-wider text-purple-300 mb-1" data-i18n="footer_nav_label">Navigazione</span>
@@ -960,6 +985,7 @@
                     <a href="#projects" class="footer-link" data-i18n="nav_work">Lavori</a>
                     <a href="#case-study" class="footer-link" data-i18n="nav_case">Case study</a>
                     <a href="#services" class="footer-link" data-i18n="nav_services">Servizi</a>
+                    <a href="#scope" class="footer-link" data-i18n="nav_scope">Cosa include</a>
                     <a href="#faq" class="footer-link">FAQ</a>
                     <a href="#contact" class="footer-link" data-i18n="nav_cta">Contatti</a>
                 </nav>
@@ -986,9 +1012,9 @@
         </div>
     </footer>
 
-    <script src="./js/i18n.js" defer></script>
-    <script src="./js/seo.js" defer></script>
-    <script src="./js/main.js" defer></script>
+    <script src="./js/i18n.js?v=3" defer></script>
+    <script src="./js/seo.js?v=3" defer></script>
+    <script src="./js/main.js?v=3" defer></script>
     <!-- pages-deploy -->
 </body>
 </html>

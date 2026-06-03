@@ -7,8 +7,19 @@ class PortfolioApp {
         this.navLinks = document.querySelectorAll('.nav-link');
         this.mobileLinks = document.querySelectorAll('.mobile-link');
         this.revealElements = document.querySelectorAll('.reveal');
-        this.visibleSections = new Map();
         this.activeSectionId = '';
+        this.navSectionIds = [
+            'hero',
+            'about',
+            'services',
+            'scope',
+            'process',
+            'skills',
+            'projects',
+            'case-study',
+            'faq',
+            'contact',
+        ];
         this.langToggles = document.querySelectorAll('.lang-toggle');
         this.copyEmailBtn = document.getElementById('copy-email-btn');
         this.projectCards = document.querySelectorAll('[data-project-category]');
@@ -20,9 +31,12 @@ class PortfolioApp {
         this.currentFilter = 'all';
         this.currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
         this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.motionTier = this.getMotionTier();
 
-        if (!this.prefersReducedMotion) {
+        if (this.motionTier === 'full') {
             document.documentElement.classList.add('motion-enhanced');
+        } else if (this.motionTier === 'lite') {
+            document.documentElement.classList.add('motion-lite');
         }
 
         this.init();
@@ -33,21 +47,24 @@ class PortfolioApp {
         this.applyTheme(this.currentTheme);
         this.setupMobileMenu();
         this.setupSmoothScrolling();
-        this.setupSectionMotion();
         this.enhanceRevealTargets();
         this.setupIntersectionObservers();
+        this.setupNavScrollSpy();
         this.setupInteractiveMotion();
-        this.setupScrollListener();
+        this.setupScrollEffects();
         this.setupContactForm();
         this.setupCopyEmail();
         this.setupLanguageToggle();
         this.setupProjectFilters();
         this.setupSpotlightCards();
         this.setupPressFeedback();
-        this.setupFaqAnimations();
-        this.setupAmbientMotion();
+        this.setupCaseMetricMotion();
+        this.setupHeroPanelTypewriter();
         this.applyLanguage(this.currentLang);
-        requestAnimationFrame(() => document.body.classList.add('page-loaded'));
+        requestAnimationFrame(() => {
+            document.body.classList.add('page-loaded');
+            document.documentElement.classList.add('page-ready');
+        });
         this.applyProjectFilter(this.currentFilter, true);
     }
 
@@ -55,13 +72,29 @@ class PortfolioApp {
         if (!this.themeToggle) return;
 
         this.themeToggle.addEventListener('click', () => {
-            this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
-            this.themeToggle.classList.remove('theme-spin');
+            if (this.themeToggle.classList.contains('is-switching')) return;
+
+            const nextTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+
+            if (this.prefersReducedMotion) {
+                this.currentTheme = nextTheme;
+                this.applyTheme(nextTheme, false);
+                localStorage.setItem('portfolio_theme', nextTheme);
+                return;
+            }
+            this.themeToggle.classList.remove('is-switching', 'to-light', 'to-dark');
             void this.themeToggle.offsetWidth;
-            this.themeToggle.classList.add('theme-spin');
-            this.applyTheme(this.currentTheme, true);
-            localStorage.setItem('portfolio_theme', this.currentTheme);
-            setTimeout(() => this.themeToggle.classList.remove('theme-spin'), 550);
+            this.themeToggle.classList.add('is-switching', nextTheme === 'light' ? 'to-light' : 'to-dark');
+
+            window.setTimeout(() => {
+                this.currentTheme = nextTheme;
+                this.applyTheme(nextTheme, true);
+                localStorage.setItem('portfolio_theme', nextTheme);
+            }, 240);
+
+            window.setTimeout(() => {
+                this.themeToggle.classList.remove('is-switching', 'to-light', 'to-dark');
+            }, 760);
         });
     }
 
@@ -99,6 +132,7 @@ class PortfolioApp {
         this.langToggles.forEach((toggle) => {
             toggle.addEventListener('click', () => {
                 const nextLang = this.currentLang === 'it' ? 'en' : 'it';
+
                 if (this.prefersReducedMotion) {
                     this.currentLang = nextLang;
                     localStorage.setItem('portfolio_lang', nextLang);
@@ -106,24 +140,32 @@ class PortfolioApp {
                     return;
                 }
 
+                const directionClass = nextLang === 'en' ? 'to-en' : 'to-it';
+
                 this.langToggles.forEach((btn) => {
-                    btn.classList.remove('lang-pop');
+                    btn.classList.remove('is-switching', 'to-en', 'to-it', 'lang-pop');
                     void btn.offsetWidth;
-                    btn.classList.add('lang-pop');
+                    btn.classList.add('is-switching', directionClass);
                 });
 
                 document.documentElement.classList.add('lang-transitioning');
 
-                requestAnimationFrame(() => {
-                    setTimeout(() => {
-                        this.currentLang = nextLang;
-                        localStorage.setItem('portfolio_lang', nextLang);
-                        this.applyLanguage(nextLang);
-                        document.documentElement.classList.remove('lang-transitioning');
-                        document.documentElement.classList.add('lang-entered');
-                        setTimeout(() => document.documentElement.classList.remove('lang-entered'), 450);
-                    }, 130);
-                });
+                window.setTimeout(() => {
+                    this.currentLang = nextLang;
+                    localStorage.setItem('portfolio_lang', nextLang);
+                    this.applyLanguage(nextLang);
+                    document.documentElement.classList.remove('lang-transitioning');
+                    document.documentElement.classList.add('lang-entered');
+                    window.setTimeout(() => {
+                        document.documentElement.classList.remove('lang-entered');
+                    }, 450);
+                }, 220);
+
+                window.setTimeout(() => {
+                    this.langToggles.forEach((btn) => {
+                        btn.classList.remove('is-switching', 'to-en', 'to-it');
+                    });
+                }, 640);
             });
         });
     }
@@ -174,6 +216,8 @@ class PortfolioApp {
         if (typeof applySeoLanguage === 'function') {
             applySeoLanguage(lang);
         }
+
+        this.updateHeroHeading(lang);
     }
 
     setupProjectFilters() {
@@ -215,7 +259,19 @@ class PortfolioApp {
         });
     }
 
+    getMotionTier() {
+        if (this.prefersReducedMotion) return 'none';
+        const coarse = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+        const narrow = window.matchMedia('(max-width: 768px)').matches;
+        const lowMemory = typeof navigator.deviceMemory === 'number' && navigator.deviceMemory < 4;
+        const lowCpu = typeof navigator.hardwareConcurrency === 'number'
+            && navigator.hardwareConcurrency <= 4;
+        if (coarse || narrow || lowMemory || lowCpu) return 'lite';
+        return 'full';
+    }
+
     setupSpotlightCards() {
+        if (this.motionTier === 'none') return;
         if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
         let rafId = null;
@@ -234,48 +290,11 @@ class PortfolioApp {
                         const rect = activeCard.getBoundingClientRect();
                         activeCard.style.setProperty('--spot-x', `${clientX - rect.left}px`);
                         activeCard.style.setProperty('--spot-y', `${clientY - rect.top}px`);
-                        if (!this.prefersReducedMotion) {
-                            const cx = rect.left + rect.width / 2;
-                            const cy = rect.top + rect.height / 2;
-                            const rotateY = ((clientX - cx) / rect.width) * 6;
-                            const rotateX = ((cy - clientY) / rect.height) * 6;
-                            activeCard.style.setProperty('--tilt-x', `${rotateX}deg`);
-                            activeCard.style.setProperty('--tilt-y', `${rotateY}deg`);
-                        }
                     }
                     rafId = null;
                 });
             }, { passive: true });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.setProperty('--tilt-x', '0deg');
-                card.style.setProperty('--tilt-y', '0deg');
-            });
         });
-    }
-
-    setupAmbientMotion() {
-        if (this.prefersReducedMotion) return;
-
-        const blobs = document.querySelectorAll('.site-blobs .blob');
-        if (!blobs.length) return;
-
-        let ticking = false;
-        const onScroll = () => {
-            if (ticking) return;
-            ticking = true;
-            requestAnimationFrame(() => {
-                const y = window.scrollY;
-                blobs.forEach((blob, index) => {
-                    const offset = y * (0.02 + index * 0.015);
-                    blob.style.setProperty('--parallax-y', `${offset}px`);
-                });
-                ticking = false;
-            });
-        };
-
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
     }
 
     setupCopyEmail() {
@@ -331,6 +350,71 @@ class PortfolioApp {
         }
     }
 
+    getScrollOffset() {
+        const navH = this.navbar ? this.navbar.offsetHeight : 0;
+        return navH + 12;
+    }
+
+    cancelSmoothScroll() {
+        if (this._smoothScrollFrame) {
+            cancelAnimationFrame(this._smoothScrollFrame);
+            this._smoothScrollFrame = null;
+        }
+        document.documentElement.classList.remove('is-smooth-scrolling');
+    }
+
+    smoothScrollToElement(targetSection) {
+        if (this.prefersReducedMotion) {
+            const top = targetSection.getBoundingClientRect().top + window.scrollY - this.getScrollOffset();
+            window.scrollTo({ top, left: 0, behavior: 'auto' });
+            return;
+        }
+
+        this.cancelSmoothScroll();
+
+        const startY = window.scrollY;
+        const targetY = targetSection.getBoundingClientRect().top + startY - this.getScrollOffset();
+        const distance = targetY - startY;
+
+        if (Math.abs(distance) < 4) return;
+
+        const duration = Math.min(920, Math.max(360, Math.abs(distance) * 0.48));
+        const easeOutCubic = (t) => 1 - (1 - t) ** 3;
+        let startedAt = null;
+
+        document.documentElement.classList.add('is-smooth-scrolling');
+
+        const cancelOnUserInput = () => {
+            this.cancelSmoothScroll();
+            window.removeEventListener('wheel', cancelOnUserInput, cancelOpts);
+            window.removeEventListener('touchstart', cancelOnUserInput, cancelOpts);
+            window.removeEventListener('keydown', cancelOnUserInput, cancelOpts);
+        };
+        const cancelOpts = { passive: true };
+        window.addEventListener('wheel', cancelOnUserInput, cancelOpts);
+        window.addEventListener('touchstart', cancelOnUserInput, cancelOpts);
+        window.addEventListener('keydown', cancelOnUserInput, cancelOpts);
+
+        const step = (now) => {
+            if (startedAt === null) startedAt = now;
+            const progress = Math.min(1, (now - startedAt) / duration);
+            window.scrollTo(0, startY + distance * easeOutCubic(progress));
+
+            if (progress < 1) {
+                this._smoothScrollFrame = requestAnimationFrame(step);
+                return;
+            }
+
+            this._smoothScrollFrame = null;
+            document.documentElement.classList.remove('is-smooth-scrolling');
+            window.removeEventListener('wheel', cancelOnUserInput, cancelOpts);
+            window.removeEventListener('touchstart', cancelOnUserInput, cancelOpts);
+            window.removeEventListener('keydown', cancelOnUserInput, cancelOpts);
+        };
+
+        this._smoothScrollFrame = requestAnimationFrame(step);
+    }
+
     setupSmoothScrolling() {
         document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
             anchor.addEventListener('click', (e) => {
@@ -339,117 +423,212 @@ class PortfolioApp {
                 const targetSection = document.querySelector(targetId);
                 if (targetSection) {
                     e.preventDefault();
-                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                    this.smoothScrollToElement(targetSection);
+                    if (this.isMenuOpen) this.toggleMenu();
                 }
             });
         });
     }
 
-    setupSectionMotion() {
-        if (this.prefersReducedMotion) return;
-
-        this.mainSections.forEach((section) => {
-            section.classList.add('motion-section');
-        });
-    }
-
     enhanceRevealTargets() {
-        if (this.prefersReducedMotion) return;
+        if (this.motionTier === 'none') return;
 
         const selectors = [
             '.section-eyebrow:not(.reveal)',
             '.section-lead:not(.reveal)',
             '.timeline-item:not(.reveal)',
-            '.faq-item:not(.reveal)',
-            '.footer-link:not(.reveal)',
-            '.case-metric-grid > div:not(.reveal)',
-            '.about-float-badge:not(.reveal)',
             '.hero-scroll-cue:not(.reveal)',
             '.filter-btn:not(.reveal)',
             '.seo-visible-block:not(.reveal)',
-            '.pkg-card:not(.reveal)',
-            '.mobile-link:not(.reveal)',
-            '.project-card .project-card-actions a:not(.reveal)',
-            '.marquee-item:not(.reveal)',
+            '.packages-unified:not(.reveal)',
         ];
 
+        if (this.motionTier === 'full') {
+            selectors.push(
+                '.footer-link:not(.reveal)',
+                '.about-float-badge:not(.reveal)',
+                '.project-card .project-card-actions a:not(.reveal)'
+            );
+        }
+
         let delayIndex = 0;
+        const maxDelaySteps = this.motionTier === 'lite' ? 6 : 10;
         selectors.forEach((selector) => {
             document.querySelectorAll(selector).forEach((el) => {
                 el.classList.add('reveal', 'reveal-fade');
-                el.style.transitionDelay = `${(delayIndex % 12) * 40}ms`;
+                el.style.transitionDelay = `${(delayIndex % maxDelaySteps) * 35}ms`;
                 delayIndex += 1;
             });
         });
 
         document.querySelectorAll('#skills .skill-tag').forEach((tag, index) => {
-            tag.style.setProperty('--stagger', `${(index % 12) * 35}ms`);
+            tag.style.setProperty('--stagger', `${(index % 10) * 30}ms`);
         });
 
         this.revealElements = document.querySelectorAll('.reveal');
     }
 
     setupIntersectionObservers() {
-        const pending = new Map();
-        let revealRaf = null;
-
-        const flushReveal = () => {
-            pending.forEach((isActive, el) => {
-                el.classList.toggle('active', isActive);
-            });
-            pending.clear();
-            revealRaf = null;
-        };
+        if (this.motionTier === 'none') {
+            this.revealElements.forEach((el) => el.classList.add('active'));
+            return;
+        }
 
         const revealObserver = new IntersectionObserver(
-            (entries) => {
+            (entries, observer) => {
                 entries.forEach((entry) => {
-                    pending.set(entry.target, entry.isIntersecting);
+                    if (!entry.isIntersecting) return;
+                    const el = entry.target;
+                    el.classList.add('active');
+                    if (el.classList.contains('skill-card')) {
+                        el.querySelectorAll('.skill-tag').forEach((tag, index) => {
+                            tag.style.setProperty('--stagger', `${0.22 + index * 0.04}s`);
+                            tag.classList.add('tag-motion');
+                        });
+                    }
+                    observer.unobserve(el);
                 });
-                if (!revealRaf) {
-                    revealRaf = requestAnimationFrame(flushReveal);
-                }
             },
             {
-                threshold: 0.1,
-                rootMargin: '8% 0px 8% 0px',
+                threshold: 0.08,
+                rootMargin: '48px 0px -4% 0px',
             }
         );
 
-        this.revealElements.forEach((el) => revealObserver.observe(el));
+        this.revealElements.forEach((el) => {
+            if (el.classList.contains('case-metric')) return;
+            if (el.closest('#process .process-grid')) return;
+            revealObserver.observe(el);
+        });
+
+        this.setupProcessReveal();
 
         const sectionObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
                     const section = entry.target;
-                    section.classList.toggle('section-visible', entry.isIntersecting);
-
-                    if (entry.isIntersecting && section.id === 'skills' && !section.dataset.staggered) {
-                        section.querySelectorAll('.skill-tag').forEach((tag) => {
-                            tag.classList.add('tag-motion');
-                        });
-                        section.dataset.staggered = '1';
-                    }
-
-                    const id = section.getAttribute('id');
-                    if (!id) return;
-                    if (entry.isIntersecting) {
-                        this.visibleSections.set(id, entry.intersectionRatio);
-                    } else {
-                        this.visibleSections.delete(id);
+                    if (!section.dataset.sectionSeen) {
+                        section.dataset.sectionSeen = '1';
+                        section.classList.add('section-visible');
+                        if (section.id === 'experience') {
+                            this.revealExperienceTimeline(section);
+                        }
                     }
                 });
-                this.syncActiveNavFromSections();
             },
-            { threshold: [0, 0.15, 0.35], rootMargin: '-12% 0px -12% 0px' }
+            { threshold: 0.12, rootMargin: '0px 0px -20% 0px' }
         );
 
         this.mainSections.forEach((section) => sectionObserver.observe(section));
     }
 
-    setupInteractiveMotion() {
-        if (this.prefersReducedMotion) return;
+    revealExperienceTimeline(section) {
+        if (this.motionTier === 'none') return;
 
+        const items = section.querySelectorAll('.timeline--exp .timeline-item.reveal');
+        items.forEach((item, index) => {
+            if (item.classList.contains('active')) return;
+            window.setTimeout(() => {
+                item.classList.add('active');
+            }, 60 + index * 110);
+        });
+    }
+
+    setupProcessReveal() {
+        const grid = document.querySelector('#process .process-grid--flow');
+        if (!grid) return;
+
+        if (this.motionTier === 'none') {
+            grid.querySelectorAll('.process-step.reveal').forEach((step) => step.classList.add('active'));
+            return;
+        }
+
+        const play = () => {
+            const section = document.getElementById('process');
+            if (section) this.revealProcessSteps(section);
+        };
+
+        const gridObserver = new IntersectionObserver(
+            (entries) => {
+                if (!entries[0]?.isIntersecting) return;
+                grid.classList.add('process-grid--inview');
+                play();
+                gridObserver.disconnect();
+            },
+            { threshold: 0.18, rootMargin: '0px 0px -8% 0px' }
+        );
+
+        gridObserver.observe(grid);
+    }
+
+    revealProcessSteps(section) {
+        if (this.motionTier === 'none') return;
+        if (section.dataset.processPlayed === '1') return;
+
+        const run = () => {
+            if (section.dataset.processPlayed === '1') return;
+            section.dataset.processPlayed = '1';
+
+            const steps = [...section.querySelectorAll('.process-grid--flow .process-step.reveal')];
+            steps.forEach((step) => step.classList.remove('active'));
+            steps.forEach((step, index) => {
+                window.setTimeout(() => {
+                    step.classList.add('active');
+                }, 70 + index * 105);
+            });
+        };
+
+        const root = document.documentElement;
+        if (root.classList.contains('is-smooth-scrolling') || root.classList.contains('is-scrolling')) {
+            window.setTimeout(run, 420);
+            return;
+        }
+
+        run();
+    }
+
+    setupNavScrollSpy() {
+        this.navSections = this.navSectionIds
+            .map((id) => document.getElementById(id))
+            .filter(Boolean);
+
+        this.syncActiveNavFromScroll();
+
+        window.addEventListener('resize', () => {
+            this.syncActiveNavFromScroll();
+        }, { passive: true });
+    }
+
+    getNavScrollProbe() {
+        const navH = this.navbar?.offsetHeight ?? 72;
+        return navH + Math.min(window.innerHeight * 0.25, 168);
+    }
+
+    syncActiveNavFromScroll() {
+        if (!this.navSections?.length) return;
+
+        const probe = window.scrollY + this.getNavScrollProbe();
+        let activeId = this.navSections[0].id;
+
+        this.navSections.forEach((section) => {
+            const top = section.getBoundingClientRect().top + window.scrollY;
+            if (top <= probe + 2) {
+                activeId = section.id;
+            }
+        });
+
+        const scrollBottom = window.scrollY + window.innerHeight;
+        const pageBottom = document.documentElement.scrollHeight;
+        if (scrollBottom >= pageBottom - 96) {
+            const contact = document.getElementById('contact');
+            if (contact) activeId = contact.id;
+        }
+
+        this.updateActiveNavLink(activeId);
+    }
+
+    setupInteractiveMotion() {
         const interactiveSelector = [
             'a.btn-primary',
             'a.btn-ghost',
@@ -458,13 +637,19 @@ class PortfolioApp {
             '.filter-btn',
             '.nav-link-cta',
             '.mobile-link-accent',
+            '.packages-unified__cta',
+            '.hero-scroll-cue',
+            '.case-cta-secondary',
             '.project-card a[class*="rounded"]',
             '#contact-form button[type="submit"]',
             '#copy-email-btn',
+            '#mobile-menu-btn',
             'footer.site-footer a.rounded-full',
             '.faq-item summary',
             '.nav-link',
             '.mobile-link',
+            '.footer-link',
+            'a.rounded-xl.font-semibold',
         ].join(', ');
 
         document.querySelectorAll(interactiveSelector).forEach((el) => {
@@ -472,75 +657,387 @@ class PortfolioApp {
         });
     }
 
-    syncActiveNavFromSections() {
-        let bestId = '';
-        let bestRatio = 0;
-        this.visibleSections.forEach((ratio, id) => {
-            if (ratio > bestRatio) {
-                bestRatio = ratio;
-                bestId = id;
-            }
-        });
-        if (bestId) this.updateActiveNavLink(bestId);
-    }
-
     updateActiveNavLink(sectionId) {
         if (sectionId === this.activeSectionId) return;
         this.activeSectionId = sectionId;
 
-        this.navLinks.forEach((link) => {
+        const applyNavState = (link) => {
             const href = link.getAttribute('href');
+            if (!href?.startsWith('#')) return;
             const isActive = href === `#${sectionId}`;
             link.classList.toggle('active-link', isActive);
+            if (isActive) {
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.removeAttribute('aria-current');
+            }
             link.classList.toggle('text-white', isActive);
             link.classList.toggle('bg-white/10', isActive);
             link.classList.toggle('text-gray-300', !isActive);
-        });
+        };
+
+        this.navLinks.forEach(applyNavState);
+        this.mobileLinks.forEach(applyNavState);
     }
 
-    setupScrollListener() {
+    setupScrollEffects() {
         let ticking = false;
+        let scrollEndTimer = null;
+
+        const markScrolling = () => {
+            document.documentElement.classList.add('is-scrolling');
+            window.clearTimeout(scrollEndTimer);
+            scrollEndTimer = window.setTimeout(() => {
+                document.documentElement.classList.remove('is-scrolling');
+            }, 150);
+        };
 
         const onScroll = () => {
+            markScrolling();
             if (ticking) return;
             ticking = true;
             requestAnimationFrame(() => {
-                this.navbar.classList.toggle('navbar-scrolled', window.scrollY > 50);
+                if (this.navbar) {
+                    this.navbar.classList.toggle('navbar-scrolled', window.scrollY > 50);
+                }
+                this.syncActiveNavFromScroll();
                 ticking = false;
             });
         };
 
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
+
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+            anchor.addEventListener('click', () => {
+                window.setTimeout(() => this.syncActiveNavFromScroll(), 480);
+            });
+        });
+    }
+
+    setupCaseMetricMotion() {
+        const grid = document.querySelector('#case-study .case-metric-grid.reveal-stagger');
+        if (!grid) return;
+
+        const cards = [...grid.querySelectorAll('.case-metric.reveal')];
+        if (!cards.length) return;
+
+        const run = () => {
+            cards.forEach((card) => card.classList.remove('metric-enter', 'active'));
+            void grid.offsetWidth;
+            cards.forEach((card, index) => {
+                window.setTimeout(() => {
+                    card.classList.add('metric-enter', 'active');
+                }, index * 100);
+            });
+        };
+
+        if (this.motionTier === 'none' || this.prefersReducedMotion) {
+            cards.forEach((card) => card.classList.add('metric-enter', 'active'));
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            (entries, obs) => {
+                if (!entries.some((e) => e.isIntersecting)) return;
+                run();
+                obs.disconnect();
+            },
+            { threshold: 0.15, rootMargin: '0px 0px -8% 0px' }
+        );
+
+        observer.observe(grid);
+    }
+
+    getHeroRoleDisplayLines(role) {
+        const sep = ' · ';
+        const idx = role.indexOf(sep);
+        if (idx === -1) return [role];
+
+        const lines = [role.slice(0, idx + 1)];
+        role.slice(idx + sep.length).trim().split(/\s+/).forEach((word) => {
+            if (word) lines.push(word);
+        });
+        return lines;
+    }
+
+    getHeroPanelCodeSegments() {
+        return [
+            { text: 'const ', class: 'tok-kw' },
+            { text: 'developer', class: 'tok-prop' },
+            { text: ' = {\n  ', class: 'tok-punct' },
+            { text: 'name', class: 'tok-prop' },
+            { text: ': ', class: 'tok-punct' },
+            { text: '"Gabriel Lazzara"', class: 'tok-str' },
+            { text: ',\n  ', class: 'tok-punct' },
+            { text: 'location', class: 'tok-prop' },
+            { text: ': ', class: 'tok-punct' },
+            { text: '"Palermo, IT"', class: 'tok-str' },
+            { text: ',\n  ', class: 'tok-punct' },
+            { text: 'stack', class: 'tok-prop' },
+            { text: ': [', class: 'tok-punct' },
+            { text: '"React"', class: 'tok-str' },
+            { text: ', ', class: 'tok-punct' },
+            { text: '"Python"', class: 'tok-str' },
+            { text: ', ', class: 'tok-punct' },
+            { text: '"PHP"', class: 'tok-str' },
+            { text: '],\n  ', class: 'tok-punct' },
+            { text: 'focus', class: 'tok-prop' },
+            { text: ': [', class: 'tok-punct' },
+            { text: '"SEO"', class: 'tok-str' },
+            { text: ', ', class: 'tok-punct' },
+            { text: '"UX"', class: 'tok-str' },
+            { text: ', ', class: 'tok-punct' },
+            { text: '"deploy"', class: 'tok-str' },
+            { text: ']\n};\n', class: 'tok-punct' },
+            { text: 'build', class: 'tok-kw' },
+            { text: '(developer); ', class: 'tok-punct' },
+            { text: '// ready ✓', class: 'tok-comment' },
+        ];
+    }
+
+    typewriterDelay(ms) {
+        return new Promise((resolve) => {
+            window.setTimeout(resolve, ms);
+        });
+    }
+
+    typewriterPauseFor(char) {
+        if (char === '\n') return 220;
+        if (char === ';' || char === '}') return 160;
+        if (char === '"' || char === '=' || char === ':') return 70;
+        if (char === ' ' || char === ',') return 28;
+        return 34 + Math.floor(Math.random() * 18);
+    }
+
+    heroHeadingPauseFor(char) {
+        if (char === ' ') return 32;
+        if (char === '·') return 140;
+        if (char === '-') return 90;
+        return 44 + Math.floor(Math.random() * 24);
+    }
+
+    getHeroHeadingLines(lang) {
+        const role = translations[lang]?.hero_role || '';
+        const roleLines = this.getHeroRoleDisplayLines(role);
+        return [
+            { text: 'Gabriel', className: 'hero-heading__line hero-heading__line--name' },
+            { text: 'Lazzara', className: 'hero-heading__line hero-heading__line--name' },
+            ...roleLines.map((line) => ({
+                text: line,
+                className: 'hero-heading__line hero-heading__line--role',
+            })),
+        ];
+    }
+
+    renderTypewriterInstant({ codeEl, cursorEl, rootEl, segments }) {
+        if (!codeEl) return;
+        codeEl.innerHTML = segments
+            .map((seg) => `<span class="${seg.class}">${seg.text}</span>`)
+            .join('');
+        rootEl?.classList.add('is-done');
+        if (cursorEl) {
+            cursorEl.textContent = '';
+            cursorEl.classList.add('is-on');
+        }
+    }
+
+    async playTypewriter({ codeEl, cursorEl, rootEl, segments, isStale, startDelay = 0 }) {
+        if (!codeEl) return;
+
+        if (startDelay > 0) {
+            await this.typewriterDelay(startDelay);
+            if (isStale?.()) return;
+        }
+
+        if (cursorEl) {
+            cursorEl.remove();
+            cursorEl.textContent = '';
+            cursorEl.classList.add('is-on');
+        }
+        codeEl.innerHTML = '';
+        rootEl?.classList.remove('is-done');
+
+        for (const segment of segments) {
+            const span = document.createElement('span');
+            span.className = segment.class;
+            codeEl.appendChild(span);
+
+            for (const char of segment.text) {
+                if (isStale?.()) return;
+                span.textContent += char;
+                await this.typewriterDelay(this.typewriterPauseFor(char));
+            }
+        }
+
+        if (isStale?.()) return;
+
+        rootEl?.classList.add('is-done');
+        if (cursorEl) {
+            cursorEl.textContent = '';
+            cursorEl.classList.add('is-on');
+        }
+    }
+
+    setupHeroPanelTypewriter() {
+        this.heroHeadingLines = document.getElementById('hero-heading-lines');
+        this.heroHeadingRoot = document.getElementById('hero-heading');
+        this.heroHeadingCursor = document.getElementById('hero-heading-cursor');
+        this.heroHeadingGen = 0;
+        this.heroPanelCode = document.getElementById('hero-panel-code');
+        this.heroPanelRoot = document.getElementById('hero-panel-typewriter');
+        this.heroPanelCursor = document.getElementById('hero-panel-cursor');
+        this.heroPanelGen = 0;
+        this.heroPanelHasPlayed = false;
+        const motionOk = !this.prefersReducedMotion && this.motionTier !== 'none';
+        this.heroHeadingEnabled = Boolean(this.heroHeadingLines && motionOk);
+        this.heroPanelEnabled = Boolean(
+            this.heroPanelCode
+            && motionOk
+            && window.matchMedia('(min-width: 1024px)').matches
+        );
+    }
+
+    parkHeroHeadingCursor() {
+        if (!this.heroHeadingCursor || !this.heroHeadingRoot) return;
+        this.heroHeadingCursor.classList.remove('is-on');
+        this.heroHeadingRoot.appendChild(this.heroHeadingCursor);
+    }
+
+    renderHeroHeadingInstant(lang) {
+        if (!this.heroHeadingLines) return;
+        const lines = this.getHeroHeadingLines(lang);
+        this.heroHeadingLines.innerHTML = lines
+            .map((line) => `<span class="${line.className}"><span class="hero-heading__text">${line.text}</span></span>`)
+            .join('');
+        this.heroHeadingRoot?.classList.add('is-done');
+        this.parkHeroHeadingCursor();
+    }
+
+    async playHeroHeadingTypewriter(lang) {
+        if (!this.heroHeadingLines) return;
+
+        const role = translations[lang]?.hero_role || '';
+        const heading = this.heroHeadingRoot;
+        const cursor = this.heroHeadingCursor;
+        const lines = this.getHeroHeadingLines(lang);
+        const gen = ++this.heroHeadingGen;
+
+        this.heroHeadingLines.innerHTML = '';
+        heading?.classList.remove('is-done');
+        this.parkHeroHeadingCursor();
+        if (cursor) {
+            cursor.classList.add('is-on');
+        }
+
+        for (let i = 0; i < lines.length; i += 1) {
+            if (gen !== this.heroHeadingGen) return;
+
+            const line = lines[i];
+            const lineEl = document.createElement('span');
+            lineEl.className = line.className;
+            const textEl = document.createElement('span');
+            textEl.className = 'hero-heading__text';
+            lineEl.appendChild(textEl);
+            if (cursor) {
+                lineEl.appendChild(cursor);
+            }
+            this.heroHeadingLines.appendChild(lineEl);
+
+            for (const char of line.text) {
+                if (gen !== this.heroHeadingGen) return;
+                textEl.textContent += char;
+                await this.typewriterDelay(this.heroHeadingPauseFor(char));
+            }
+
+            if (i < lines.length - 1) {
+                await this.typewriterDelay(200);
+            }
+        }
+
+        if (gen !== this.heroHeadingGen) return;
+
+        heading?.classList.add('is-done');
+        this.parkHeroHeadingCursor();
+        if (heading) {
+            heading.setAttribute('aria-label', `Gabriel Lazzara — ${role}`);
+        }
+    }
+
+    updateHeroHeading(lang) {
+        const role = translations[lang]?.hero_role || '';
+        const heading = document.getElementById('hero-heading');
+        if (heading) {
+            heading.setAttribute('aria-label', `Gabriel Lazzara — ${role}`);
+        }
+
+        if (!this.heroHeadingLines) return;
+
+        if (!this.heroHeadingEnabled) {
+            this.renderHeroHeadingInstant(lang);
+        } else {
+            this.playHeroHeadingTypewriter(lang);
+        }
+
+        if (!this.heroPanelCode) return;
+
+        if (!this.heroPanelEnabled) {
+            this.renderHeroPanelInstant();
+            return;
+        }
+
+        if (!this.heroPanelHasPlayed) {
+            this.heroPanelHasPlayed = true;
+            this.playHeroPanelCode();
+        } else {
+            this.renderHeroPanelInstant();
+        }
+    }
+
+    renderHeroPanelInstant() {
+        this.renderTypewriterInstant({
+            codeEl: this.heroPanelCode,
+            cursorEl: this.heroPanelCursor,
+            rootEl: this.heroPanelRoot,
+            segments: this.getHeroPanelCodeSegments(),
+        });
+    }
+
+    async playHeroPanelCode() {
+        if (!this.heroPanelEnabled) {
+            this.renderHeroPanelInstant();
+            return;
+        }
+
+        const gen = ++this.heroPanelGen;
+        await this.playTypewriter({
+            codeEl: this.heroPanelCode,
+            cursorEl: this.heroPanelCursor,
+            rootEl: this.heroPanelRoot,
+            segments: this.getHeroPanelCodeSegments(),
+            isStale: () => gen !== this.heroPanelGen,
+            startDelay: 520,
+        });
     }
 
     setupPressFeedback() {
-        if (this.prefersReducedMotion) return;
-
         const pressables = document.querySelectorAll(
-            '.motion-interactive, .theme-toggle, .lang-toggle'
+            '.motion-interactive, .theme-toggle, .lang-toggle, .btn-primary, .btn-ghost, .filter-btn, .nav-link, .mobile-link, .footer-link'
         );
 
         pressables.forEach((el) => {
-            const onDown = () => el.classList.add('is-pressed');
+            if (el.dataset.pressBound === '1') return;
+            el.dataset.pressBound = '1';
+
+            const onDown = (e) => {
+                if (e.pointerType === 'mouse' && e.button !== 0) return;
+                el.classList.add('is-pressed');
+            };
             const onUp = () => el.classList.remove('is-pressed');
             el.addEventListener('pointerdown', onDown);
             el.addEventListener('pointerup', onUp);
             el.addEventListener('pointerleave', onUp);
             el.addEventListener('pointercancel', onUp);
-        });
-    }
-
-    setupFaqAnimations() {
-        document.querySelectorAll('.faq-item').forEach((item) => {
-            item.addEventListener('toggle', () => {
-                if (!item.open || this.prefersReducedMotion) return;
-                const body = item.querySelector('p, .faq-answer');
-                if (!body) return;
-                body.classList.remove('faq-replay');
-                void body.offsetWidth;
-                body.classList.add('faq-replay');
-            });
         });
     }
 
