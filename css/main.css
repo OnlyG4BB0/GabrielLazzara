@@ -62,11 +62,14 @@
     --leading-heading: 1.22;
     --leading-body: 1.68;
 
-    --space-section: clamp(4rem, 9vw, 6.5rem);
-    --space-block: clamp(1rem, 2.5vw, 1.5rem);
-    --container-pad: clamp(1rem, 4vw, 2rem);
+    --space-section: clamp(3rem, 8vw, 6.5rem);
+    --space-block: clamp(0.875rem, 2.5vw, 1.5rem);
+    --container-pad: clamp(1rem, 4.5vw, 2rem);
     --container-max: 72rem;
-    --header-h: 4.25rem;
+    --header-h: clamp(3.5rem, 10vw, 4.25rem);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
 
     /* Motion tokens */
     --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
@@ -218,8 +221,8 @@ body,
     max-width: var(--container-max);
     margin-left: auto;
     margin-right: auto;
-    padding-left: var(--container-pad);
-    padding-right: var(--container-pad);
+    padding-left: max(var(--container-pad), var(--safe-left));
+    padding-right: max(var(--container-pad), var(--safe-right));
 }
 
 .site-main {
@@ -814,6 +817,8 @@ html.page-ready [data-theme="light"] .hero-status-led {
         max-width: none;
         margin-left: 0;
         margin-right: 0;
+        min-width: 0;
+        padding-right: clamp(1rem, 2.5vw, 2rem);
     }
 }
 
@@ -830,16 +835,40 @@ html.page-ready [data-theme="light"] .hero-status-led {
     .hero-grid {
         justify-items: stretch;
         align-items: center;
+        column-gap: clamp(3rem, 5vw, 6rem);
     }
 
     .hero-visual-col {
-        display: block !important;
         width: 100%;
         min-width: 0;
+        padding-left: clamp(1.25rem, 3vw, 2.5rem);
     }
 
     .hero-visual-card {
         width: 100%;
+        max-width: 32rem;
+        margin-left: auto;
+    }
+}
+
+/* Hero visual: sotto il testo su mobile/tablet, colonna a destra su desktop */
+.hero-visual-col {
+    display: block;
+    width: 100%;
+    max-width: min(100%, 28rem);
+    margin: clamp(1.5rem, 4vw, 2.5rem) auto 0;
+}
+
+@media (min-width: 640px) {
+    .hero-visual-col {
+        max-width: min(100%, 32rem);
+    }
+}
+
+@media (min-width: 1024px) {
+    .hero-visual-col {
+        margin: 0;
+        max-width: none;
     }
 }
 
@@ -876,6 +905,13 @@ html.page-ready [data-theme="light"] .hero-status-led {
 .hero-heading__line {
     display: block;
     white-space: nowrap;
+}
+
+@media (max-width: 1023px) {
+    .hero-heading__line {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
 }
 
 .hero-heading__line .hero-heading__cursor {
@@ -4038,6 +4074,332 @@ article p.text-gray-400 {
     .marquee-track { animation: none; }
     .hero-visual-card { animation: none; }
     .nav-link.active-link { animation: none; }
+}
+
+/* ========== Responsive — tutti i dispositivi ========== */
+
+/* Telefoni piccoli (≤379px) */
+@media (max-width: 379px) {
+    :root {
+        --text-display: clamp(1.625rem, 9vw, 2rem);
+        --text-h2: clamp(1.5rem, 7vw, 1.875rem);
+    }
+
+    .hero-stats {
+        grid-template-columns: 1fr;
+        max-width: 14rem;
+    }
+
+    .hero-stat {
+        padding: 0.75rem 1rem;
+    }
+
+    .filter-btn {
+        flex: 1 1 calc(50% - 0.25rem);
+        min-width: 0;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        font-size: 0.8125rem;
+    }
+
+    .project-filters {
+        gap: 0.375rem;
+    }
+
+    .packages-unified {
+        padding: 1.25rem !important;
+    }
+
+    .contact-panel {
+        padding: 1.25rem !important;
+        border-radius: 1.75rem !important;
+    }
+
+    .cta-band {
+        padding: 1.5rem 1rem !important;
+    }
+}
+
+/* Telefoni (380px –639px) */
+@media (min-width: 380px) and (max-width: 639px) {
+    .hero-stats {
+        gap: 0.5rem;
+    }
+
+    .bento-span-2 {
+        grid-column: span 1;
+    }
+}
+
+/* Tablet portrait / phablet (640px –767px) */
+@media (min-width: 640px) and (max-width: 767px) {
+    .hero-grid {
+        gap: 2rem;
+    }
+
+    .process-grid {
+        gap: 1rem;
+    }
+
+    .skills-grid {
+        gap: 1rem;
+    }
+}
+
+/* Tablet landscape (768px –1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .hero-grid {
+        gap: 2.5rem;
+    }
+
+    .hero-visual-col {
+        max-width: min(100%, 36rem);
+    }
+
+    #about .grid {
+        gap: 2.5rem;
+    }
+
+    .projects-bento {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .projects-bento .project-card--featured {
+        grid-column: 1 / -1;
+    }
+
+    .case-study-grid {
+        gap: 2rem;
+    }
+
+    .packages-unified__includes {
+        columns: 1;
+    }
+}
+
+/* Desktop compatto (1024px –1279px) */
+@media (min-width: 1024px) and (max-width: 1279px) {
+    .site-main > section:not(#hero):not(#about):not(#case-study) {
+        contain-intrinsic-size: auto 480px;
+    }
+}
+
+/* Tipografia e spaziatura sezioni */
+.site-main > section h2.font-display {
+    font-size: var(--text-h2);
+    padding-inline: clamp(0rem, 2vw, 0.5rem);
+}
+
+.site-main > section .section-lead {
+    padding-inline: clamp(0rem, 3vw, 1rem);
+    font-size: clamp(0.9375rem, 2.2vw, 1.0625rem);
+}
+
+/* Hero availability badge */
+.hero-availability {
+    max-width: 100%;
+}
+
+.hero-availability span:last-child {
+    overflow-wrap: anywhere;
+}
+
+/* Griglie utility (Tailwind fallback robusto) */
+.process-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+}
+
+@media (min-width: 640px) {
+    .process-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .process-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .skills-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* About: card e testo */
+#about .grid > .glass-card {
+    padding: clamp(1.25rem, 4vw, 3rem) !important;
+}
+
+#about .grid > .glass-card p {
+    font-size: clamp(1rem, 2.5vw, 1.125rem);
+}
+
+#about .grid > .glass-card p .font-medium {
+    overflow-wrap: anywhere;
+}
+
+/* Progetti */
+.project-card {
+    min-width: 0;
+}
+
+.project-card h3 {
+    font-size: clamp(1.125rem, 3vw, 1.375rem);
+    overflow-wrap: anywhere;
+}
+
+.project-card .project-card-actions {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.project-card .project-card-actions a {
+    flex: 1 1 auto;
+    min-width: min(100%, 8rem);
+}
+
+/* Pacchetti / scope */
+.packages-unified {
+    padding: clamp(1.25rem, 4vw, 2.5rem) !important;
+}
+
+.packages-unified__narrative {
+    text-align: left;
+    font-size: clamp(0.875rem, 2.4vw, 1rem);
+}
+
+@media (min-width: 640px) {
+    .packages-unified__narrative {
+        text-align: center;
+    }
+}
+
+/* Contatti */
+.contact-panel {
+    padding: clamp(1.5rem, 5vw, 4rem) !important;
+    border-radius: clamp(1.5rem, 5vw, 3rem) !important;
+    margin-inline: auto;
+    width: 100%;
+}
+
+#contact-form input,
+#contact-form textarea {
+    font-size: 16px; /* evita zoom iOS su focus */
+}
+
+#contact .flex-col.sm\:flex-row a {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    text-align: center;
+    justify-content: center;
+}
+
+#contact-form button[type="submit"] {
+    width: 100%;
+    max-width: 100%;
+}
+
+@media (min-width: 768px) {
+    #contact-form button[type="submit"] {
+        width: auto;
+        min-width: 16rem;
+    }
+}
+
+/* CTA band */
+.cta-band {
+    padding: clamp(1.75rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem) !important;
+}
+
+.cta-band .btn-primary {
+    width: 100%;
+    max-width: 20rem;
+}
+
+/* Footer e safe area */
+.site-footer {
+    padding-bottom: calc(2rem + var(--safe-bottom));
+}
+
+footer.site-footer a.rounded-full {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+}
+
+/* Navbar mobile */
+#mobile-menu-btn {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding: 0.5rem;
+}
+
+.mobile-menu-panel a,
+#mobile-menu .mobile-link {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Marquee su schermi stretti */
+@media (max-width: 639px) {
+    .marquee-item {
+        font-size: 0.8125rem;
+        padding: 0.35rem 0.75rem;
+    }
+}
+
+/* FAQ */
+.faq-item summary {
+    padding: 1rem 1.125rem;
+    font-size: clamp(0.9375rem, 2.5vw, 1.0625rem);
+}
+
+/* Overflow globale testo lungo */
+.site-main img,
+.site-main video,
+.site-main svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.site-main pre,
+.site-main code {
+    max-width: 100%;
+}
+
+.hero-code {
+    font-size: clamp(0.6875rem, 2.8vw, 0.75rem);
+}
+
+/* Landscape phone */
+@media (max-height: 520px) and (orientation: landscape) {
+    .hero-section {
+        min-height: 0 !important;
+        padding-top: 1rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .hero-grid {
+        gap: 1.25rem;
+    }
+
+    .hero-visual-col {
+        margin-top: 1rem;
+    }
 }
 
 @media print {
