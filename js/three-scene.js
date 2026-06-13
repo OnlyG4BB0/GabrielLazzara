@@ -1,22 +1,11 @@
 import * as THREE from 'three';
 
 /*
- * Site-wide WebGL ambience — performance-first.
- *
- * Tiered quality:
- *   minimal  — mobile / weak GPU: shader aurora only, half-res, ~24fps
- *   balanced — tablets / motion-lite: aurora + few crystals, ~30fps
- *   full     — desktop: aurora + crystals + light particles, adaptive fps
- *
- * Stars are baked into the shader (no Points geometry on minimal/balanced).
+ * Site-wide WebGL ambience — performance-first, responsive.
+ * Aurora shader (always) + low-poly crystals (all tiers, count scales with viewport).
  */
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const isMobile = window.matchMedia('(max-width: 768px)').matches;
-const isCoarse = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-const isLiteMotion = () => document.documentElement.classList.contains('motion-lite');
-const lowMemory = typeof navigator.deviceMemory === 'number' && navigator.deviceMemory < 4;
-const lowCpu = typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency <= 4;
 
 function supportsWebGL() {
     try {
@@ -30,18 +19,41 @@ function supportsWebGL() {
     }
 }
 
+function getViewport() {
+    const vv = window.visualViewport;
+    return {
+        w: Math.round(vv?.width ?? window.innerWidth),
+        h: Math.round(vv?.height ?? window.innerHeight),
+    };
+}
+
+function isNarrowViewport() {
+    return getViewport().w <= 768;
+}
+
+function isCoarsePointer() {
+    return window.matchMedia('(hover: none), (pointer: coarse)').matches;
+}
+
 function getPerfTier() {
-    if (isMobile || lowMemory || lowCpu) return 'minimal';
-    if (isCoarse || isLiteMotion()) return 'balanced';
+    const { w } = getViewport();
+    const lowMemory = typeof navigator.deviceMemory === 'number' && navigator.deviceMemory < 4;
+    const lowCpu = typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency <= 4;
+    if (w <= 768) return 'minimal';
+    if (lowMemory || lowCpu || isCoarsePointer()) return 'balanced';
+    if (document.documentElement.classList.contains('motion-lite')) return 'balanced';
     return 'full';
 }
 
-const TIER = getPerfTier();
 const TIER_CFG = {
-    minimal: { renderScale: 0.42, maxDpr: 1, targetFps: 24, crystals: 0, particles: 0, shaderOctaves: 2 },
-    balanced: { renderScale: 0.58, maxDpr: 1.15, targetFps: 30, crystals: 3, particles: 0, shaderOctaves: 2 },
-    full: { renderScale: 0.72, maxDpr: 1.4, targetFps: 50, crystals: 5, particles: 280, shaderOctaves: 3 },
-}[TIER];
+    minimal: { renderScale: 0.55, maxDpr: 1.1, targetFps: 28, crystals: 4, particles: 0, shaderOctaves: 2 },
+    balanced: { renderScale: 0.65, maxDpr: 1.25, targetFps: 36, crystals: 6, particles: 120, shaderOctaves: 2 },
+    full: { renderScale: 0.78, maxDpr: 1.5, targetFps: 50, crystals: 8, particles: 320, shaderOctaves: 3 },
+};
+
+function getTierConfig() {
+    return TIER_CFG[getPerfTier()];
+}
 
 /* ---- palettes -------------------------------------------------------- */
 const PALETTES = {
@@ -50,7 +62,7 @@ const PALETTES = {
         aurB: new THREE.Color('#241753'),
         aurC: new THREE.Color('#7c3aed'),
         crystals: ['#c084fc', '#8b5cf6', '#e879f9', '#6366f1'],
-        crystalOpacity: 0.85,
+        crystalOpacity: 0.88,
         particle: new THREE.Color('#c4b5fd'),
         particleOpacity: 0.55,
     },
@@ -59,9 +71,9 @@ const PALETTES = {
         aurB: new THREE.Color('#dcd0f4'),
         aurC: new THREE.Color('#b69bf0'),
         crystals: ['#7c3aed', '#6d28d9', '#9333ea', '#4f46e5'],
-        crystalOpacity: 0.45,
+        crystalOpacity: 0.5,
         particle: new THREE.Color('#7c3aed'),
-        particleOpacity: 0.35,
+        particleOpacity: 0.38,
     },
 };
 
@@ -74,7 +86,7 @@ const clock = new THREE.Clock();
 let running = false;
 let rafId = 0;
 let tickFn = null;
-const minFrameMs = 1000 / TIER_CFG.targetFps;
+let minFrameMs = 1000 / 36;
 let lastFrameTs = 0;
 
 function frame(ts) {
@@ -99,17 +111,18 @@ document.addEventListener('visibilitychange', () => {
     if (document.hidden) stop(); else start();
 });
 
-/* ---- input (throttled) ----------------------------------------------- */
+/* ---- input ----------------------------------------------------------- */
 const input = { px: 0, py: 0, tx: 0, ty: 0, scroll: 0 };
 let lastPointerTs = 0;
 
-if (!isCoarse) {
+if (!isCoarsePointer()) {
     window.addEventListener('pointermove', (e) => {
         const now = performance.now();
         if (now - lastPointerTs < 32) return;
         lastPointerTs = now;
-        input.tx = (e.clientX / window.innerWidth - 0.5) * 2;
-        input.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+        const { w, h } = getViewport();
+        input.tx = (e.clientX / w - 0.5) * 2;
+        input.ty = (e.clientY / h - 0.5) * 2;
     }, { passive: true });
 }
 
@@ -128,18 +141,10 @@ function isScrolling() {
     return root.classList.contains('is-scrolling') || root.classList.contains('is-smooth-scrolling');
 }
 
-/* ---- GLSL (lighter: fewer octaves, stars in shader) ------------------ */
-const OCTAVES = TIER_CFG.shaderOctaves;
-const AURORA_VERT = /* glsl */`
-    varying vec2 vUv;
-    void main() {
-        vUv = uv;
-        gl_Position = vec4(position.xy, 0.0, 1.0);
-    }
-`;
-
-const AURORA_FRAG = /* glsl */`
-    precision ${TIER === 'full' ? 'highp' : 'mediump'} float;
+/* ---- GLSL ------------------------------------------------------------ */
+function buildAuroraFrag(octaves) {
+    return /* glsl */`
+    precision mediump float;
     varying vec2 vUv;
     uniform float uTime;
     uniform vec2  uMouse;
@@ -197,33 +202,51 @@ const AURORA_FRAG = /* glsl */`
     }
     float fbm(vec3 p){
         float v=0.0,a=0.5;
-        for(int i=0;i<${OCTAVES};i++){v+=a*snoise(p);p*=2.02;a*=0.5;}
+        for(int i=0;i<${octaves};i++){v+=a*snoise(p);p*=2.02;a*=0.5;}
         return v;
     }
     float stars(vec2 uv){
-        vec2 gv=fract(uv*vec2(120.0,90.0))-0.5;
-        vec2 id=floor(uv*vec2(120.0,90.0));
+        vec2 id=floor(uv*vec2(100.0,75.0));
         float n=fract(sin(dot(id,vec2(12.9898,78.233)))*43758.5453);
-        float sz=smoothstep(0.5,0.0,length(gv))*step(0.992,n);
-        return sz;
+        vec2 gv=fract(uv*vec2(100.0,75.0))-0.5;
+        return smoothstep(0.45,0.0,length(gv))*step(0.985,n);
+    }
+    float shard(vec2 uv,vec2 c,float r,float a){
+        vec2 d=uv-c;
+        float ca=cos(a),sa=sin(a);
+        d=mat2(ca,-sa,sa,ca)*d;
+        return smoothstep(r,r*0.72,max(abs(d.x)*0.65+abs(d.y),abs(d.x)*0.2+abs(d.y)*1.1));
     }
     void main(){
         vec2 uv=vUv;
         vec2 p=(uv-0.5);
-        p.x*=uAspect.x/uAspect.y;
+        p.x*=uAspect.x/max(uAspect.y,0.001);
         float t=uTime*0.04;
-        vec3 q=vec3(p*1.35,t+uScroll*0.5);
-        float n=fbm(q+vec3(uMouse*0.35,0.0));
+        vec3 q=vec3(p*1.3,t+uScroll*0.45);
+        float n=fbm(q+vec3(uMouse*0.3,0.0));
         n=n*0.5+0.5;
         float band=smoothstep(0.2,0.82,n);
         vec3 col=mix(uColA,uColB,band);
-        col=mix(col,uColC,pow(n,2.8)*0.55);
-        col+=uColC*stars(uv+uTime*0.002)*0.35;
+        col=mix(col,uColC,pow(n,2.6)*0.55);
+        col+=uColC*stars(uv+uTime*0.0015)*0.4;
+        float s1=shard(p,vec2(0.35*sin(t*0.7),0.28*cos(t*0.5)),0.14,t*0.3);
+        float s2=shard(p,vec2(-0.42*cos(t*0.55),0.22*sin(t*0.65)),0.11,t*0.5+1.0);
+        float s3=shard(p,vec2(0.18*sin(t*0.4+2.0),-0.38*cos(t*0.45)),0.1,t*0.25+2.5);
+        col+=uColC*(s1+s2+s3)*0.22;
         float d=distance(uv,uMouse*0.5+0.5);
-        col+=uColC*smoothstep(0.5,0.0,d)*0.07;
-        float vig=smoothstep(1.2,0.3,length(p));
-        col*=mix(0.65,1.0,vig);
+        col+=uColC*smoothstep(0.5,0.0,d)*0.06;
+        float vig=smoothstep(1.15,0.35,length(p));
+        col*=mix(0.68,1.0,vig);
         gl_FragColor=vec4(col,1.0);
+    }
+`;
+}
+
+const AURORA_VERT = /* glsl */`
+    varying vec2 vUv;
+    void main() {
+        vUv = uv;
+        gl_Position = vec4(position.xy, 0.0, 1.0);
     }
 `;
 
@@ -234,7 +257,10 @@ function build() {
     canvas.setAttribute('aria-hidden', 'true');
     document.body.prepend(canvas);
 
-    const cfg = TIER_CFG;
+    let tier = getPerfTier();
+    let cfg = TIER_CFG[tier];
+    minFrameMs = 1000 / cfg.targetFps;
+
     let dpr = Math.min(window.devicePixelRatio || 1, cfg.maxDpr);
     let renderScale = cfg.renderScale;
 
@@ -242,10 +268,11 @@ function build() {
         canvas,
         antialias: false,
         alpha: false,
-        powerPreference: isMobile ? 'low-power' : 'high-performance',
+        powerPreference: isNarrowViewport() ? 'low-power' : 'high-performance',
         stencil: false,
         depth: true,
     });
+    renderer.autoClear = false;
     renderer.setPixelRatio(dpr);
 
     const auroraScene = new THREE.Scene();
@@ -259,89 +286,119 @@ function build() {
         uColB: { value: PALETTES.dark.aurB.clone() },
         uColC: { value: PALETTES.dark.aurC.clone() },
     };
-    auroraScene.add(new THREE.Mesh(
-        new THREE.PlaneGeometry(2, 2),
-        new THREE.ShaderMaterial({
-            vertexShader: AURORA_VERT,
-            fragmentShader: AURORA_FRAG,
-            uniforms: auroraUniforms,
-            depthTest: false,
-            depthWrite: false,
-        })
-    ));
+    const auroraMat = new THREE.ShaderMaterial({
+        vertexShader: AURORA_VERT,
+        fragmentShader: buildAuroraFrag(cfg.shaderOctaves),
+        uniforms: auroraUniforms,
+        depthTest: false,
+        depthWrite: false,
+    });
+    auroraScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), auroraMat));
 
-    const hasOverlay = cfg.crystals > 0 || cfg.particles > 0;
-    let scene = null;
-    let camera = null;
-    let world = null;
-    let crystals = [];
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(58, 1, 0.1, 80);
+    camera.position.set(0, 0, 12);
+    const world = new THREE.Group();
+    scene.add(world);
+
+    const geos = [
+        new THREE.IcosahedronGeometry(1, 0),
+        new THREE.OctahedronGeometry(1, 0),
+        new THREE.TetrahedronGeometry(1.15, 0),
+    ];
+    const crystals = [];
     let particles = null;
     let pMat = null;
 
-    if (hasOverlay) {
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
-        camera.position.set(0, 0, 14);
-        world = new THREE.Group();
-        scene.add(world);
-
-        if (cfg.crystals > 0) {
-            const geos = [
-                new THREE.IcosahedronGeometry(1, 0),
-                new THREE.OctahedronGeometry(1, 0),
-                new THREE.TetrahedronGeometry(1.2, 0),
-            ];
-            for (let i = 0; i < cfg.crystals; i += 1) {
-                const mesh = new THREE.Mesh(
-                    geos[i % geos.length],
-                    new THREE.MeshBasicMaterial({
-                        color: 0xffffff,
-                        transparent: true,
-                        opacity: 0.85,
-                        depthWrite: false,
-                    })
-                );
-                const radius = 5.5 + Math.random() * 6;
-                const angle = Math.random() * Math.PI * 2;
-                mesh.position.set(
-                    Math.cos(angle) * radius,
-                    (Math.random() - 0.5) * 10,
-                    -3 - Math.random() * 12
-                );
-                mesh.scale.setScalar(0.55 + Math.random() * 1.1);
-                mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
-                mesh.userData = {
-                    rs: (Math.random() - 0.5) * 0.18,
-                    phase: Math.random() * Math.PI * 2,
-                    amp: 0.25 + Math.random() * 0.35,
-                    baseY: mesh.position.y,
-                };
-                world.add(mesh);
-                crystals.push(mesh);
-            }
-        }
-
-        if (cfg.particles > 0) {
-            const pos = new Float32Array(cfg.particles * 3);
-            for (let i = 0; i < cfg.particles; i += 1) {
-                pos[i * 3] = (Math.random() - 0.5) * 38;
-                pos[i * 3 + 1] = (Math.random() - 0.5) * 28;
-                pos[i * 3 + 2] = (Math.random() - 0.5) * 24 - 4;
-            }
-            const pGeo = new THREE.BufferGeometry();
-            pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-            pMat = new THREE.PointsMaterial({
+    function spawnCrystal(index, total) {
+        const mesh = new THREE.Mesh(
+            geos[index % geos.length],
+            new THREE.MeshBasicMaterial({
                 color: 0xffffff,
-                size: 0.05,
-                sizeAttenuation: true,
                 transparent: true,
-                opacity: 0.5,
+                opacity: 0.88,
+                depthTest: true,
                 depthWrite: false,
-                blending: THREE.AdditiveBlending,
-            });
-            particles = new THREE.Points(pGeo, pMat);
-            world.add(particles);
+            })
+        );
+        const { w, h } = getViewport();
+        const aspect = w / Math.max(h, 1);
+        const narrow = aspect < 0.85;
+        const radius = narrow ? 3.5 + Math.random() * 4.5 : 4.5 + Math.random() * 6;
+        const angle = (index / total) * Math.PI * 2 + Math.random() * 0.6;
+        mesh.position.set(
+            Math.cos(angle) * radius,
+            (Math.random() - 0.5) * (narrow ? 8 : 11),
+            -2 - Math.random() * 10
+        );
+        mesh.scale.setScalar(narrow ? 0.65 + Math.random() * 0.85 : 0.55 + Math.random() * 1.05);
+        mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+        mesh.userData = {
+            rs: (Math.random() - 0.5) * 0.16,
+            phase: Math.random() * Math.PI * 2,
+            amp: 0.2 + Math.random() * 0.3,
+            baseY: mesh.position.y,
+        };
+        world.add(mesh);
+        crystals.push(mesh);
+        return mesh;
+    }
+
+    function rebuildCrystals(count) {
+        while (crystals.length) {
+            const m = crystals.pop();
+            world.remove(m);
+            m.geometry.dispose();
+            m.material.dispose();
         }
+        for (let i = 0; i < count; i += 1) spawnCrystal(i, count);
+        applyTheme();
+    }
+
+    function rebuildParticles(count) {
+        if (particles) {
+            world.remove(particles);
+            particles.geometry.dispose();
+            pMat.dispose();
+            particles = null;
+            pMat = null;
+        }
+        if (count <= 0) return;
+        const pos = new Float32Array(count * 3);
+        for (let i = 0; i < count; i += 1) {
+            pos[i * 3] = (Math.random() - 0.5) * 36;
+            pos[i * 3 + 1] = (Math.random() - 0.5) * 26;
+            pos[i * 3 + 2] = (Math.random() - 0.5) * 22 - 3;
+        }
+        const pGeo = new THREE.BufferGeometry();
+        pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        pMat = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: isNarrowViewport() ? 0.065 : 0.05,
+            sizeAttenuation: true,
+            transparent: true,
+            opacity: 0.5,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+        });
+        particles = new THREE.Points(pGeo, pMat);
+        world.add(particles);
+        applyTheme();
+    }
+
+    function applyTierLayout() {
+        const nextTier = getPerfTier();
+        const nextCfg = TIER_CFG[nextTier];
+        if (nextTier !== tier) {
+            tier = nextTier;
+            cfg = nextCfg;
+            minFrameMs = 1000 / cfg.targetFps;
+            auroraMat.fragmentShader = buildAuroraFrag(cfg.shaderOctaves);
+            auroraMat.needsUpdate = true;
+            document.documentElement.dataset.webglTier = tier;
+        }
+        rebuildCrystals(cfg.crystals);
+        rebuildParticles(cfg.particles);
     }
 
     function applyTheme() {
@@ -358,11 +415,11 @@ function build() {
             pMat.opacity = pal.particleOpacity;
         }
     }
-    applyTheme();
+
+    applyTierLayout();
 
     function resize() {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
+        const { w, h } = getViewport();
         const rw = Math.max(1, Math.floor(w * renderScale));
         const rh = Math.max(1, Math.floor(h * renderScale));
         renderer.setSize(rw, rh, false);
@@ -370,23 +427,29 @@ function build() {
         canvas.style.width = `${w}px`;
         canvas.style.height = `${h}px`;
         auroraUniforms.uAspect.value.set(w, h);
-        if (camera) {
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
-        }
+        camera.aspect = w / Math.max(h, 1);
+        camera.updateProjectionMatrix();
     }
+
     let resizeTimer = 0;
-    window.addEventListener('resize', () => {
+    function onViewportChange() {
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(resize, 150);
-    });
+        resizeTimer = setTimeout(() => {
+            resize();
+            applyTierLayout();
+        }, 120);
+    }
+    window.addEventListener('resize', onViewportChange, { passive: true });
+    window.addEventListener('orientationchange', onViewportChange, { passive: true });
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', onViewportChange, { passive: true });
+    }
+
     resize();
 
     let slowFrames = 0;
-    let frameCounter = 0;
 
     tickFn = (delta, elapsed) => {
-        // Durante lo scroll: zero WebGL → il main thread resta libero per il compositing
         if (isScrolling()) return;
 
         input.px += (input.tx - input.px) * 0.04;
@@ -396,34 +459,29 @@ function build() {
         auroraUniforms.uMouse.value.set(input.px, -input.py);
         auroraUniforms.uScroll.value = input.scroll;
 
-        if (hasOverlay) {
-            camera.position.x += (input.px * 1.6 - camera.position.x) * 0.04;
-            camera.position.y += (-input.py * 1.2 - camera.position.y) * 0.04;
-            camera.lookAt(0, 0, 0);
-            world.position.y = input.scroll * 5;
-            world.rotation.y = elapsed * 0.015;
+        camera.position.x += (input.px * 1.4 - camera.position.x) * 0.04;
+        camera.position.y += (-input.py * 1.0 - camera.position.y) * 0.04;
+        camera.lookAt(0, 0, 0);
+        world.position.y = input.scroll * 4.5;
+        world.rotation.y = elapsed * 0.012;
 
-            for (let i = 0; i < crystals.length; i += 1) {
-                const m = crystals[i];
-                const ud = m.userData;
-                m.rotation.y += ud.rs * delta;
-                m.position.y = ud.baseY + Math.sin(elapsed * 0.45 + ud.phase) * ud.amp;
-            }
-            if (particles) particles.rotation.y = elapsed * 0.012;
+        for (let i = 0; i < crystals.length; i += 1) {
+            const m = crystals[i];
+            const ud = m.userData;
+            m.rotation.y += ud.rs * delta;
+            m.position.y = ud.baseY + Math.sin(elapsed * 0.45 + ud.phase) * ud.amp;
         }
+        if (particles) particles.rotation.y = elapsed * 0.01;
 
-        renderer.clear();
+        renderer.clear(true, true, true);
         renderer.render(auroraScene, auroraCam);
-        if (hasOverlay) {
-            renderer.render(scene, camera);
-        }
+        renderer.render(scene, camera);
 
-        frameCounter += 1;
-        if (delta > 0.032) {
+        if (delta > 0.034) {
             slowFrames += 1;
-            if (slowFrames > 45 && renderScale > 0.35) {
-                renderScale = Math.max(0.35, renderScale - 0.08);
-                if (dpr > 1) dpr = Math.max(1, dpr - 0.15);
+            if (slowFrames > 40 && renderScale > 0.4) {
+                renderScale = Math.max(0.4, renderScale - 0.06);
+                if (dpr > 1) dpr = Math.max(1, dpr - 0.1);
                 slowFrames = 0;
                 resize();
             }
@@ -434,7 +492,7 @@ function build() {
 
     requestAnimationFrame(() => canvas.classList.add('is-ready'));
     document.documentElement.classList.add('webgl-active');
-    document.documentElement.dataset.webglTier = TIER;
+    document.documentElement.dataset.webglTier = tier;
 
     return { applyTheme };
 }
