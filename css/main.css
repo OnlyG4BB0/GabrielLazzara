@@ -224,16 +224,28 @@ body,
     opacity: 0;
     transition: opacity 1.2s ease;
     transform: translateZ(0);
+    contain: strict;
 }
 
 #webgl-bg.is-ready {
     opacity: 1;
 }
 
-/* Quando la scena WebGL è attiva, i blob CSS sfumano via */
+/* WebGL attivo: spegne animazioni CSS di sfondo (meno lavoro GPU) */
 html.webgl-active .site-blobs {
     opacity: 0;
     transition: opacity 0.8s ease;
+}
+
+html.webgl-active .bg-mesh::after,
+html.webgl-active .bg-grid {
+    animation: none !important;
+}
+
+html.webgl-active.motion-enhanced .bg-mesh::after,
+html.webgl-active.motion-enhanced .bg-grid,
+html.webgl-active.motion-enhanced .site-blobs .blob {
+    animation-play-state: paused !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
