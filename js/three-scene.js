@@ -590,6 +590,165 @@ function buildFox() {
     return true;
 }
 
+/* ---- about origami fox (anelli 3D + gemme orbitanti) ----------------- */
+function buildAboutFox() {
+    const host = document.getElementById('about-fox');
+    if (!host) return null;
+
+    const canvas = document.createElement('canvas');
+    canvas.setAttribute('aria-hidden', 'true');
+    host.appendChild(canvas);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+    renderer.setClearColor(0x000000, 0);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 30);
+    camera.position.set(0, 0, 5.8);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+    const key = new THREE.PointLight(0xe879f9, 22, 40);
+    key.position.set(4, 5, 6);
+    const rim = new THREE.PointLight(0x6366f1, 16, 40);
+    rim.position.set(-5, -2, 4);
+    const fill = new THREE.PointLight(0xc084fc, 8, 30);
+    fill.position.set(0, -4, 3);
+    scene.add(key, rim, fill);
+
+    const root = new THREE.Group();
+    scene.add(root);
+
+    root.add(new THREE.Mesh(
+        new THREE.SphereGeometry(1.75, 32, 32),
+        new THREE.MeshBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.14 })
+    ));
+
+    const ringMat = new THREE.MeshStandardMaterial({
+        color: 0xa855f7,
+        emissive: 0x7c3aed,
+        emissiveIntensity: 0.45,
+        metalness: 0.75,
+        roughness: 0.22,
+        transparent: true,
+        opacity: 0.72,
+    });
+    const ringOuter = new THREE.Mesh(new THREE.TorusGeometry(2.4, 0.028, 10, 96), ringMat);
+    const ringInner = new THREE.Mesh(new THREE.TorusGeometry(1.88, 0.02, 8, 72), ringMat.clone());
+    ringInner.material.opacity = 0.55;
+    root.add(ringOuter, ringInner);
+
+    const geo = buildFoxGeometry();
+    const foxGroup = new THREE.Group();
+    const faceMat = new THREE.MeshStandardMaterial({
+        vertexColors: true,
+        flatShading: true,
+        metalness: 0.4,
+        roughness: 0.3,
+        emissive: new THREE.Color('#3b1a6b'),
+        emissiveIntensity: 0.3,
+        side: THREE.DoubleSide,
+    });
+    const fox = new THREE.Mesh(geo, faceMat);
+    fox.scale.setScalar(2.15);
+    foxGroup.add(fox);
+    const edges = new THREE.LineSegments(
+        new THREE.EdgesGeometry(geo, 1),
+        new THREE.LineBasicMaterial({ color: 0xf5d0fe, transparent: true, opacity: 0.4 })
+    );
+    edges.scale.copy(fox.scale);
+    foxGroup.add(edges);
+    root.add(foxGroup);
+
+    const gemGeo = new THREE.OctahedronGeometry(0.12, 0);
+    const gems = [];
+    const gemColors = [0xc084fc, 0xe879f9, 0x6366f1];
+    for (let i = 0; i < 3; i += 1) {
+        const gem = new THREE.Mesh(
+            gemGeo,
+            new THREE.MeshStandardMaterial({
+                color: gemColors[i],
+                emissive: gemColors[i],
+                emissiveIntensity: 0.35,
+                metalness: 0.5,
+                roughness: 0.25,
+                flatShading: true,
+            })
+        );
+        gem.userData = {
+            angle: (i / 3) * Math.PI * 2,
+            radius: 2.15,
+            speed: 0.35 + i * 0.08,
+            y: 0.15 * (i - 1),
+        };
+        root.add(gem);
+        gems.push(gem);
+    }
+
+    function resize() {
+        const w = host.clientWidth || 1;
+        const h = host.clientHeight || 1;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / Math.max(h, 1);
+        camera.updateProjectionMatrix();
+    }
+    let resizeTimer = 0;
+    const onResize = () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 120);
+    };
+    window.addEventListener('resize', onResize, { passive: true });
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', onResize, { passive: true });
+    }
+    resize();
+
+    let inView = false;
+    const io = new IntersectionObserver((entries) => {
+        inView = entries[0]?.isIntersecting ?? false;
+    }, { rootMargin: '80px', threshold: 0.08 });
+    io.observe(host);
+
+    let yawOffset = 0;
+    let pitchOffset = 0;
+    const glow = root.children[0];
+
+    tickFns.push((delta, elapsed) => {
+        if (!inView) return;
+
+        yawOffset += (input.px * 0.45 - yawOffset) * 0.05;
+        pitchOffset += (input.py * 0.25 - pitchOffset) * 0.05;
+
+        ringOuter.rotation.z = elapsed * 0.22;
+        ringOuter.rotation.x = Math.PI * 0.5 + Math.sin(elapsed * 0.3) * 0.08;
+        ringInner.rotation.z = -elapsed * 0.16;
+        ringInner.rotation.x = Math.PI * 0.5 + Math.cos(elapsed * 0.25) * 0.06;
+
+        foxGroup.rotation.y = Math.sin(elapsed * 0.45) * 0.35 + yawOffset;
+        foxGroup.rotation.x = pitchOffset + Math.sin(elapsed * 0.55) * 0.04;
+        foxGroup.position.y = Math.sin(elapsed * 0.65) * 0.06;
+
+        glow.scale.setScalar(1 + Math.sin(elapsed * 0.8) * 0.04);
+
+        for (let i = 0; i < gems.length; i += 1) {
+            const g = gems[i];
+            const ud = g.userData;
+            const a = ud.angle + elapsed * ud.speed;
+            g.position.set(
+                Math.cos(a) * ud.radius,
+                ud.y + Math.sin(elapsed + i) * 0.08,
+                Math.sin(a) * ud.radius * 0.35
+            );
+            g.rotation.y = elapsed * 1.2 + i;
+        }
+
+        root.rotation.y = yawOffset * 0.15;
+        renderer.render(scene, camera);
+    });
+
+    return true;
+}
+
 /* ---- boot ------------------------------------------------------------ */
 function boot() {
     if (prefersReducedMotion || !supportsWebGL()) return;
@@ -604,8 +763,9 @@ function boot() {
 
     try {
         buildFox();
+        buildAboutFox();
     } catch (e) {
-        /* fox optional */
+        /* fox scenes optional */
     }
 
     const mo = new MutationObserver(() => bg.applyTheme());

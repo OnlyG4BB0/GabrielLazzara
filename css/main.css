@@ -3570,10 +3570,55 @@ html[data-lang="it"] .lang-toggle:not(.is-switching) .lang-toggle__pill {
 }
 
 .about-visual-stage {
+    position: relative;
     overflow: visible;
-    /* spazio per il bounding box della rotazione (~√2 × orbit) e badge */
-    padding: clamp(2.5rem, 7vw, 4.25rem);
-    box-sizing: border-box;
+    width: clamp(16rem, 48vw, 22rem);
+    height: clamp(16rem, 48vw, 22rem);
+    margin-inline: auto;
+    padding: clamp(1.25rem, 4vw, 2rem);
+    box-sizing: content-box;
+}
+
+.about-visual-fallback,
+.about-fox-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.about-visual-fallback .about-visual-orbit {
+    width: 100%;
+    height: 100%;
+}
+
+.about-fox-canvas {
+    display: none;
+    z-index: 1;
+}
+
+html.webgl-active .about-fox-canvas {
+    display: block;
+}
+
+html.webgl-active .about-visual-fallback {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+html.webgl-active .about-visual-stage .about-float-badge {
+    z-index: 2;
+    animation: aboutBadgeFloat 4s ease-in-out infinite;
+}
+
+html.webgl-active .about-visual-stage .about-float-badge:last-child {
+    animation-delay: 2s;
+}
+
+@keyframes aboutBadgeFloat {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -6px, 0); }
 }
 
 .about-visual-orbit {

@@ -76,7 +76,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="./css/main.css?v=12">
+    <link rel="stylesheet" href="./css/main.css?v=13">
 
     <script>
         (function () {
@@ -379,39 +379,33 @@
                 
                 <div class="flex justify-center items-center reveal about-visual" style="transition-delay: 200ms;">
                     <div class="about-visual-stage mx-auto">
-                    <div class="about-visual-orbit relative shrink-0">
-                        <div class="ring ring--outer absolute inset-0 border-2 rounded-full"></div>
-                        <div class="ring ring--inner absolute inset-4 border-2 rounded-full"></div>
-                        <div class="absolute inset-8 glass-panel rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(168,85,247,0.2)] animate-float">
-                            <!-- Logo Corretto anche qui -->
-                            <svg class="w-32 h-32 md:w-40 md:h-40 drop-shadow-[0_0_20px_rgba(232,121,249,0.6)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="fox-grad-main-about" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#e879f9" />
-                                        <stop offset="100%" stop-color="#c084fc" />
-                                    </linearGradient>
-                                    <linearGradient id="fox-grad-dark-about" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#c084fc" />
-                                        <stop offset="100%" stop-color="#6366f1" />
-                                    </linearGradient>
-                                </defs>
-                                <polygon points="25,15 40,40 10,45" fill="#d8b4fe" />
-                                <polygon points="75,15 60,40 90,45" fill="#a855f7" />
-                                <polygon points="10,45 40,40 50,85" fill="#9333ea" />
-                                <polygon points="90,45 60,40 50,85" fill="#4f46e5" />
-                                <polygon points="40,40 60,40 50,48" fill="#f0abfc" />
-                                <polygon points="40,40 50,48 50,85" fill="url(#fox-grad-main-about)" />
-                                <polygon points="60,40 50,48 50,85" fill="url(#fox-grad-dark-about)" />
-                                <polygon points="46,77 54,77 50,85" fill="#ffffff" />
-                            </svg>
+                        <!-- Fallback statico (no WebGL / reduced motion) -->
+                        <div class="about-visual-fallback" aria-hidden="true">
+                            <div class="about-visual-orbit relative shrink-0">
+                                <div class="ring ring--outer absolute inset-0 border-2 rounded-full"></div>
+                                <div class="ring ring--inner absolute inset-4 border-2 rounded-full"></div>
+                                <div class="absolute inset-8 glass-panel rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(168,85,247,0.2)]">
+                                    <svg class="w-32 h-32 md:w-40 md:h-40 drop-shadow-[0_0_20px_rgba(232,121,249,0.6)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                        <polygon points="25,15 40,40 10,45" fill="#d8b4fe" />
+                                        <polygon points="75,15 60,40 90,45" fill="#a855f7" />
+                                        <polygon points="10,45 40,40 50,85" fill="#9333ea" />
+                                        <polygon points="90,45 60,40 50,85" fill="#4f46e5" />
+                                        <polygon points="40,40 60,40 50,48" fill="#f0abfc" />
+                                        <polygon points="40,40 50,48 50,85" fill="#c084fc" />
+                                        <polygon points="60,40 50,48 50,85" fill="#6366f1" />
+                                        <polygon points="46,77 54,77 50,85" fill="#ffffff" />
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
-                        <div class="about-float-badge absolute top-6 right-0 sm:top-10 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-lg animate-float" style="animation-delay: 1s;">
-                            <i class="fab fa-react mr-1"></i> Fullstack
+                        <!-- Scena Three.js: volpe origami + anelli 3D -->
+                        <div id="about-fox" class="about-fox-canvas" aria-hidden="true"></div>
+                        <div class="about-float-badge absolute top-6 right-0 sm:top-10 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-lg" style="animation-delay: 1s;">
+                            <i class="fab fa-react mr-1" aria-hidden="true"></i> Fullstack
                         </div>
-                        <div class="about-float-badge absolute bottom-6 left-0 sm:bottom-10 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-lg animate-float" style="animation-delay: 2s;">
-                            <i class="fas fa-magic mr-1"></i> UI/UX
+                        <div class="about-float-badge absolute bottom-6 left-0 sm:bottom-10 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-lg" style="animation-delay: 2s;">
+                            <i class="fas fa-magic mr-1" aria-hidden="true"></i> UI/UX
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
@@ -1025,10 +1019,10 @@
         </div>
     </footer>
 
-    <script src="./js/i18n.js?v=12" defer></script>
-    <script src="./js/seo.js?v=12" defer></script>
-    <script src="./js/main.js?v=12" defer></script>
-    <script type="module" src="./js/three-scene.js?v=12"></script>
+    <script src="./js/i18n.js?v=13" defer></script>
+    <script src="./js/seo.js?v=13" defer></script>
+    <script src="./js/main.js?v=13" defer></script>
+    <script type="module" src="./js/three-scene.js?v=13"></script>
     <!-- pages-deploy -->
 </body>
 </html>
