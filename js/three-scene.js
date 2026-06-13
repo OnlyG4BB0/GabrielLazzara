@@ -386,6 +386,9 @@ function build() {
     let frameCounter = 0;
 
     tickFn = (delta, elapsed) => {
+        // Durante lo scroll: zero WebGL → il main thread resta libero per il compositing
+        if (isScrolling()) return;
+
         input.px += (input.tx - input.px) * 0.04;
         input.py += (input.ty - input.py) * 0.04;
 
@@ -393,10 +396,7 @@ function build() {
         auroraUniforms.uMouse.value.set(input.px, -input.py);
         auroraUniforms.uScroll.value = input.scroll;
 
-        const scrolling = isScrolling();
-        const skipOverlay = scrolling && TIER !== 'full';
-
-        if (hasOverlay && !skipOverlay) {
+        if (hasOverlay) {
             camera.position.x += (input.px * 1.6 - camera.position.x) * 0.04;
             camera.position.y += (-input.py * 1.2 - camera.position.y) * 0.04;
             camera.lookAt(0, 0, 0);
@@ -414,7 +414,7 @@ function build() {
 
         renderer.clear();
         renderer.render(auroraScene, auroraCam);
-        if (hasOverlay && !skipOverlay) {
+        if (hasOverlay) {
             renderer.render(scene, camera);
         }
 

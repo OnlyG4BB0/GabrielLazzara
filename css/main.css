@@ -2424,16 +2424,55 @@ html.is-smooth-scrolling .section-visible .section-eyebrow {
     animation-play-state: paused !important;
 }
 
+/* Scroll: spegne backdrop-filter (costoso durante il repaint) → sfondo solido */
+html.is-scrolling .glass-panel,
+html.is-scrolling .glass-card,
+html.is-scrolling .nav-pill,
+html.is-scrolling .theme-toggle,
+html.is-scrolling .lang-toggle,
+html.is-scrolling .mobile-menu-panel,
+html.is-scrolling .hero-stat,
+html.is-scrolling .faq-item,
+html.is-scrolling .filter-btn,
+html.is-smooth-scrolling .glass-panel,
+html.is-smooth-scrolling .glass-card,
+html.is-smooth-scrolling .nav-pill,
+html.is-smooth-scrolling .theme-toggle,
+html.is-smooth-scrolling .lang-toggle,
+html.is-smooth-scrolling .mobile-menu-panel,
+html.is-smooth-scrolling .hero-stat,
+html.is-smooth-scrolling .faq-item,
+html.is-smooth-scrolling .filter-btn {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
 html.is-scrolling #navbar,
 html.is-smooth-scrolling #navbar {
-    -webkit-backdrop-filter: blur(12px) saturate(var(--glass-saturate));
-    backdrop-filter: blur(12px) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: var(--c-nav-scrolled);
 }
 
 html.is-scrolling #navbar.navbar-scrolled,
 html.is-smooth-scrolling #navbar.navbar-scrolled {
-    -webkit-backdrop-filter: blur(8px) saturate(1.2);
-    backdrop-filter: blur(8px) saturate(1.2);
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+/* WebGL attivo: blur vetro più leggero a riposo */
+html.webgl-active .glass-panel,
+html.webgl-active .glass-card,
+html.webgl-active .nav-pill,
+html.webgl-active .theme-toggle,
+html.webgl-active .lang-toggle {
+    -webkit-backdrop-filter: blur(10px) saturate(1.2);
+    backdrop-filter: blur(10px) saturate(1.2);
+}
+
+html.webgl-active #navbar.glass-panel {
+    -webkit-backdrop-filter: blur(12px) saturate(1.2);
+    backdrop-filter: blur(12px) saturate(1.2);
 }
 
 /* ---------- Motion enhanced (desktop, effetti decorativi dopo il load) ---------- */

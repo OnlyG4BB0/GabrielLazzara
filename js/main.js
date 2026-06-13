@@ -596,9 +596,11 @@ class PortfolioApp {
             .map((id) => document.getElementById(id))
             .filter(Boolean);
 
+        this.cacheNavSectionMetrics();
         this.syncActiveNavFromScroll();
 
         window.addEventListener('resize', () => {
+            this.cacheNavSectionMetrics();
             this.syncActiveNavFromScroll();
         }, { passive: true });
     }
@@ -608,18 +610,27 @@ class PortfolioApp {
         return navH + Math.min(window.innerHeight * 0.25, 168);
     }
 
-    syncActiveNavFromScroll() {
+    cacheNavSectionMetrics() {
         if (!this.navSections?.length) return;
+        const scrollY = window.scrollY;
+        this.navSectionMetrics = this.navSections.map((section) => ({
+            id: section.id,
+            top: section.getBoundingClientRect().top + scrollY,
+        }));
+    }
+
+    syncActiveNavFromScroll() {
+        if (!this.navSectionMetrics?.length) return;
 
         const probe = window.scrollY + this.getNavScrollProbe();
-        let activeId = this.navSections[0].id;
+        let activeId = this.navSectionMetrics[0].id;
 
-        this.navSections.forEach((section) => {
-            const top = section.getBoundingClientRect().top + window.scrollY;
-            if (top <= probe + 2) {
-                activeId = section.id;
+        for (let i = 0; i < this.navSectionMetrics.length; i += 1) {
+            const entry = this.navSectionMetrics[i];
+            if (entry.top <= probe + 2) {
+                activeId = entry.id;
             }
-        });
+        }
 
         const scrollBottom = window.scrollY + window.innerHeight;
         const pageBottom = document.documentElement.scrollHeight;
@@ -686,13 +697,17 @@ class PortfolioApp {
     setupScrollEffects() {
         let ticking = false;
         let scrollEndTimer = null;
+        let lastSpyAt = 0;
+        const spyIntervalMs = 120;
 
         const markScrolling = () => {
             document.documentElement.classList.add('is-scrolling');
             window.clearTimeout(scrollEndTimer);
             scrollEndTimer = window.setTimeout(() => {
                 document.documentElement.classList.remove('is-scrolling');
-            }, 150);
+                this.cacheNavSectionMetrics();
+                this.syncActiveNavFromScroll();
+            }, 180);
         };
 
         const onScroll = () => {
@@ -703,7 +718,11 @@ class PortfolioApp {
                 if (this.navbar) {
                     this.navbar.classList.toggle('navbar-scrolled', window.scrollY > 50);
                 }
-                this.syncActiveNavFromScroll();
+                const now = performance.now();
+                if (now - lastSpyAt >= spyIntervalMs) {
+                    lastSpyAt = now;
+                    this.syncActiveNavFromScroll();
+                }
                 ticking = false;
             });
         };
