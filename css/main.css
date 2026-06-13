@@ -236,40 +236,6 @@ html.webgl-active .site-blobs {
     transition: opacity 0.8s ease;
 }
 
-/* ---------- Logo 3D (Three.js) ---------- */
-.brand-logo {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    flex-shrink: 0;
-}
-
-.brand-logo > svg {
-    width: 100%;
-    height: 100%;
-}
-
-.brand-logo__canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    pointer-events: none;
-}
-
-.brand-logo.logo3d-ready > svg {
-    opacity: 0;
-}
-
-.brand-logo.logo3d-ready .brand-logo__canvas {
-    opacity: 1;
-}
-
 @media (prefers-reduced-motion: reduce) {
     #webgl-bg {
         display: none !important;
@@ -277,14 +243,6 @@ html.webgl-active .site-blobs {
 
     html.webgl-active .site-blobs {
         opacity: 1;
-    }
-
-    .brand-logo.logo3d-ready > svg {
-        opacity: 1;
-    }
-
-    .brand-logo.logo3d-ready .brand-logo__canvas {
-        opacity: 0;
     }
 }
 
