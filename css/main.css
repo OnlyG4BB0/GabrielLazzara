@@ -262,6 +262,59 @@ html.webgl-active.motion-enhanced .site-blobs .blob {
     }
 }
 
+/* ---------- Volpe origami 3D (hero) ---------- */
+.hero-fox {
+    display: none;
+}
+
+html.webgl-active .hero-fox {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 220px;
+    margin: 0.5rem 0 1.25rem;
+    z-index: 0;
+    pointer-events: none;
+}
+
+html.webgl-active .hero-fox canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    filter: drop-shadow(0 12px 32px rgba(139, 92, 246, 0.35));
+}
+
+/* Desktop: la volpe galleggia nell'angolo in alto a destra, sopra al pannello */
+@media (min-width: 1024px) {
+    html.webgl-active .hero-fox {
+        position: absolute;
+        top: -4%;
+        right: 0;
+        width: 40%;
+        height: 52%;
+        margin: 0;
+        z-index: 3;
+    }
+
+    .hero-visual-col {
+        position: relative;
+        z-index: 2;
+    }
+}
+
+@media (min-width: 1280px) {
+    html.webgl-active .hero-fox {
+        width: 38%;
+        height: 56%;
+    }
+}
+
+@media (max-width: 380px) {
+    html.webgl-active .hero-fox {
+        height: 180px;
+    }
+}
+
 /* ---------- Layout ---------- */
 .site-shell {
     width: 100%;

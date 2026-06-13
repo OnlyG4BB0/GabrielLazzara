@@ -1,8 +1,15 @@
 import * as THREE from 'three';
 
 /*
- * Site-wide WebGL ambience — performance-first, responsive.
- * Aurora shader (always) + low-poly crystals (all tiers, count scales with viewport).
+ * Site-wide WebGL ambience + hero origami fox (Three.js).
+ *
+ *  - Background: aurora shader + higher-quality low-poly crystals (lit, flat
+ *    shaded). Keeps animating during scroll (lighter fps while scrolling).
+ *  - Hero fox: a 3D origami fox built from the logo's triangle layout, rotates
+ *    on its own and reacts to the global pointer. Own small renderer, paused
+ *    when the hero leaves the viewport.
+ *
+ * Degrades gracefully: no WebGL / reduced motion -> CSS blobs + SVG logo stay.
  */
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -46,14 +53,10 @@ function getPerfTier() {
 }
 
 const TIER_CFG = {
-    minimal: { renderScale: 0.55, maxDpr: 1.1, targetFps: 28, crystals: 4, particles: 0, shaderOctaves: 2 },
-    balanced: { renderScale: 0.65, maxDpr: 1.25, targetFps: 36, crystals: 6, particles: 120, shaderOctaves: 2 },
-    full: { renderScale: 0.78, maxDpr: 1.5, targetFps: 50, crystals: 8, particles: 320, shaderOctaves: 3 },
+    minimal: { renderScale: 0.62, maxDpr: 1.2, targetFps: 30, scrollFps: 24, crystals: 5, detail: 1, octaves: 2 },
+    balanced: { renderScale: 0.72, maxDpr: 1.35, targetFps: 40, scrollFps: 28, crystals: 7, detail: 1, octaves: 2 },
+    full: { renderScale: 0.85, maxDpr: 1.6, targetFps: 55, scrollFps: 32, crystals: 9, detail: 1, octaves: 3 },
 };
-
-function getTierConfig() {
-    return TIER_CFG[getPerfTier()];
-}
 
 /* ---- palettes -------------------------------------------------------- */
 const PALETTES = {
@@ -62,18 +65,16 @@ const PALETTES = {
         aurB: new THREE.Color('#241753'),
         aurC: new THREE.Color('#7c3aed'),
         crystals: ['#c084fc', '#8b5cf6', '#e879f9', '#6366f1'],
-        crystalOpacity: 0.88,
-        particle: new THREE.Color('#c4b5fd'),
-        particleOpacity: 0.55,
+        crystalOpacity: 0.9,
+        crystalEmissive: 0.18,
     },
     light: {
         aurA: new THREE.Color('#f4f0fb'),
         aurB: new THREE.Color('#dcd0f4'),
         aurC: new THREE.Color('#b69bf0'),
         crystals: ['#7c3aed', '#6d28d9', '#9333ea', '#4f46e5'],
-        crystalOpacity: 0.5,
-        particle: new THREE.Color('#7c3aed'),
-        particleOpacity: 0.38,
+        crystalOpacity: 0.55,
+        crystalEmissive: 0.05,
     },
 };
 
@@ -81,23 +82,32 @@ function themeKey() {
     return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
 }
 
-/* ---- loop ------------------------------------------------------------ */
+/* ---- shared loop ----------------------------------------------------- */
 const clock = new THREE.Clock();
+const tickFns = [];
 let running = false;
 let rafId = 0;
-let tickFn = null;
-let minFrameMs = 1000 / 36;
 let lastFrameTs = 0;
+let baseFps = 40;
+let scrollFps = 28;
+
+function isScrolling() {
+    const root = document.documentElement;
+    return root.classList.contains('is-scrolling') || root.classList.contains('is-smooth-scrolling');
+}
 
 function frame(ts) {
     if (!running) return;
     rafId = requestAnimationFrame(frame);
-    if (ts - lastFrameTs < minFrameMs) return;
+    const minMs = 1000 / (isScrolling() ? scrollFps : baseFps);
+    if (ts - lastFrameTs < minMs) return;
     lastFrameTs = ts;
-    if (tickFn) tickFn(Math.min(clock.getDelta(), 0.05), clock.elapsedTime);
+    const delta = Math.min(clock.getDelta(), 0.05);
+    const elapsed = clock.elapsedTime;
+    for (let i = 0; i < tickFns.length; i += 1) tickFns[i](delta, elapsed);
 }
 function start() {
-    if (running || !tickFn) return;
+    if (running || tickFns.length === 0) return;
     running = true;
     clock.start();
     lastFrameTs = 0;
@@ -111,14 +121,14 @@ document.addEventListener('visibilitychange', () => {
     if (document.hidden) stop(); else start();
 });
 
-/* ---- input ----------------------------------------------------------- */
+/* ---- shared pointer / scroll ----------------------------------------- */
 const input = { px: 0, py: 0, tx: 0, ty: 0, scroll: 0 };
 let lastPointerTs = 0;
 
 if (!isCoarsePointer()) {
     window.addEventListener('pointermove', (e) => {
         const now = performance.now();
-        if (now - lastPointerTs < 32) return;
+        if (now - lastPointerTs < 24) return;
         lastPointerTs = now;
         const { w, h } = getViewport();
         input.tx = (e.clientX / w - 0.5) * 2;
@@ -136,12 +146,15 @@ window.addEventListener('scroll', () => {
     });
 }, { passive: true });
 
-function isScrolling() {
-    const root = document.documentElement;
-    return root.classList.contains('is-scrolling') || root.classList.contains('is-smooth-scrolling');
-}
+/* ---- aurora shader --------------------------------------------------- */
+const AURORA_VERT = /* glsl */`
+    varying vec2 vUv;
+    void main() {
+        vUv = uv;
+        gl_Position = vec4(position.xy, 0.0, 1.0);
+    }
+`;
 
-/* ---- GLSL ------------------------------------------------------------ */
 function buildAuroraFrag(octaves) {
     return /* glsl */`
     precision mediump float;
@@ -211,12 +224,6 @@ function buildAuroraFrag(octaves) {
         vec2 gv=fract(uv*vec2(100.0,75.0))-0.5;
         return smoothstep(0.45,0.0,length(gv))*step(0.985,n);
     }
-    float shard(vec2 uv,vec2 c,float r,float a){
-        vec2 d=uv-c;
-        float ca=cos(a),sa=sin(a);
-        d=mat2(ca,-sa,sa,ca)*d;
-        return smoothstep(r,r*0.72,max(abs(d.x)*0.65+abs(d.y),abs(d.x)*0.2+abs(d.y)*1.1));
-    }
     void main(){
         vec2 uv=vUv;
         vec2 p=(uv-0.5);
@@ -229,10 +236,6 @@ function buildAuroraFrag(octaves) {
         vec3 col=mix(uColA,uColB,band);
         col=mix(col,uColC,pow(n,2.6)*0.55);
         col+=uColC*stars(uv+uTime*0.0015)*0.4;
-        float s1=shard(p,vec2(0.35*sin(t*0.7),0.28*cos(t*0.5)),0.14,t*0.3);
-        float s2=shard(p,vec2(-0.42*cos(t*0.55),0.22*sin(t*0.65)),0.11,t*0.5+1.0);
-        float s3=shard(p,vec2(0.18*sin(t*0.4+2.0),-0.38*cos(t*0.45)),0.1,t*0.25+2.5);
-        col+=uColC*(s1+s2+s3)*0.22;
         float d=distance(uv,uMouse*0.5+0.5);
         col+=uColC*smoothstep(0.5,0.0,d)*0.06;
         float vig=smoothstep(1.15,0.35,length(p));
@@ -242,16 +245,8 @@ function buildAuroraFrag(octaves) {
 `;
 }
 
-const AURORA_VERT = /* glsl */`
-    varying vec2 vUv;
-    void main() {
-        vUv = uv;
-        gl_Position = vec4(position.xy, 0.0, 1.0);
-    }
-`;
-
-/* ---- scene ----------------------------------------------------------- */
-function build() {
+/* ---- background scene ------------------------------------------------ */
+function buildBackground() {
     const canvas = document.createElement('canvas');
     canvas.id = 'webgl-bg';
     canvas.setAttribute('aria-hidden', 'true');
@@ -259,7 +254,8 @@ function build() {
 
     let tier = getPerfTier();
     let cfg = TIER_CFG[tier];
-    minFrameMs = 1000 / cfg.targetFps;
+    baseFps = cfg.targetFps;
+    scrollFps = cfg.scrollFps;
 
     let dpr = Math.min(window.devicePixelRatio || 1, cfg.maxDpr);
     let renderScale = cfg.renderScale;
@@ -288,7 +284,7 @@ function build() {
     };
     const auroraMat = new THREE.ShaderMaterial({
         vertexShader: AURORA_VERT,
-        fragmentShader: buildAuroraFrag(cfg.shaderOctaves),
+        fragmentShader: buildAuroraFrag(cfg.octaves),
         uniforms: auroraUniforms,
         depthTest: false,
         depthWrite: false,
@@ -298,107 +294,67 @@ function build() {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(58, 1, 0.1, 80);
     camera.position.set(0, 0, 12);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+    const keyLight = new THREE.PointLight(0xe879f9, 1.1, 0, 0.6);
+    keyLight.position.set(7, 9, 12);
+    const rimLight = new THREE.PointLight(0x6366f1, 0.9, 0, 0.6);
+    rimLight.position.set(-9, -5, 6);
+    scene.add(keyLight, rimLight);
+
     const world = new THREE.Group();
     scene.add(world);
 
-    const geos = [
-        new THREE.IcosahedronGeometry(1, 0),
-        new THREE.OctahedronGeometry(1, 0),
-        new THREE.TetrahedronGeometry(1.15, 0),
-    ];
     const crystals = [];
-    let particles = null;
-    let pMat = null;
 
-    function spawnCrystal(index, total) {
-        const mesh = new THREE.Mesh(
-            geos[index % geos.length],
-            new THREE.MeshBasicMaterial({
-                color: 0xffffff,
-                transparent: true,
-                opacity: 0.88,
-                depthTest: true,
-                depthWrite: false,
-            })
-        );
-        const { w, h } = getViewport();
-        const aspect = w / Math.max(h, 1);
-        const narrow = aspect < 0.85;
-        const radius = narrow ? 3.5 + Math.random() * 4.5 : 4.5 + Math.random() * 6;
-        const angle = (index / total) * Math.PI * 2 + Math.random() * 0.6;
-        mesh.position.set(
-            Math.cos(angle) * radius,
-            (Math.random() - 0.5) * (narrow ? 8 : 11),
-            -2 - Math.random() * 10
-        );
-        mesh.scale.setScalar(narrow ? 0.65 + Math.random() * 0.85 : 0.55 + Math.random() * 1.05);
-        mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
-        mesh.userData = {
-            rs: (Math.random() - 0.5) * 0.16,
-            phase: Math.random() * Math.PI * 2,
-            amp: 0.2 + Math.random() * 0.3,
-            baseY: mesh.position.y,
-        };
-        world.add(mesh);
-        crystals.push(mesh);
-        return mesh;
+    function buildGeos(detail) {
+        return [
+            new THREE.IcosahedronGeometry(1, detail),
+            new THREE.OctahedronGeometry(1, detail),
+            new THREE.DodecahedronGeometry(0.92, 0),
+        ];
     }
+    let geos = buildGeos(cfg.detail);
 
-    function rebuildCrystals(count) {
+    function spawnCrystals(count) {
         while (crystals.length) {
             const m = crystals.pop();
             world.remove(m);
-            m.geometry.dispose();
             m.material.dispose();
         }
-        for (let i = 0; i < count; i += 1) spawnCrystal(i, count);
-        applyTheme();
-    }
-
-    function rebuildParticles(count) {
-        if (particles) {
-            world.remove(particles);
-            particles.geometry.dispose();
-            pMat.dispose();
-            particles = null;
-            pMat = null;
-        }
-        if (count <= 0) return;
-        const pos = new Float32Array(count * 3);
+        const { w, h } = getViewport();
+        const narrow = w / Math.max(h, 1) < 0.85;
         for (let i = 0; i < count; i += 1) {
-            pos[i * 3] = (Math.random() - 0.5) * 36;
-            pos[i * 3 + 1] = (Math.random() - 0.5) * 26;
-            pos[i * 3 + 2] = (Math.random() - 0.5) * 22 - 3;
+            const mat = new THREE.MeshStandardMaterial({
+                color: 0xffffff,
+                roughness: 0.3,
+                metalness: 0.45,
+                flatShading: true,
+                transparent: true,
+                opacity: 0.9,
+                emissive: 0x000000,
+                emissiveIntensity: 0.18,
+            });
+            const mesh = new THREE.Mesh(geos[i % geos.length], mat);
+            const radius = narrow ? 3.5 + Math.random() * 4.5 : 4.5 + Math.random() * 6;
+            const angle = (i / count) * Math.PI * 2 + Math.random() * 0.6;
+            mesh.position.set(
+                Math.cos(angle) * radius,
+                (Math.random() - 0.5) * (narrow ? 8 : 11),
+                -2 - Math.random() * 10
+            );
+            mesh.scale.setScalar(narrow ? 0.65 + Math.random() * 0.85 : 0.55 + Math.random() * 1.05);
+            mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+            mesh.userData = {
+                rsx: (Math.random() - 0.5) * 0.16,
+                rsy: (Math.random() - 0.5) * 0.18,
+                phase: Math.random() * Math.PI * 2,
+                amp: 0.2 + Math.random() * 0.3,
+                baseY: mesh.position.y,
+            };
+            world.add(mesh);
+            crystals.push(mesh);
         }
-        const pGeo = new THREE.BufferGeometry();
-        pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-        pMat = new THREE.PointsMaterial({
-            color: 0xffffff,
-            size: isNarrowViewport() ? 0.065 : 0.05,
-            sizeAttenuation: true,
-            transparent: true,
-            opacity: 0.5,
-            depthWrite: false,
-            blending: THREE.AdditiveBlending,
-        });
-        particles = new THREE.Points(pGeo, pMat);
-        world.add(particles);
         applyTheme();
-    }
-
-    function applyTierLayout() {
-        const nextTier = getPerfTier();
-        const nextCfg = TIER_CFG[nextTier];
-        if (nextTier !== tier) {
-            tier = nextTier;
-            cfg = nextCfg;
-            minFrameMs = 1000 / cfg.targetFps;
-            auroraMat.fragmentShader = buildAuroraFrag(cfg.shaderOctaves);
-            auroraMat.needsUpdate = true;
-            document.documentElement.dataset.webglTier = tier;
-        }
-        rebuildCrystals(cfg.crystals);
-        rebuildParticles(cfg.particles);
     }
 
     function applyTheme() {
@@ -407,22 +363,32 @@ function build() {
         auroraUniforms.uColB.value.copy(pal.aurB);
         auroraUniforms.uColC.value.copy(pal.aurC);
         crystals.forEach((m, i) => {
-            m.material.color.set(pal.crystals[i % pal.crystals.length]);
+            const hex = pal.crystals[i % pal.crystals.length];
+            m.material.color.set(hex);
+            m.material.emissive.set(hex);
+            m.material.emissiveIntensity = pal.crystalEmissive;
             m.material.opacity = pal.crystalOpacity;
         });
-        if (pMat) {
-            pMat.color.copy(pal.particle);
-            pMat.opacity = pal.particleOpacity;
-        }
     }
 
-    applyTierLayout();
+    function applyTier() {
+        const nextTier = getPerfTier();
+        if (nextTier !== tier) {
+            tier = nextTier;
+            cfg = TIER_CFG[tier];
+            baseFps = cfg.targetFps;
+            scrollFps = cfg.scrollFps;
+            auroraMat.fragmentShader = buildAuroraFrag(cfg.octaves);
+            auroraMat.needsUpdate = true;
+            geos = buildGeos(cfg.detail);
+            document.documentElement.dataset.webglTier = tier;
+        }
+        spawnCrystals(cfg.crystals);
+    }
 
     function resize() {
         const { w, h } = getViewport();
-        const rw = Math.max(1, Math.floor(w * renderScale));
-        const rh = Math.max(1, Math.floor(h * renderScale));
-        renderer.setSize(rw, rh, false);
+        renderer.setSize(Math.floor(w * renderScale), Math.floor(h * renderScale), false);
         renderer.setPixelRatio(dpr);
         canvas.style.width = `${w}px`;
         canvas.style.height = `${h}px`;
@@ -434,10 +400,7 @@ function build() {
     let resizeTimer = 0;
     function onViewportChange() {
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-            resize();
-            applyTierLayout();
-        }, 120);
+        resizeTimer = setTimeout(() => { resize(); applyTier(); }, 120);
     }
     window.addEventListener('resize', onViewportChange, { passive: true });
     window.addEventListener('orientationchange', onViewportChange, { passive: true });
@@ -445,13 +408,12 @@ function build() {
         window.visualViewport.addEventListener('resize', onViewportChange, { passive: true });
     }
 
+    applyTier();
     resize();
 
     let slowFrames = 0;
 
-    tickFn = (delta, elapsed) => {
-        if (isScrolling()) return;
-
+    tickFns.push((delta, elapsed) => {
         input.px += (input.tx - input.px) * 0.04;
         input.py += (input.ty - input.py) * 0.04;
 
@@ -468,19 +430,19 @@ function build() {
         for (let i = 0; i < crystals.length; i += 1) {
             const m = crystals[i];
             const ud = m.userData;
-            m.rotation.y += ud.rs * delta;
+            m.rotation.x += ud.rsx * delta;
+            m.rotation.y += ud.rsy * delta;
             m.position.y = ud.baseY + Math.sin(elapsed * 0.45 + ud.phase) * ud.amp;
         }
-        if (particles) particles.rotation.y = elapsed * 0.01;
 
         renderer.clear(true, true, true);
         renderer.render(auroraScene, auroraCam);
         renderer.render(scene, camera);
 
-        if (delta > 0.034) {
+        if (delta > 0.05 && renderScale > 0.45) {
             slowFrames += 1;
-            if (slowFrames > 40 && renderScale > 0.4) {
-                renderScale = Math.max(0.4, renderScale - 0.06);
+            if (slowFrames > 50) {
+                renderScale = Math.max(0.45, renderScale - 0.06);
                 if (dpr > 1) dpr = Math.max(1, dpr - 0.1);
                 slowFrames = 0;
                 resize();
@@ -488,7 +450,7 @@ function build() {
         } else if (slowFrames > 0) {
             slowFrames -= 1;
         }
-    };
+    });
 
     requestAnimationFrame(() => canvas.classList.add('is-ready'));
     document.documentElement.classList.add('webgl-active');
@@ -497,18 +459,156 @@ function build() {
     return { applyTheme };
 }
 
+/* ---- hero origami fox ------------------------------------------------ */
+function buildFoxGeometry() {
+    // Vertices from the SVG logo (x,y in 0..100), mapped to normalized 3D
+    // with a z-depth that folds the face forward like origami.
+    const P = {
+        A: [-0.5, 0.7, -0.1], D: [0.5, 0.7, -0.1],     // ear tips (fold back)
+        C: [-0.8, 0.1, -0.06], F: [0.8, 0.1, -0.06],   // outer cheeks
+        B: [-0.2, 0.2, 0.12], E: [0.2, 0.2, 0.12],     // inner brows
+        H: [0.0, 0.04, 0.26],                          // nose bridge (forward)
+        G: [0.0, -0.7, 0.12],                          // chin / snout
+        I: [-0.08, -0.54, 0.15], J: [0.08, -0.54, 0.15], // snout tip base
+    };
+    const tris = [
+        { v: ['A', 'B', 'C'], c: '#d8b4fe' },
+        { v: ['D', 'F', 'E'], c: '#a855f7' },
+        { v: ['C', 'B', 'G'], c: '#9333ea' },
+        { v: ['F', 'G', 'E'], c: '#4f46e5' },
+        { v: ['B', 'E', 'H'], c: '#f0abfc' },
+        { v: ['B', 'H', 'G'], c: '#e879f9' },
+        { v: ['E', 'G', 'H'], c: '#8b5cf6' },
+        { v: ['I', 'J', 'G'], c: '#ffffff' },
+    ];
+    const positions = [];
+    const colors = [];
+    const col = new THREE.Color();
+    for (const tri of tris) {
+        col.set(tri.c);
+        for (const key of tri.v) {
+            const p = P[key];
+            positions.push(p[0], p[1], p[2]);
+            colors.push(col.r, col.g, col.b);
+        }
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    geo.computeVertexNormals();
+    return geo;
+}
+
+function buildFox() {
+    const host = document.getElementById('hero-fox');
+    if (!host) return null;
+
+    const canvas = document.createElement('canvas');
+    canvas.setAttribute('aria-hidden', 'true');
+    host.appendChild(canvas);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+    renderer.setClearColor(0x000000, 0);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 20);
+    camera.position.set(0, 0, 4.2);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.85));
+    const key = new THREE.PointLight(0xe879f9, 18, 30);
+    key.position.set(3, 4, 5);
+    const rim = new THREE.PointLight(0x6366f1, 14, 30);
+    rim.position.set(-4, -1, 3);
+    const top = new THREE.DirectionalLight(0xffffff, 0.5);
+    top.position.set(0, 5, 2);
+    scene.add(key, rim, top);
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const geo = buildFoxGeometry();
+    const faceMat = new THREE.MeshStandardMaterial({
+        vertexColors: true,
+        flatShading: true,
+        metalness: 0.35,
+        roughness: 0.34,
+        emissive: new THREE.Color('#3b1a6b'),
+        emissiveIntensity: 0.25,
+        side: THREE.DoubleSide,
+    });
+    const fox = new THREE.Mesh(geo, faceMat);
+    fox.scale.setScalar(1.65);
+    group.add(fox);
+
+    const edges = new THREE.LineSegments(
+        new THREE.EdgesGeometry(geo, 1),
+        new THREE.LineBasicMaterial({ color: 0xf5d0fe, transparent: true, opacity: 0.35 })
+    );
+    edges.scale.copy(fox.scale);
+    group.add(edges);
+
+    function resize() {
+        const w = host.clientWidth || 1;
+        const h = host.clientHeight || 1;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / Math.max(h, 1);
+        camera.updateProjectionMatrix();
+    }
+    let resizeTimer = 0;
+    const onResize = () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 120);
+    };
+    window.addEventListener('resize', onResize, { passive: true });
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', onResize, { passive: true });
+    }
+    resize();
+
+    let inView = true;
+    const io = new IntersectionObserver((entries) => {
+        inView = entries[0]?.isIntersecting ?? true;
+    }, { rootMargin: '120px' });
+    io.observe(host);
+
+    let yawOffset = 0;     // eased pointer offset (yaw)
+    let pitchOffset = 0;   // eased pointer offset (pitch)
+
+    tickFns.push((delta, elapsed) => {
+        if (!inView) return;
+        // Sway around the front-facing pose so the fox stays recognizable.
+        yawOffset += (input.px * 0.55 - yawOffset) * 0.06;
+        pitchOffset += (input.py * 0.3 - pitchOffset) * 0.06;
+
+        group.rotation.y = Math.sin(elapsed * 0.5) * 0.5 + yawOffset;
+        group.rotation.x = pitchOffset + Math.sin(elapsed * 0.65) * 0.05;
+        group.position.y = Math.sin(elapsed * 0.7) * 0.08;
+        renderer.render(scene, camera);
+    });
+
+    return true;
+}
+
+/* ---- boot ------------------------------------------------------------ */
 function boot() {
     if (prefersReducedMotion || !supportsWebGL()) return;
 
-    let themed = null;
+    let bg = null;
     try {
-        themed = build();
+        bg = buildBackground();
     } catch (e) {
         return;
     }
-    if (!themed) return;
+    if (!bg) return;
 
-    const mo = new MutationObserver(() => themed.applyTheme());
+    try {
+        buildFox();
+    } catch (e) {
+        /* fox optional */
+    }
+
+    const mo = new MutationObserver(() => bg.applyTheme());
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
     start();
