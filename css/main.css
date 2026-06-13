@@ -262,59 +262,6 @@ html.webgl-active.motion-enhanced .site-blobs .blob {
     }
 }
 
-/* ---------- Volpe origami 3D (hero) ---------- */
-.hero-fox {
-    display: none;
-}
-
-html.webgl-active .hero-fox {
-    display: block;
-    position: relative;
-    width: 100%;
-    height: 220px;
-    margin: 0.5rem 0 1.25rem;
-    z-index: 0;
-    pointer-events: none;
-}
-
-html.webgl-active .hero-fox canvas {
-    display: block;
-    width: 100% !important;
-    height: 100% !important;
-    filter: drop-shadow(0 12px 32px rgba(139, 92, 246, 0.35));
-}
-
-/* Desktop: la volpe galleggia nell'angolo in alto a destra, sopra al pannello */
-@media (min-width: 1024px) {
-    html.webgl-active .hero-fox {
-        position: absolute;
-        top: -4%;
-        right: 0;
-        width: 40%;
-        height: 52%;
-        margin: 0;
-        z-index: 3;
-    }
-
-    .hero-visual-col {
-        position: relative;
-        z-index: 2;
-    }
-}
-
-@media (min-width: 1280px) {
-    html.webgl-active .hero-fox {
-        width: 38%;
-        height: 56%;
-    }
-}
-
-@media (max-width: 380px) {
-    html.webgl-active .hero-fox {
-        height: 180px;
-    }
-}
-
 /* ---------- Layout ---------- */
 .site-shell {
     width: 100%;
@@ -3567,16 +3514,17 @@ html[data-lang="it"] .lang-toggle:not(.is-switching) .lang-toggle__pill {
 .about-visual {
     overflow: visible;
     align-self: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .about-visual-stage {
     position: relative;
     overflow: visible;
-    width: clamp(16rem, 48vw, 22rem);
-    height: clamp(16rem, 48vw, 22rem);
+    width: min(100%, clamp(16rem, 52vw, 22rem));
+    aspect-ratio: 1;
     margin-inline: auto;
-    padding: clamp(1.25rem, 4vw, 2rem);
-    box-sizing: content-box;
 }
 
 .about-visual-fallback,
@@ -3587,9 +3535,16 @@ html[data-lang="it"] .lang-toggle:not(.is-switching) .lang-toggle__pill {
     height: 100%;
 }
 
+.about-visual-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .about-visual-fallback .about-visual-orbit {
-    width: 100%;
-    height: 100%;
+    width: 88%;
+    height: 88%;
+    margin: 0;
 }
 
 .about-fox-canvas {
@@ -3601,18 +3556,40 @@ html.webgl-active .about-fox-canvas {
     display: block;
 }
 
+html.webgl-active .about-fox-canvas canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 auto;
+}
+
 html.webgl-active .about-visual-fallback {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
 }
 
-html.webgl-active .about-visual-stage .about-float-badge {
+.about-visual-stage .about-float-badge {
+    position: absolute;
     z-index: 2;
+    white-space: nowrap;
+}
+
+.about-float-badge--stack {
+    top: 4%;
+    right: -2%;
+}
+
+.about-float-badge--ux {
+    bottom: 4%;
+    left: -2%;
+}
+
+html.webgl-active .about-visual-stage .about-float-badge {
     animation: aboutBadgeFloat 4s ease-in-out infinite;
 }
 
-html.webgl-active .about-visual-stage .about-float-badge:last-child {
+html.webgl-active .about-visual-stage .about-float-badge--ux {
     animation-delay: 2s;
 }
 

@@ -459,7 +459,7 @@ function buildBackground() {
     return { applyTheme };
 }
 
-/* ---- hero origami fox ------------------------------------------------ */
+/* ---- origami fox geometry (used in About scene) ---------------------- */
 function buildFoxGeometry() {
     // Vertices from the SVG logo (x,y in 0..100), mapped to normalized 3D
     // with a z-depth that folds the face forward like origami.
@@ -499,97 +499,6 @@ function buildFoxGeometry() {
     return geo;
 }
 
-function buildFox() {
-    const host = document.getElementById('hero-fox');
-    if (!host) return null;
-
-    const canvas = document.createElement('canvas');
-    canvas.setAttribute('aria-hidden', 'true');
-    host.appendChild(canvas);
-
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
-    renderer.setClearColor(0x000000, 0);
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 20);
-    camera.position.set(0, 0, 4.2);
-
-    scene.add(new THREE.AmbientLight(0xffffff, 0.85));
-    const key = new THREE.PointLight(0xe879f9, 18, 30);
-    key.position.set(3, 4, 5);
-    const rim = new THREE.PointLight(0x6366f1, 14, 30);
-    rim.position.set(-4, -1, 3);
-    const top = new THREE.DirectionalLight(0xffffff, 0.5);
-    top.position.set(0, 5, 2);
-    scene.add(key, rim, top);
-
-    const group = new THREE.Group();
-    scene.add(group);
-
-    const geo = buildFoxGeometry();
-    const faceMat = new THREE.MeshStandardMaterial({
-        vertexColors: true,
-        flatShading: true,
-        metalness: 0.35,
-        roughness: 0.34,
-        emissive: new THREE.Color('#3b1a6b'),
-        emissiveIntensity: 0.25,
-        side: THREE.DoubleSide,
-    });
-    const fox = new THREE.Mesh(geo, faceMat);
-    fox.scale.setScalar(1.65);
-    group.add(fox);
-
-    const edges = new THREE.LineSegments(
-        new THREE.EdgesGeometry(geo, 1),
-        new THREE.LineBasicMaterial({ color: 0xf5d0fe, transparent: true, opacity: 0.35 })
-    );
-    edges.scale.copy(fox.scale);
-    group.add(edges);
-
-    function resize() {
-        const w = host.clientWidth || 1;
-        const h = host.clientHeight || 1;
-        renderer.setSize(w, h, false);
-        camera.aspect = w / Math.max(h, 1);
-        camera.updateProjectionMatrix();
-    }
-    let resizeTimer = 0;
-    const onResize = () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(resize, 120);
-    };
-    window.addEventListener('resize', onResize, { passive: true });
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', onResize, { passive: true });
-    }
-    resize();
-
-    let inView = true;
-    const io = new IntersectionObserver((entries) => {
-        inView = entries[0]?.isIntersecting ?? true;
-    }, { rootMargin: '120px' });
-    io.observe(host);
-
-    let yawOffset = 0;     // eased pointer offset (yaw)
-    let pitchOffset = 0;   // eased pointer offset (pitch)
-
-    tickFns.push((delta, elapsed) => {
-        if (!inView) return;
-        // Sway around the front-facing pose so the fox stays recognizable.
-        yawOffset += (input.px * 0.55 - yawOffset) * 0.06;
-        pitchOffset += (input.py * 0.3 - pitchOffset) * 0.06;
-
-        group.rotation.y = Math.sin(elapsed * 0.5) * 0.5 + yawOffset;
-        group.rotation.x = pitchOffset + Math.sin(elapsed * 0.65) * 0.05;
-        group.position.y = Math.sin(elapsed * 0.7) * 0.08;
-        renderer.render(scene, camera);
-    });
-
-    return true;
-}
-
 /* ---- about origami fox (anelli 3D + gemme orbitanti) ----------------- */
 function buildAboutFox() {
     const host = document.getElementById('about-fox');
@@ -604,8 +513,9 @@ function buildAboutFox() {
     renderer.setClearColor(0x000000, 0);
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 30);
-    camera.position.set(0, 0, 5.8);
+    const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 30);
+    camera.position.set(0, 0.08, 6.4);
+    camera.lookAt(0, 0, 0);
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.75));
     const key = new THREE.PointLight(0xe879f9, 22, 40);
@@ -620,8 +530,8 @@ function buildAboutFox() {
     scene.add(root);
 
     root.add(new THREE.Mesh(
-        new THREE.SphereGeometry(1.75, 32, 32),
-        new THREE.MeshBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.14 })
+        new THREE.SphereGeometry(1.45, 32, 32),
+        new THREE.MeshBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.12 })
     ));
 
     const ringMat = new THREE.MeshStandardMaterial({
@@ -633,12 +543,13 @@ function buildAboutFox() {
         transparent: true,
         opacity: 0.72,
     });
-    const ringOuter = new THREE.Mesh(new THREE.TorusGeometry(2.4, 0.028, 10, 96), ringMat);
-    const ringInner = new THREE.Mesh(new THREE.TorusGeometry(1.88, 0.02, 8, 72), ringMat.clone());
+    const ringOuter = new THREE.Mesh(new THREE.TorusGeometry(2.05, 0.024, 10, 96), ringMat);
+    const ringInner = new THREE.Mesh(new THREE.TorusGeometry(1.62, 0.018, 8, 72), ringMat.clone());
     ringInner.material.opacity = 0.55;
     root.add(ringOuter, ringInner);
 
     const geo = buildFoxGeometry();
+    geo.center();
     const foxGroup = new THREE.Group();
     const faceMat = new THREE.MeshStandardMaterial({
         vertexColors: true,
@@ -650,7 +561,7 @@ function buildAboutFox() {
         side: THREE.DoubleSide,
     });
     const fox = new THREE.Mesh(geo, faceMat);
-    fox.scale.setScalar(2.15);
+    fox.scale.setScalar(1.85);
     foxGroup.add(fox);
     const edges = new THREE.LineSegments(
         new THREE.EdgesGeometry(geo, 1),
@@ -660,7 +571,7 @@ function buildAboutFox() {
     foxGroup.add(edges);
     root.add(foxGroup);
 
-    const gemGeo = new THREE.OctahedronGeometry(0.12, 0);
+    const gemGeo = new THREE.OctahedronGeometry(0.1, 0);
     const gems = [];
     const gemColors = [0xc084fc, 0xe879f9, 0x6366f1];
     for (let i = 0; i < 3; i += 1) {
@@ -677,9 +588,9 @@ function buildAboutFox() {
         );
         gem.userData = {
             angle: (i / 3) * Math.PI * 2,
-            radius: 2.15,
+            radius: 1.95,
             speed: 0.35 + i * 0.08,
-            y: 0.15 * (i - 1),
+            y: 0.12 * (i - 1),
         };
         root.add(gem);
         gems.push(gem);
@@ -724,11 +635,11 @@ function buildAboutFox() {
         ringInner.rotation.z = -elapsed * 0.16;
         ringInner.rotation.x = Math.PI * 0.5 + Math.cos(elapsed * 0.25) * 0.06;
 
-        foxGroup.rotation.y = Math.sin(elapsed * 0.45) * 0.35 + yawOffset;
-        foxGroup.rotation.x = pitchOffset + Math.sin(elapsed * 0.55) * 0.04;
-        foxGroup.position.y = Math.sin(elapsed * 0.65) * 0.06;
+        foxGroup.rotation.y = Math.sin(elapsed * 0.45) * 0.22 + yawOffset * 0.35;
+        foxGroup.rotation.x = pitchOffset * 0.35 + Math.sin(elapsed * 0.55) * 0.03;
+        foxGroup.position.y = Math.sin(elapsed * 0.65) * 0.04;
 
-        glow.scale.setScalar(1 + Math.sin(elapsed * 0.8) * 0.04);
+        glow.scale.setScalar(1 + Math.sin(elapsed * 0.8) * 0.03);
 
         for (let i = 0; i < gems.length; i += 1) {
             const g = gems[i];
@@ -736,13 +647,13 @@ function buildAboutFox() {
             const a = ud.angle + elapsed * ud.speed;
             g.position.set(
                 Math.cos(a) * ud.radius,
-                ud.y + Math.sin(elapsed + i) * 0.08,
-                Math.sin(a) * ud.radius * 0.35
+                ud.y + Math.sin(elapsed + i) * 0.06,
+                Math.sin(a) * ud.radius * 0.28
             );
             g.rotation.y = elapsed * 1.2 + i;
         }
 
-        root.rotation.y = yawOffset * 0.15;
+        camera.lookAt(0, 0, 0);
         renderer.render(scene, camera);
     });
 
@@ -762,10 +673,9 @@ function boot() {
     if (!bg) return;
 
     try {
-        buildFox();
         buildAboutFox();
     } catch (e) {
-        /* fox scenes optional */
+        /* about fox scene optional */
     }
 
     const mo = new MutationObserver(() => bg.applyTheme());
