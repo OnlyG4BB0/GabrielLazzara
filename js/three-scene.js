@@ -53,9 +53,9 @@ function getPerfTier() {
 }
 
 const TIER_CFG = {
-    minimal: { renderScale: 0.62, maxDpr: 1.2, targetFps: 30, scrollFps: 24, crystals: 5, detail: 1, octaves: 2 },
-    balanced: { renderScale: 0.72, maxDpr: 1.35, targetFps: 40, scrollFps: 28, crystals: 7, detail: 1, octaves: 2 },
-    full: { renderScale: 0.85, maxDpr: 1.6, targetFps: 55, scrollFps: 32, crystals: 9, detail: 1, octaves: 3 },
+    minimal: { renderScale: 0.62, maxDpr: 1.2, targetFps: 30, scrollFps: 24, crystals: 5, detail: 2, octaves: 2 },
+    balanced: { renderScale: 0.72, maxDpr: 1.35, targetFps: 40, scrollFps: 28, crystals: 7, detail: 2, octaves: 2 },
+    full: { renderScale: 0.85, maxDpr: 1.6, targetFps: 55, scrollFps: 32, crystals: 9, detail: 3, octaves: 3 },
 };
 
 /* ---- palettes -------------------------------------------------------- */
@@ -307,10 +307,11 @@ function buildBackground() {
     const crystals = [];
 
     function buildGeos(detail) {
+        const dodecaDetail = detail >= 3 ? 1 : Math.max(detail - 1, 0);
         return [
             new THREE.IcosahedronGeometry(1, detail),
             new THREE.OctahedronGeometry(1, detail),
-            new THREE.DodecahedronGeometry(0.92, 0),
+            new THREE.DodecahedronGeometry(0.92, dodecaDetail),
         ];
     }
     let geos = buildGeos(cfg.detail);
@@ -513,8 +514,8 @@ function buildAboutFox() {
     renderer.setClearColor(0x000000, 0);
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 30);
-    camera.position.set(0, 0.08, 6.4);
+    const camera = new THREE.PerspectiveCamera(33, 1, 0.1, 30);
+    camera.position.set(0, 0.08, 7.35);
     camera.lookAt(0, 0, 0);
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.75));
@@ -530,7 +531,7 @@ function buildAboutFox() {
     scene.add(root);
 
     root.add(new THREE.Mesh(
-        new THREE.SphereGeometry(1.45, 32, 32),
+        new THREE.SphereGeometry(1.45, 48, 48),
         new THREE.MeshBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.12 })
     ));
 
@@ -571,7 +572,7 @@ function buildAboutFox() {
     foxGroup.add(edges);
     root.add(foxGroup);
 
-    const gemGeo = new THREE.OctahedronGeometry(0.1, 0);
+    const gemGeo = new THREE.OctahedronGeometry(0.1, 1);
     const gems = [];
     const gemColors = [0xc084fc, 0xe879f9, 0x6366f1];
     for (let i = 0; i < 3; i += 1) {

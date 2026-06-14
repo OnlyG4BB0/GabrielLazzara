@@ -3517,12 +3517,13 @@ html[data-lang="it"] .lang-toggle:not(.is-switching) .lang-toggle__pill {
     width: 100%;
     display: flex;
     justify-content: center;
+    padding-inline: clamp(0.25rem, 3vw, 1rem);
 }
 
 .about-visual-stage {
     position: relative;
     overflow: visible;
-    width: min(100%, clamp(16rem, 52vw, 22rem));
+    width: min(100%, clamp(18rem, 86vw, 28rem));
     aspect-ratio: 1;
     margin-inline: auto;
 }
