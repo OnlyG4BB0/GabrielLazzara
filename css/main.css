@@ -1298,6 +1298,15 @@ html.page-ready [data-theme="light"] .hero-status-led {
     animation: marquee 32s linear infinite;
 }
 
+.marquee-wrap:hover .marquee-track,
+.marquee-wrap:focus-within .marquee-track {
+    animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+}
+
 .marquee-item {
     flex-shrink: 0;
     padding: 0.4rem 1rem;

@@ -20,6 +20,7 @@ class PortfolioApp {
             'faq',
             'contact',
         ];
+        this.navSectionAlias = { values: 'about', experience: 'about' };
         this.langToggles = document.querySelectorAll('.lang-toggle');
         this.copyEmailBtn = document.getElementById('copy-email-btn');
         this.projectCards = document.querySelectorAll('[data-project-category]');
@@ -61,6 +62,7 @@ class PortfolioApp {
         this.setupSpotlightCards();
         this.setupPressFeedback();
         this.setupCaseMetricMotion();
+        this.setupOutboundTracking();
         requestAnimationFrame(() => {
             document.body.classList.add('page-loaded');
             document.documentElement.classList.add('page-ready');
@@ -207,7 +209,15 @@ class PortfolioApp {
             }
         });
 
-        ['proj3_bullets', 'proj_luxury_bullets', 'pkg1_feat', 'pkg2_feat', 'pkg3_feat'].forEach((key) => {
+        document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
+            if (el === this.menuBtn && this.isMenuOpen) return;
+            const key = el.getAttribute('data-i18n-aria');
+            if (translations[lang][key]) {
+                el.setAttribute('aria-label', translations[lang][key]);
+            }
+        });
+
+        ['proj3_bullets', 'proj_luxury_bullets'].forEach((key) => {
             document.querySelectorAll(`[data-i18n="${key}"]`).forEach((el) => {
                 if (translations[lang][key]) el.innerHTML = translations[lang][key];
             });
@@ -230,6 +240,7 @@ class PortfolioApp {
                 this.filterBtns.forEach((b) => {
                     const isActive = b === btn;
                     b.classList.toggle('filter-active', isActive);
+                    b.setAttribute('aria-selected', isActive ? 'true' : 'false');
                     if (isActive) {
                         b.classList.remove('filter-pop');
                         void b.offsetWidth;
@@ -237,6 +248,7 @@ class PortfolioApp {
                     }
                 });
                 this.applyProjectFilter(filter);
+                this.trackEvent('project_filter', { filter });
             });
         });
     }
@@ -256,6 +268,30 @@ class PortfolioApp {
                     card.classList.remove('project-enter');
                 }
             }
+        });
+    }
+
+    trackEvent(name, props = {}) {
+        try {
+            if (typeof window.plausible === 'function') {
+                window.plausible(name, { props });
+            }
+            if (typeof window.gtag === 'function') {
+                window.gtag('event', name, props);
+            }
+            (window.dataLayer = window.dataLayer || []).push({ event: name, ...props });
+        } catch {
+            /* analytics is best-effort */
+        }
+    }
+
+    setupOutboundTracking() {
+        document.querySelectorAll('#projects a[href^="http"], #case-study a[href^="http"]').forEach((link) => {
+            link.addEventListener('click', () => {
+                const card = link.closest('[data-project-category], #case-study');
+                const title = card?.querySelector('h3')?.textContent?.trim() || link.href;
+                this.trackEvent('project_click', { project: title, url: link.href });
+            });
         });
     }
 
@@ -303,6 +339,7 @@ class PortfolioApp {
         this.copyEmailBtn.addEventListener('click', async () => {
             try {
                 await navigator.clipboard.writeText(email);
+                this.trackEvent('copy_email');
                 this.copyEmailBtn.classList.remove('is-copied');
                 void this.copyEmailBtn.offsetWidth;
                 this.copyEmailBtn.classList.add('is-copied');
@@ -319,17 +356,34 @@ class PortfolioApp {
     }
 
     setupMobileMenu() {
+        if (!this.menuBtn || !this.mobileMenu) return;
         this.menuBtn.addEventListener('click', () => this.toggleMenu());
         this.mobileLinks.forEach((link) => {
             link.addEventListener('click', () => {
                 if (this.isMenuOpen) this.toggleMenu();
             });
         });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.isMenuOpen) {
+                this.toggleMenu();
+                this.menuBtn.focus();
+            }
+        });
+
+        this.mobileMenu.addEventListener('click', (e) => {
+            if (e.target === this.mobileMenu && this.isMenuOpen) this.toggleMenu();
+        });
     }
 
     toggleMenu() {
         this.isMenuOpen = !this.isMenuOpen;
         this.menuBtn.classList.toggle('menu-open');
+        this.menuBtn.setAttribute('aria-expanded', this.isMenuOpen ? 'true' : 'false');
+        const t = (typeof translations !== 'undefined' && translations[this.currentLang]) || {};
+        this.menuBtn.setAttribute('aria-label', this.isMenuOpen
+            ? (t.menu_close_aria || 'Chiudi menu')
+            : (t.menu_open_aria || 'Apri menu'));
 
         if (this.isMenuOpen) {
             this.mobileMenu.classList.remove('hidden');
@@ -338,6 +392,7 @@ class PortfolioApp {
             requestAnimationFrame(() => {
                 this.mobileMenu.classList.add('menu-visible');
                 document.body.style.overflow = 'hidden';
+                this.mobileLinks[0]?.focus();
             });
         } else {
             this.mobileMenu.classList.remove('menu-visible');
@@ -592,9 +647,11 @@ class PortfolioApp {
     }
 
     setupNavScrollSpy() {
-        this.navSections = this.navSectionIds
+        const spyIds = [...this.navSectionIds, ...Object.keys(this.navSectionAlias)];
+        this.navSections = spyIds
             .map((id) => document.getElementById(id))
-            .filter(Boolean);
+            .filter(Boolean)
+            .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
 
         this.cacheNavSectionMetrics();
         this.syncActiveNavFromScroll();
@@ -639,7 +696,7 @@ class PortfolioApp {
             if (contact) activeId = contact.id;
         }
 
-        this.updateActiveNavLink(activeId);
+        this.updateActiveNavLink(this.navSectionAlias[activeId] || activeId);
     }
 
     setupInteractiveMotion() {
@@ -1127,6 +1184,7 @@ class PortfolioApp {
             const text = encodeURIComponent(this.buildWhatsAppMessage(name, email, message));
             const url = `https://wa.me/${this.getWhatsAppNumber()}?text=${text}`;
 
+            this.trackEvent('contact_whatsapp');
             window.open(url, '_blank', 'noopener,noreferrer');
 
             const btn = contactForm.querySelector('button[type="submit"]');

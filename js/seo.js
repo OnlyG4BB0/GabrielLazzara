@@ -7,7 +7,7 @@ const SEO_KEYWORDS_GLOBAL =
     'sviluppatore web Palermo, full stack developer Sicily, siti web Palermo, portfolio developer, ' +
     'hire web developer, assumere sviluppatore web, landing page developer, React developer, ' +
     'Python developer, PHP developer, technical SEO, multilingual website, GitHub Pages, VPS deploy, ' +
-    'Webentwickler Palermo, développeur web Palerme, desarrollador web Palermo, Sicilia, Mondello';
+    'web developer Sicilia, web developer Mondello';
 
 const seoByLang = {
     it: {
