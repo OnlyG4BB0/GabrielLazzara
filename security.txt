@@ -1,0 +1,7 @@
+Contact: mailto:gabrielelazzara67@gmail.com
+Expires: 2027-06-14T00:00:00Z
+Preferred-Languages: it, en
+Canonical: https://onlyg4bb0.github.io/GabrielLazzara/
+
+# Security contact for Gabriel Lazzara portfolio
+# Report vulnerabilities responsibly via email.

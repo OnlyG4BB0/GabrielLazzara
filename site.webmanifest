@@ -6,7 +6,7 @@
   "id": "https://onlyg4bb0.github.io/GabrielLazzara/",
   "display": "standalone",
   "background_color": "#08060f",
-  "theme_color": "#8b5cf6",
+  "theme_color": "#08060f",
   "lang": "it",
   "icons": [
     {
@@ -25,7 +25,7 @@
       "src": "assets/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable"
     },
     {
       "src": "assets/icon-192.svg",

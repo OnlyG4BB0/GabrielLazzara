@@ -1,0 +1,26 @@
+# Gabriel Lazzara — Web Developer Portfolio
+# https://onlyg4bb0.github.io/GabrielLazzara/
+
+> Full-stack web developer based in Palermo, Sicily, Italy.
+> Services: business websites, landing pages, web apps, technical SEO, multilingual sites, deploy.
+
+## Contact
+- Email: gabrielelazzara67@gmail.com
+- GitHub: https://github.com/OnlyG4BB0
+- Portfolio: https://onlyg4bb0.github.io/GabrielLazzara/
+
+## Key pages
+- Home: /
+- Privacy: /privacy.html
+- Cookie policy: /cookie.html
+- Legal notice: /note-legali.html
+
+## Languages
+- Italian (default): /?lang=it
+- English: /?lang=en
+
+## Tech stack
+JavaScript, React, TypeScript, Python, PHP, Three.js, Tailwind CSS, Schema.org, GitHub Pages, VPS deploy.
+
+## Client work
+- Rent Boat Mondello: https://rentboatmondello.it

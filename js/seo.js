@@ -183,6 +183,15 @@ const personSchemaByLang = {
             'https://www.youtube.com/@ONLY_G4BB0',
         ],
         email: 'gabrielelazzara67@gmail.com',
+        contactPoint: [
+            {
+                '@type': 'ContactPoint',
+                contactType: 'customer support',
+                email: 'gabrielelazzara67@gmail.com',
+                areaServed: ['IT', 'EU'],
+                availableLanguage: ['Italian', 'English'],
+            },
+        ],
         knowsAbout: [
             'Web development',
             'Web developer',
@@ -222,6 +231,15 @@ const personSchemaByLang = {
             'https://www.youtube.com/@ONLY_G4BB0',
         ],
         email: 'gabrielelazzara67@gmail.com',
+        contactPoint: [
+            {
+                '@type': 'ContactPoint',
+                contactType: 'customer support',
+                email: 'gabrielelazzara67@gmail.com',
+                areaServed: ['IT', 'EU'],
+                availableLanguage: ['Italian', 'English'],
+            },
+        ],
         knowsAbout: [
             'Web development',
             'Web developer',
@@ -254,9 +272,15 @@ function applySeoLanguage(lang) {
     setMetaContent('meta[property="og:description"]', seo.ogDescription);
     setMetaContent('meta[property="og:locale"]', seo.ogLocale);
     setMetaContent('meta[property="og:locale:alternate"]', seo.ogLocaleAlternate);
+    setMetaContent('meta[property="og:url"]', typeof siteUrl === 'function' ? siteUrl('', lang) : seo.ogUrl);
 
     setMetaContent('meta[name="twitter:title"]', seo.ogTitle);
     setMetaContent('meta[name="twitter:description"]', seo.ogDescription);
+
+    const canonical = document.getElementById('canonical-link') || document.querySelector('link[rel="canonical"]');
+    if (canonical && typeof siteUrl === 'function') {
+        canonical.setAttribute('href', siteUrl('', lang));
+    }
 
     const faqEl = document.getElementById('ld-faq');
     if (faqEl && faqSchemaByLang[lang]) {

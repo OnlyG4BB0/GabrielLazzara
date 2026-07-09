@@ -1,0 +1,611 @@
+/* ==========================================================================
+   Neo-Brutal Motion Layer — scroll reveals, hovers, presses, micro-interactions
+   ========================================================================== */
+
+:root {
+    --motion-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --motion-snap: cubic-bezier(0.22, 1, 0.36, 1);
+    --motion-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ---------- Ambient background motion ---------- */
+.neo-block {
+    animation: neoBlockDrift 14s ease-in-out infinite;
+}
+
+.neo-block--1 { animation-delay: 0s; }
+.neo-block--2 { animation-delay: -4.5s; animation-duration: 18s; }
+.neo-block--3 { animation-delay: -9s; animation-duration: 16s; }
+.neo-block--4 { animation-delay: -2s; animation-duration: 20s; }
+.neo-block--5 { animation-delay: -6s; animation-duration: 22s; }
+.neo-block--6 { animation-delay: -11s; animation-duration: 17s; }
+.neo-block--7 { animation-delay: -7.5s; animation-duration: 19s; }
+
+.neo-bg-plus {
+    animation: neoPlusPulse 5s ease-in-out infinite;
+}
+
+.neo-bg-plus--2 { animation-delay: -1.6s; }
+.neo-bg-plus--3 { animation-delay: -3.2s; }
+
+@keyframes neoPlusPulse {
+    0%, 100% { opacity: 0.3; transform: scale(1) rotate(0deg); }
+    50% { opacity: 0.55; transform: scale(1.15) rotate(90deg); }
+}
+
+.neo-bg-ring--1 {
+    animation: neoRingSpin 24s linear infinite;
+}
+
+.neo-bg-ring--2 {
+    animation: neoRingSpin 18s linear infinite reverse;
+}
+
+@keyframes neoRingSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.neo-bg-stripe--1 {
+    animation: neoStripeSlide 12s ease-in-out infinite;
+}
+
+.neo-bg-stripe--2 {
+    animation: neoStripeSlide 14s ease-in-out infinite reverse;
+}
+
+@keyframes neoStripeSlide {
+    0%, 100% { transform: rotate(-8deg) translateX(0); opacity: 0.2; }
+    50% { transform: rotate(-8deg) translateX(12px); opacity: 0.35; }
+}
+
+.marquee-backdrop {
+    animation: marqueeBackdropBreath 6s ease-in-out infinite;
+}
+
+@keyframes marqueeBackdropBreath {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(2px, -2px); }
+}
+
+.marquee-backdrop__dots {
+    animation: marqueeDotsShift 8s linear infinite;
+}
+
+@keyframes marqueeDotsShift {
+    from { background-position: 0 0; }
+    to { background-position: 28px 0; }
+}
+
+.bg-grid::before {
+    animation: gridDotsPulse 10s ease-in-out infinite;
+}
+
+@keyframes gridDotsPulse {
+    0%, 100% { opacity: 0.45; }
+    50% { opacity: 0.75; }
+}
+
+@keyframes neoBlockDrift {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(8px, -12px) rotate(2deg); }
+    66% { transform: translate(-6px, 8px) rotate(-1.5deg); }
+}
+
+.bg-grid {
+    animation: gridPulse 8s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 0.85; }
+}
+
+/* ---------- Stronger scroll reveals ---------- */
+.reveal {
+    --reveal-y: 28px;
+    transition:
+        opacity 0.62s var(--motion-snap),
+        transform 0.62s var(--motion-spring),
+        filter 0.5s var(--motion-snap);
+    filter: blur(2px);
+}
+
+.reveal.active {
+    filter: blur(0);
+}
+
+.reveal-scale {
+    --reveal-y: 24px;
+    --reveal-scale: 0.9;
+    --reveal-rot: -2deg;
+    transform: translate3d(var(--reveal-x), var(--reveal-y), 0) scale(var(--reveal-scale)) rotate(var(--reveal-rot, 0deg));
+}
+
+.reveal-scale.active {
+    --reveal-rot: 0deg;
+}
+
+.reveal-left {
+    --reveal-x: -36px;
+    --reveal-rot: -3deg;
+    transform: translate3d(var(--reveal-x), var(--reveal-y), 0) rotate(var(--reveal-rot, 0deg));
+}
+
+.reveal-left.active { --reveal-rot: 0deg; }
+
+.reveal-right {
+    --reveal-x: 36px;
+    --reveal-rot: 3deg;
+}
+
+.reveal-stagger > .reveal:nth-child(1) { transition-delay: 0ms; }
+.reveal-stagger > .reveal:nth-child(2) { transition-delay: 80ms; }
+.reveal-stagger > .reveal:nth-child(3) { transition-delay: 160ms; }
+.reveal-stagger > .reveal:nth-child(4) { transition-delay: 240ms; }
+.reveal-stagger > .reveal:nth-child(5) { transition-delay: 320ms; }
+.reveal-stagger > .reveal:nth-child(6) { transition-delay: 400ms; }
+.reveal-stagger > .reveal:nth-child(7) { transition-delay: 460ms; }
+.reveal-stagger > .reveal:nth-child(8) { transition-delay: 520ms; }
+.reveal-stagger > .reveal:nth-child(n + 9) { transition-delay: 580ms; }
+
+html.page-ready body.page-loaded #hero .reveal:not(#hero-heading) {
+    transition-duration: 0.72s;
+    transition-timing-function: var(--motion-spring);
+}
+
+.site-main > section.section-visible {
+    animation: sectionLand 0.7s var(--motion-snap) both;
+}
+
+@keyframes sectionLand {
+    from { opacity: 0.92; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section-eyebrow.active,
+.section-eyebrow.reveal.active {
+    animation: eyebrowPop 0.55s var(--motion-bounce) both;
+}
+
+@keyframes eyebrowPop {
+    0% { opacity: 0; transform: translateX(-12px) scale(0.92); }
+    70% { transform: translateX(4px) scale(1.02); }
+    100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+.section-eyebrow.active::before,
+.section-eyebrow.reveal.active::before {
+    animation: eyebrowBarGrow 0.4s var(--motion-snap) 0.1s both;
+}
+
+@keyframes eyebrowBarGrow {
+    from { width: 0; opacity: 0; }
+    to { width: 1.25rem; opacity: 1; }
+}
+
+/* ---------- Cards & panels ---------- */
+.glass-card,
+.spotlight-card,
+.bento-item,
+.skill-card,
+.process-step,
+.project-card,
+.faq-item,
+.packages-unified,
+.contact-panel,
+.cta-band {
+    transition:
+        transform 0.22s var(--motion-snap),
+        box-shadow 0.22s var(--motion-snap),
+        border-color 0.25s ease;
+}
+
+.glass-card:hover,
+.spotlight-card:hover,
+.bento-item:hover,
+.skill-card:hover,
+.process-step:hover,
+.project-card:hover,
+.packages-unified:hover {
+    transform: translate(-4px, -4px) rotate(-0.5deg);
+}
+
+.glass-card:hover > i,
+.spotlight-card:hover > i,
+.bento-item:hover > i,
+.process-step:hover > i {
+    animation: iconBounce 0.55s var(--motion-bounce);
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    40% { transform: translateY(-6px) scale(1.12); }
+    70% { transform: translateY(2px) scale(0.98); }
+}
+
+.spotlight-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 3px solid transparent;
+    pointer-events: none;
+    transition: border-color 0.2s ease;
+    border-radius: inherit;
+}
+
+.spotlight-card:hover::after {
+    border-color: var(--c-accent-indigo);
+}
+
+.project-card:hover .project-thumb img {
+    transform: scale(1.08) rotate(0.5deg);
+    transition: transform 0.55s var(--motion-snap);
+}
+
+.project-card.project-tilt {
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.project-card.project-tilt:hover {
+    transition: transform 0.08s linear;
+}
+
+/* ---------- Buttons & links ---------- */
+.btn-primary,
+.btn-ghost,
+.hero-action-btn,
+.nav-link-cta,
+.packages-unified__cta,
+.filter-btn,
+#contact-form button[type="submit"] {
+    position: relative;
+    overflow: hidden;
+    transition:
+        transform 0.18s var(--motion-snap),
+        box-shadow 0.18s var(--motion-snap),
+        background-color 0.2s ease;
+}
+
+.btn-primary {
+    transform: translate(
+        calc(-2px + var(--mag-x, 0px)),
+        calc(-2px + var(--mag-y, 0px))
+    );
+}
+
+.btn-primary:hover {
+    animation: btnPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes btnPulse {
+    0%, 100% { box-shadow: calc(var(--neo-shadow-x) + 2px) calc(var(--neo-shadow-y) + 2px) 0 var(--c-accent); }
+    50% { box-shadow: calc(var(--neo-shadow-x) + 4px) calc(var(--neo-shadow-y) + 4px) 0 var(--c-accent-indigo); }
+}
+
+.btn-primary.is-pressed,
+.btn-ghost.is-pressed,
+.hero-action-btn.is-pressed,
+.filter-btn.is-pressed,
+.nav-link-cta.is-pressed {
+    animation: brutalClick 0.32s var(--motion-snap);
+}
+
+@keyframes brutalClick {
+    0% { transform: translate(0, 0) scale(1); }
+    35% { transform: translate(3px, 3px) scale(0.97); }
+    65% { transform: translate(-1px, -1px) scale(1.02); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+
+.filter-btn.filter-pop {
+    animation: filterPop 0.45s var(--motion-bounce);
+}
+
+@keyframes filterPop {
+    0% { transform: scale(1); }
+    35% { transform: translate(-3px, -3px) scale(1.06); }
+    70% { transform: translate(1px, 1px) scale(0.98); }
+    100% { transform: translate(-2px, -2px) scale(1); }
+}
+
+.filter-btn.filter-active {
+    animation: filterActiveGlow 2s ease-in-out infinite;
+}
+
+@keyframes filterActiveGlow {
+    0%, 100% { box-shadow: var(--neo-shadow); }
+    50% { box-shadow: calc(var(--neo-shadow-x) + 2px) calc(var(--neo-shadow-y) + 2px) 0 var(--c-accent-indigo); }
+}
+
+.nav-link:hover {
+    transform: translate(-1px, -1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-indicator {
+        transition: none;
+    }
+}
+
+.footer-link {
+    display: inline-block;
+    transition: transform 0.2s var(--motion-snap), color 0.2s ease;
+}
+
+.footer-link:hover {
+    transform: translateX(6px);
+    color: var(--c-accent-bright);
+}
+
+/* ---------- Ripple click effect ---------- */
+.neo-ripple-host { position: relative; overflow: hidden; }
+
+.neo-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--c-accent);
+    opacity: 0.45;
+    transform: scale(0);
+    animation: neoRipple 0.55s var(--motion-snap) forwards;
+    pointer-events: none;
+    z-index: 20;
+}
+
+@keyframes neoRipple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* ---------- Form inputs ---------- */
+.glass-input.is-focused {
+    animation: inputFocusPop 0.35s var(--motion-bounce);
+}
+
+@keyframes inputFocusPop {
+    0% { transform: scale(1); }
+    50% { transform: translate(-3px, -3px) scale(1.01); }
+    100% { transform: translate(-2px, -2px) scale(1); }
+}
+
+.glass-input.is-typing {
+    border-color: var(--c-accent-indigo) !important;
+}
+
+#copy-email-btn.is-copied {
+    animation: copySuccess 0.6s var(--motion-bounce);
+}
+
+@keyframes copySuccess {
+    0%, 100% { transform: scale(1); }
+    40% { transform: translate(-4px, -4px) scale(1.05); }
+}
+
+/* ---------- FAQ ---------- */
+.faq-item summary {
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.faq-item summary .faq-chevron {
+    transition: transform 0.35s var(--motion-spring);
+}
+
+.faq-item[open] summary .faq-chevron {
+    transform: rotate(180deg);
+}
+
+.faq-item.faq-opening {
+    animation: faqOpen 0.4s var(--motion-snap);
+}
+
+@keyframes faqOpen {
+    0% { transform: scale(0.98); }
+    60% { transform: translate(-2px, -2px) scale(1.01); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+
+.faq-item[open] .faq-answer {
+    animation: faqAnswerIn 0.38s var(--motion-snap);
+}
+
+@keyframes faqAnswerIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Hero ---------- */
+.hero-stat {
+    transition: transform 0.25s var(--motion-spring), box-shadow 0.25s ease;
+}
+
+.hero-stat:hover {
+    transform: translate(-4px, -4px) rotate(-1deg);
+    animation: statWiggle 0.5s var(--motion-bounce);
+}
+
+@keyframes statWiggle {
+    0%, 100% { transform: translate(-4px, -4px) rotate(-1deg); }
+    50% { transform: translate(-6px, -6px) rotate(1deg); }
+}
+
+.hero-scroll-cue {
+    animation: scrollCueBounce 2s ease-in-out infinite;
+}
+
+@keyframes scrollCueBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+}
+
+.hero-scroll-cue:hover {
+    animation: scrollCueBounce 0.6s ease-in-out infinite;
+}
+
+.hero-visual-card {
+    animation: heroCardFloat 5s ease-in-out infinite;
+}
+
+@keyframes heroCardFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+/* ---------- Timeline ---------- */
+.timeline-item {
+    transition: transform 0.25s var(--motion-snap), box-shadow 0.25s ease;
+}
+
+.timeline-item:hover {
+    transform: translate(-3px, -3px);
+}
+
+.timeline-item.reveal.active .timeline-period {
+    animation: periodPop 0.5s var(--motion-bounce) 0.15s both;
+}
+
+@keyframes periodPop {
+    from { transform: scale(0.85); opacity: 0.6; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* ---------- Skill tags ---------- */
+.skill-tag.tag-motion {
+    animation: tagPop 0.45s var(--motion-bounce) both;
+    animation-delay: var(--stagger, 0ms);
+}
+
+@keyframes tagPop {
+    from { opacity: 0; transform: translateY(8px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.skill-tag:hover {
+    transform: translate(-2px, -2px) rotate(-2deg);
+    transition: transform 0.2s var(--motion-snap);
+}
+
+/* ---------- Marquee ---------- */
+.marquee-wrap:hover .marquee-item {
+    cursor: default;
+}
+
+.marquee-item {
+    transition: color 0.2s ease, transform 0.22s var(--motion-spring);
+}
+
+.marquee-wrap:hover .marquee-item:hover {
+    animation: marqueeTagLift 0.35s var(--motion-bounce);
+}
+
+@keyframes marqueeTagLift {
+    0%, 100% { transform: translateY(-2px); }
+    50% { transform: translateY(-5px); }
+}
+
+/* ---------- About badges ---------- */
+.about-float-badge {
+    animation: badgeFloat 3s ease-in-out infinite;
+}
+
+.about-float-badge--ux {
+    animation-delay: 1.5s;
+}
+
+@keyframes badgeFloat {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(-4px, -8px) rotate(-2deg); }
+}
+
+/* ---------- Project filter enter ---------- */
+[data-project-category].project-enter {
+    animation: projectCardIn 0.55s var(--motion-spring) both;
+}
+
+@keyframes projectCardIn {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.92) rotate(-2deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotate(0deg);
+    }
+}
+
+/* ---------- Social icons ---------- */
+footer.site-footer a.rounded-full {
+    transition: transform 0.25s var(--motion-spring), box-shadow 0.2s ease;
+}
+
+footer.site-footer a.rounded-full:hover {
+    transform: translate(-3px, -3px) rotate(-8deg) scale(1.08);
+}
+
+/* ---------- Theme / lang toggles ---------- */
+.theme-toggle:hover,
+.lang-toggle:hover {
+    animation: toggleWiggle 0.4s var(--motion-bounce);
+}
+
+@keyframes toggleWiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-6deg); }
+    75% { transform: rotate(6deg); }
+}
+
+#mobile-menu-btn.menu-open {
+    animation: menuBtnSpin 0.35s var(--motion-snap);
+}
+
+@keyframes menuBtnSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(90deg); }
+}
+
+/* ---------- CTA band ---------- */
+.cta-band {
+    animation: ctaPulse 4s ease-in-out infinite;
+}
+
+@keyframes ctaPulse {
+    0%, 100% { box-shadow: var(--neo-shadow); }
+    50% { box-shadow: calc(var(--neo-shadow-x) + 3px) calc(var(--neo-shadow-y) + 3px) 0 var(--c-accent-indigo); }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .neo-block,
+    .bg-grid,
+    .bg-grid::before,
+    .hero-scroll-cue,
+    .hero-visual-card,
+    .about-float-badge,
+    .cta-band,
+    .btn-primary:hover,
+    .filter-btn.filter-active,
+    .neo-bg-plus,
+    .neo-bg-ring,
+    .neo-bg-stripe,
+    .marquee-backdrop,
+    .marquee-backdrop__dots {
+        animation: none !important;
+    }
+
+    .reveal,
+    .reveal.active {
+        filter: none;
+        transition-duration: 0.01ms !important;
+    }
+
+    .project-card.project-tilt:hover {
+        transform: none !important;
+    }
+}
+
+html.motion-lite .project-card.project-tilt,
+html.motion-lite .btn-primary:hover {
+    animation: none !important;
+}

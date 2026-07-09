@@ -28,7 +28,15 @@ class PortfolioApp {
         this.themeToggle = document.getElementById('theme-toggle');
 
         this.isMenuOpen = false;
-        this.currentLang = localStorage.getItem('portfolio_lang') || 'it';
+        this.isProgrammaticScroll = false;
+        this.scrollNavTarget = null;
+
+        const urlLang = new URLSearchParams(window.location.search).get('lang');
+        if (urlLang === 'it' || urlLang === 'en') {
+            this.currentLang = urlLang;
+        } else {
+            this.currentLang = localStorage.getItem('portfolio_lang') || 'it';
+        }
         this.currentFilter = 'all';
         this.currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
         this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -53,6 +61,7 @@ class PortfolioApp {
         this.applyLanguage(this.currentLang);
         this.setupIntersectionObservers();
         this.setupNavScrollSpy();
+        this.setupNavIndicator();
         this.setupInteractiveMotion();
         this.setupScrollEffects();
         this.setupContactForm();
@@ -61,6 +70,7 @@ class PortfolioApp {
         this.setupProjectFilters();
         this.setupSpotlightCards();
         this.setupPressFeedback();
+        this.setupNeoMotion();
         this.setupCaseMetricMotion();
         this.setupOutboundTracking();
         requestAnimationFrame(() => {
@@ -228,6 +238,14 @@ class PortfolioApp {
         }
 
         this.updateHeroHeading(lang);
+
+        if (typeof history !== 'undefined' && typeof URL !== 'undefined') {
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState({}, '', url);
+        }
+
+        window.requestAnimationFrame(() => this.repositionNavIndicator?.());
     }
 
     setupProjectFilters() {
@@ -273,6 +291,11 @@ class PortfolioApp {
 
     trackEvent(name, props = {}) {
         try {
+            const analyticsOk = typeof ConsentManager !== 'undefined'
+                ? ConsentManager.analyticsAllowed()
+                : false;
+            if (!analyticsOk) return;
+
             if (typeof window.plausible === 'function') {
                 window.plausible(name, { props });
             }
@@ -416,25 +439,35 @@ class PortfolioApp {
             this._smoothScrollFrame = null;
         }
         document.documentElement.classList.remove('is-smooth-scrolling');
+        this.isProgrammaticScroll = false;
+        this.scrollNavTarget = null;
     }
 
-    smoothScrollToElement(targetSection) {
+    smoothScrollToElement(targetSection, onComplete) {
         if (this.prefersReducedMotion) {
             const top = targetSection.getBoundingClientRect().top + window.scrollY - this.getScrollOffset();
             window.scrollTo({ top, left: 0, behavior: 'auto' });
+            onComplete?.();
             return;
         }
 
         this.cancelSmoothScroll();
+        const lockedTarget = this.scrollNavTarget;
+        this.isProgrammaticScroll = true;
+        this.scrollNavTarget = lockedTarget;
 
         const startY = window.scrollY;
         const targetY = targetSection.getBoundingClientRect().top + startY - this.getScrollOffset();
         const distance = targetY - startY;
 
-        if (Math.abs(distance) < 4) return;
+        if (Math.abs(distance) < 4) {
+            this.isProgrammaticScroll = false;
+            onComplete?.();
+            return;
+        }
 
-        const duration = Math.min(920, Math.max(360, Math.abs(distance) * 0.48));
-        const easeOutCubic = (t) => 1 - (1 - t) ** 3;
+        const duration = Math.min(620, Math.max(240, Math.abs(distance) * 0.34));
+        const easeOutQuart = (t) => 1 - (1 - t) ** 4;
         let startedAt = null;
 
         document.documentElement.classList.add('is-smooth-scrolling');
@@ -444,30 +477,51 @@ class PortfolioApp {
             window.removeEventListener('wheel', cancelOnUserInput, cancelOpts);
             window.removeEventListener('touchstart', cancelOnUserInput, cancelOpts);
             window.removeEventListener('keydown', cancelOnUserInput, cancelOpts);
+            onComplete?.();
         };
         const cancelOpts = { passive: true };
         window.addEventListener('wheel', cancelOnUserInput, cancelOpts);
         window.addEventListener('touchstart', cancelOnUserInput, cancelOpts);
         window.addEventListener('keydown', cancelOnUserInput, cancelOpts);
 
+        const finish = () => {
+            this._smoothScrollFrame = null;
+            this.isProgrammaticScroll = false;
+            this.scrollNavTarget = null;
+            document.documentElement.classList.remove('is-smooth-scrolling');
+            window.removeEventListener('wheel', cancelOnUserInput, cancelOpts);
+            window.removeEventListener('touchstart', cancelOnUserInput, cancelOpts);
+            window.removeEventListener('keydown', cancelOnUserInput, cancelOpts);
+            this.cacheNavSectionMetrics();
+            onComplete?.();
+        };
+
         const step = (now) => {
             if (startedAt === null) startedAt = now;
             const progress = Math.min(1, (now - startedAt) / duration);
-            window.scrollTo(0, startY + distance * easeOutCubic(progress));
+            window.scrollTo(0, startY + distance * easeOutQuart(progress));
 
             if (progress < 1) {
                 this._smoothScrollFrame = requestAnimationFrame(step);
                 return;
             }
 
-            this._smoothScrollFrame = null;
-            document.documentElement.classList.remove('is-smooth-scrolling');
-            window.removeEventListener('wheel', cancelOnUserInput, cancelOpts);
-            window.removeEventListener('touchstart', cancelOnUserInput, cancelOpts);
-            window.removeEventListener('keydown', cancelOnUserInput, cancelOpts);
+            finish();
         };
 
         this._smoothScrollFrame = requestAnimationFrame(step);
+    }
+
+    resolveNavSectionId(sectionId) {
+        return this.navSectionAlias[sectionId] || sectionId;
+    }
+
+    setNavTargetFromHref(href) {
+        if (!href?.startsWith('#')) return;
+        const sectionId = href.slice(1);
+        if (!sectionId) return;
+        this.scrollNavTarget = this.resolveNavSectionId(sectionId);
+        this.updateActiveNavLink(this.scrollNavTarget);
     }
 
     setupSmoothScrolling() {
@@ -478,7 +532,10 @@ class PortfolioApp {
                 const targetSection = document.querySelector(targetId);
                 if (targetSection) {
                     e.preventDefault();
-                    this.smoothScrollToElement(targetSection);
+                    this.setNavTargetFromHref(targetId);
+                    this.smoothScrollToElement(targetSection, () => {
+                        this.syncActiveNavFromScroll();
+                    });
                     if (this.isMenuOpen) this.toggleMenu();
                 }
             });
@@ -496,22 +553,35 @@ class PortfolioApp {
             '.filter-btn:not(.reveal)',
             '.seo-visible-block:not(.reveal)',
             '.packages-unified:not(.reveal)',
+            '.cta-band:not(.reveal)',
+            '.contact-panel:not(.reveal)',
+            '.hero-visual-card:not(.reveal)',
         ];
 
         if (this.motionTier === 'full') {
             selectors.push(
                 '.footer-link:not(.reveal)',
                 '.about-float-badge:not(.reveal)',
-                '.project-card .project-card-actions a:not(.reveal)'
+                '.project-card .project-card-actions a:not(.reveal)',
+                '.about-visual:not(.reveal)',
+                'footer.site-footer a.rounded-full:not(.reveal)',
+                '.skill-tag:not(.reveal)'
+            );
+        } else if (this.motionTier === 'lite') {
+            selectors.push(
+                '.footer-link:not(.reveal)',
+                '.about-float-badge:not(.reveal)'
             );
         }
 
         let delayIndex = 0;
-        const maxDelaySteps = this.motionTier === 'lite' ? 6 : 10;
+        const stepMs = this.motionTier === 'lite' ? 55 : 72;
+        const maxDelaySteps = this.motionTier === 'lite' ? 8 : 12;
         selectors.forEach((selector) => {
             document.querySelectorAll(selector).forEach((el) => {
-                el.classList.add('reveal', 'reveal-fade');
-                el.style.transitionDelay = `${(delayIndex % maxDelaySteps) * 35}ms`;
+                const variant = el.classList.contains('about-visual') ? 'reveal-right' : 'reveal-fade';
+                el.classList.add('reveal', variant);
+                el.style.transitionDelay = `${(delayIndex % maxDelaySteps) * stepMs}ms`;
                 delayIndex += 1;
             });
         });
@@ -664,7 +734,7 @@ class PortfolioApp {
 
     getNavScrollProbe() {
         const navH = this.navbar?.offsetHeight ?? 72;
-        return navH + Math.min(window.innerHeight * 0.25, 168);
+        return navH + 56;
     }
 
     cacheNavSectionMetrics() {
@@ -678,6 +748,11 @@ class PortfolioApp {
 
     syncActiveNavFromScroll() {
         if (!this.navSectionMetrics?.length) return;
+
+        if (this.isProgrammaticScroll && this.scrollNavTarget) {
+            this.updateActiveNavLink(this.scrollNavTarget);
+            return;
+        }
 
         const probe = window.scrollY + this.getNavScrollProbe();
         let activeId = this.navSectionMetrics[0].id;
@@ -721,6 +796,15 @@ class PortfolioApp {
             '.mobile-link',
             '.footer-link',
             'a.rounded-xl.font-semibold',
+            '.hero-stat',
+            '.marquee-item',
+            '.glass-card',
+            '.spotlight-card',
+            '.bento-item',
+            '.skill-card',
+            '.process-step',
+            '.project-card',
+            '.packages-unified',
         ].join(', ');
 
         document.querySelectorAll(interactiveSelector).forEach((el) => {
@@ -729,26 +813,58 @@ class PortfolioApp {
     }
 
     updateActiveNavLink(sectionId) {
-        if (sectionId === this.activeSectionId) return;
-        this.activeSectionId = sectionId;
+        const resolvedId = this.resolveNavSectionId(sectionId);
+        if (resolvedId === this.activeSectionId) {
+            this.repositionNavIndicator?.();
+            return;
+        }
+        this.activeSectionId = resolvedId;
 
         const applyNavState = (link) => {
             const href = link.getAttribute('href');
             if (!href?.startsWith('#')) return;
-            const isActive = href === `#${sectionId}`;
-            link.classList.toggle('active-link', isActive);
-            if (isActive) {
+            const isActive = href === `#${resolvedId}`;
+            const isContactCta = link.classList.contains('nav-link-cta') && resolvedId === 'contact';
+            const active = isActive || isContactCta;
+            link.classList.toggle('active-link', active);
+            if (active) {
                 link.setAttribute('aria-current', 'page');
             } else {
                 link.removeAttribute('aria-current');
             }
-            link.classList.toggle('text-white', isActive);
-            link.classList.toggle('bg-white/10', isActive);
-            link.classList.toggle('text-gray-300', !isActive);
+            link.classList.toggle('text-white', active);
+            link.classList.toggle('bg-white/10', active);
+            link.classList.toggle('text-gray-300', !active);
         };
 
         this.navLinks.forEach(applyNavState);
         this.mobileLinks.forEach(applyNavState);
+        this.repositionNavIndicator?.();
+    }
+
+    setupNavIndicator() {
+        this.navPill = document.querySelector('.navbar-nav.nav-pill');
+        this.navIndicator = this.navPill?.querySelector('.nav-indicator');
+        if (!this.navPill || !this.navIndicator) return;
+
+        this.repositionNavIndicator = () => {
+            const active = this.navPill.querySelector('.nav-link.active-link');
+            if (!active) {
+                this.navIndicator.classList.remove('is-visible');
+                return;
+            }
+
+            this.navIndicator.style.width = `${active.offsetWidth}px`;
+            this.navIndicator.style.height = `${active.offsetHeight}px`;
+            this.navIndicator.style.transform = `translate3d(${active.offsetLeft}px, ${active.offsetTop}px, 0)`;
+            this.navIndicator.classList.add('is-visible');
+        };
+
+        window.addEventListener('resize', () => {
+            window.requestAnimationFrame(() => this.repositionNavIndicator());
+        }, { passive: true });
+
+        window.requestAnimationFrame(() => this.repositionNavIndicator());
     }
 
     setupScrollEffects() {
@@ -776,7 +892,7 @@ class PortfolioApp {
                     this.navbar.classList.toggle('navbar-scrolled', window.scrollY > 50);
                 }
                 const now = performance.now();
-                if (now - lastSpyAt >= spyIntervalMs) {
+                if (!this.isProgrammaticScroll && now - lastSpyAt >= spyIntervalMs) {
                     lastSpyAt = now;
                     this.syncActiveNavFromScroll();
                 }
@@ -789,7 +905,8 @@ class PortfolioApp {
 
         document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
             anchor.addEventListener('click', () => {
-                window.setTimeout(() => this.syncActiveNavFromScroll(), 480);
+                if (this.isProgrammaticScroll) return;
+                window.setTimeout(() => this.syncActiveNavFromScroll(), 120);
             });
         });
     }
@@ -1135,11 +1252,131 @@ class PortfolioApp {
                 if (e.pointerType === 'mouse' && e.button !== 0) return;
                 el.classList.add('is-pressed');
             };
-            const onUp = () => el.classList.remove('is-pressed');
+            const onUp = () => {
+                el.classList.remove('is-pressed');
+            };
             el.addEventListener('pointerdown', onDown);
             el.addEventListener('pointerup', onUp);
             el.addEventListener('pointerleave', onUp);
             el.addEventListener('pointercancel', onUp);
+        });
+    }
+
+    setupNeoMotion() {
+        if (this.motionTier === 'none') return;
+
+        this.setupRipples();
+        this.setupMagneticButtons();
+        this.setupCardTilt();
+        this.setupFaqMotion();
+        this.setupInputMotion();
+    }
+
+    setupRipples() {
+        const rippleHosts = document.querySelectorAll(
+            '.btn-primary, .btn-ghost, .hero-action-btn, .nav-link-cta, .filter-btn, #contact-form button[type="submit"], #copy-email-btn, .packages-unified__cta'
+        );
+
+        rippleHosts.forEach((el) => {
+            if (el.dataset.rippleBound === '1') return;
+            el.dataset.rippleBound = '1';
+            el.classList.add('neo-ripple-host');
+
+            el.addEventListener('pointerdown', (e) => {
+                if (e.pointerType === 'mouse' && e.button !== 0) return;
+                const rect = el.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height) * 1.2;
+                const ripple = document.createElement('span');
+                ripple.className = 'neo-ripple';
+                ripple.style.width = `${size}px`;
+                ripple.style.height = `${size}px`;
+                ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+                ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+                el.appendChild(ripple);
+                ripple.addEventListener('animationend', () => ripple.remove());
+            });
+        });
+    }
+
+    setupMagneticButtons() {
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+        const magneticSelector = '.btn-primary, .nav-link-cta, .hero-action-btn, .packages-unified__cta';
+        const strength = this.motionTier === 'full' ? 10 : 6;
+
+        document.querySelectorAll(magneticSelector).forEach((btn) => {
+            if (btn.dataset.magneticBound === '1') return;
+            btn.dataset.magneticBound = '1';
+
+            btn.addEventListener('pointermove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width - 0.5) * strength;
+                const y = ((e.clientY - rect.top) / rect.height - 0.5) * strength;
+                btn.style.setProperty('--mag-x', `${x}px`);
+                btn.style.setProperty('--mag-y', `${y}px`);
+            });
+
+            const reset = () => {
+                btn.style.setProperty('--mag-x', '0px');
+                btn.style.setProperty('--mag-y', '0px');
+            };
+            btn.addEventListener('pointerleave', reset);
+            btn.addEventListener('pointerup', reset);
+        });
+    }
+
+    setupCardTilt() {
+        if (this.motionTier !== 'full') return;
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+        document.querySelectorAll('.project-card').forEach((card) => {
+            card.classList.add('project-tilt');
+
+            card.addEventListener('pointermove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const px = (e.clientX - rect.left) / rect.width - 0.5;
+                const py = (e.clientY - rect.top) / rect.height - 0.5;
+                const rotX = (-py * 6).toFixed(2);
+                const rotY = (px * 6).toFixed(2);
+                card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) translate(-4px, -4px)`;
+            });
+
+            const reset = () => {
+                card.style.transform = '';
+            };
+            card.addEventListener('pointerleave', reset);
+        });
+    }
+
+    setupFaqMotion() {
+        document.querySelectorAll('.faq-item').forEach((item) => {
+            if (item.dataset.faqMotionBound === '1') return;
+            item.dataset.faqMotionBound = '1';
+
+            item.addEventListener('toggle', () => {
+                if (!item.open) return;
+                item.classList.remove('faq-opening');
+                void item.offsetWidth;
+                item.classList.add('faq-opening');
+                window.setTimeout(() => item.classList.remove('faq-opening'), 420);
+            });
+        });
+    }
+
+    setupInputMotion() {
+        document.querySelectorAll('.glass-input').forEach((input) => {
+            if (input.dataset.inputMotionBound === '1') return;
+            input.dataset.inputMotionBound = '1';
+
+            input.addEventListener('focus', () => {
+                input.classList.add('is-focused');
+            });
+            input.addEventListener('blur', () => {
+                input.classList.remove('is-focused', 'is-typing');
+            });
+            input.addEventListener('input', () => {
+                input.classList.toggle('is-typing', input.value.trim().length > 0);
+            });
         });
     }
 
@@ -1171,9 +1408,18 @@ class PortfolioApp {
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
+            const privacyConsent = contactForm.querySelector('#contact-privacy-consent');
             const nameInput = contactForm.querySelector('input[name="name"]');
             const emailInput = contactForm.querySelector('input[name="email"]');
             const messageInput = contactForm.querySelector('textarea[name="message"]');
+            const t = translations[this.currentLang] || translations.it;
+
+            if (privacyConsent && !privacyConsent.checked) {
+                privacyConsent.setCustomValidity(t.form_consent_required);
+                privacyConsent.reportValidity();
+                return;
+            }
+            if (privacyConsent) privacyConsent.setCustomValidity('');
 
             if (!contactForm.reportValidity()) return;
 
@@ -1189,7 +1435,6 @@ class PortfolioApp {
 
             const btn = contactForm.querySelector('button[type="submit"]');
             const originalHtml = btn.innerHTML;
-            const t = translations[this.currentLang] || translations.it;
             btn.innerHTML = `${t.whatsapp_opening} <i class="fab fa-whatsapp ml-1" aria-hidden="true"></i>`;
 
             setTimeout(() => {
