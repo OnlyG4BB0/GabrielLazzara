@@ -19,6 +19,9 @@
 - Italian (default): /?lang=it
 - English: /?lang=en
 
+## Keywords
+web developer Palermo, sviluppatore web Palermo, developer Sicilia, creazione siti web, landing page, web app, portfolio developer, SEO tecnica, indicizzazione Google, Schema.org, siti multilingua, React, JavaScript, TypeScript, Python, PHP, GitHub Pages, VPS, Mondello, freelance developer Italy
+
 ## Tech stack
 JavaScript, React, TypeScript, Python, PHP, Three.js, Tailwind CSS, Schema.org, GitHub Pages, VPS deploy.
 

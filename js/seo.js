@@ -2,22 +2,32 @@
  * SEO meta e structured data per lingua (IT / EN) + termini internazionali.
  */
 const SEO_KEYWORDS_GLOBAL =
-    'Gabriel Lazzara, web developer, developer, software developer, full stack developer, ' +
-    'sviluppatore web, programmatore web, freelance developer Italy, web developer Palermo, ' +
-    'sviluppatore web Palermo, full stack developer Sicily, siti web Palermo, portfolio developer, ' +
-    'hire web developer, assumere sviluppatore web, landing page developer, React developer, ' +
-    'Python developer, PHP developer, technical SEO, multilingual website, GitHub Pages, VPS deploy, ' +
-    'web developer Sicilia, web developer Mondello';
+    'Gabriel Lazzara, web developer, developer, software developer, full stack developer, full-stack developer, ' +
+    'sviluppatore web, programmatore web, sviluppatore siti web, creazione siti web, realizzazione siti web, ' +
+    'freelance developer Italy, freelance web developer, web developer Palermo, web developer Sicilia, ' +
+    'sviluppatore web Palermo, sviluppatore web Sicilia, programmatore Palermo, developer Palermo, ' +
+    'full stack developer Sicily, full stack developer Palermo, siti web Palermo, siti internet Palermo, ' +
+    'portfolio developer, sito portfolio developer, hire web developer, assumere sviluppatore web, ' +
+    'landing page developer, siti vetrina, e-commerce developer, web app developer, ' +
+    'React developer, TypeScript developer, JavaScript developer, Python developer, PHP developer, ' +
+    'Three.js developer, Tailwind CSS, Svelte developer, technical SEO, SEO tecnica, SEO locale Palermo, ' +
+    'Google indexing, Schema.org, sitemap, hreflang, multilingual website, siti multilingua, ' +
+    'GitHub Pages, VPS deploy, Oracle Cloud, responsive web design, mobile-first, web performance, ' +
+    'web developer Mondello, sviluppatore web Mondello, siti web Sicilia, web agency Palermo freelance, ' +
+    'preventivo sito web, consulenza web, sviluppo frontend, sviluppo backend, API REST, WhatsApp business';
 
 const seoByLang = {
     it: {
         title: 'Gabriel Lazzara | Web Developer & Sviluppatore Full-Stack · Palermo',
         description:
-            'Gabriel Lazzara — web developer e sviluppatore full-stack a Palermo (Sicilia). Assumo progetti siti web, landing page e web app: SEO tecnica, multilingua IT/EN, Schema.org, deploy VPS/GitHub Pages. Portfolio e preventivo.',
+            'Gabriel Lazzara — web developer e sviluppatore full-stack a Palermo (Sicilia). Siti web, landing page, web app, e-commerce e portfolio per PMI: SEO tecnica, indicizzazione Google, Schema.org, multilingua IT/EN, performance mobile-first, deploy VPS/GitHub Pages. Preventivo e contatti.',
         keywords:
             'Gabriel Lazzara, web developer Palermo, sviluppatore web Palermo, developer Sicilia, programmatore web Palermo, ' +
             'full stack developer Italia, freelance developer Palermo, assumere sviluppatore web, portfolio developer, ' +
-            'creazione siti web Palermo, siti internet Palermo, React developer, Python developer, PHP developer, SEO locale',
+            'creazione siti web Palermo, realizzazione siti web Palermo, siti internet Palermo, siti web Sicilia, ' +
+            'landing page Palermo, web app Palermo, sito vetrina professionale, preventivo sito web, consulenza SEO, ' +
+            'React developer Palermo, JavaScript developer, TypeScript developer, Python developer, PHP developer, ' +
+            'SEO locale Palermo, indicizzazione Google, Schema.org, siti multilingua, GitHub Pages, VPS hosting',
         ogTitle: 'Gabriel Lazzara | Web Developer Full-Stack · Palermo',
         ogDescription:
             'Sviluppatore web a Palermo: siti, landing e web app con SEO, multilingua e performance. Portfolio progetti cliente.',
@@ -28,11 +38,14 @@ const seoByLang = {
     en: {
         title: 'Gabriel Lazzara | Web Developer & Full-Stack Developer · Palermo, Italy',
         description:
-            'Gabriel Lazzara — full-stack web developer in Palermo, Sicily, Italy. I build business websites, landing pages and web apps with technical SEO, multilingual setup (EN/IT), Schema.org and VPS/GitHub Pages deploy. Portfolio and quotes.',
+            'Gabriel Lazzara — full-stack web developer in Palermo, Sicily, Italy. Business websites, landing pages, web apps and portfolios for SMEs: technical SEO, Google indexing, Schema.org, EN/IT multilingual sites, mobile-first performance, VPS/GitHub Pages deploy. Quotes and contact.',
         keywords:
             'Gabriel Lazzara, web developer Palermo, developer Sicily, full stack developer Italy, software developer Palermo, ' +
             'freelance web developer Italy, hire web developer Palermo, portfolio developer, website developer Italy, ' +
-            'custom web development, React developer, Python developer, PHP developer, local SEO Palermo',
+            'custom web development, business website Palermo, landing page developer Sicily, web app developer Italy, ' +
+            'local SEO Palermo, Google search indexing, Schema.org structured data, multilingual website, ' +
+            'React developer, TypeScript developer, JavaScript developer, Python developer, PHP developer, ' +
+            'GitHub Pages deploy, VPS hosting, responsive web design, frontend backend developer',
         ogTitle: 'Gabriel Lazzara | Full-Stack Web Developer',
         ogDescription:
             'Web developer in Palermo: websites, landing pages and web apps with SEO, multilingual delivery and deploy.',
@@ -165,6 +178,8 @@ const personSchemaByLang = {
             'Gabriel Lazzara web developer',
             'Gabriel Lazzara sviluppatore web',
             'Gabriel Lazzara developer Palermo',
+            'Gabriel Lazzara programmatore web',
+            'Gabriel Lazzara full stack developer',
         ],
         url: 'https://onlyg4bb0.github.io/GabrielLazzara/',
         image: 'https://onlyg4bb0.github.io/GabrielLazzara/assets/icon-192.png',
@@ -195,13 +210,25 @@ const personSchemaByLang = {
         knowsAbout: [
             'Web development',
             'Web developer',
+            'Sviluppatore web',
+            'Full-stack development',
             'JavaScript',
+            'TypeScript',
             'React',
             'Python',
             'PHP',
+            'Three.js',
+            'Tailwind CSS',
             'Technical SEO',
+            'Local SEO Palermo',
+            'Google indexing',
             'Schema.org',
             'Multilingual websites',
+            'Landing pages',
+            'Web applications',
+            'GitHub Pages',
+            'VPS deployment',
+            'Responsive web design',
         ],
     },
     en: {
@@ -213,6 +240,8 @@ const personSchemaByLang = {
             'Gabriel Lazzara web developer',
             'Gabriel Lazzara full stack developer',
             'Gabriel Lazzara developer Palermo',
+            'Gabriel Lazzara software developer',
+            'Gabriel Lazzara website developer Italy',
         ],
         url: 'https://onlyg4bb0.github.io/GabrielLazzara/',
         image: 'https://onlyg4bb0.github.io/GabrielLazzara/assets/icon-192.png',
@@ -243,13 +272,24 @@ const personSchemaByLang = {
         knowsAbout: [
             'Web development',
             'Web developer',
+            'Full-stack development',
             'JavaScript',
+            'TypeScript',
             'React',
             'Python',
             'PHP',
+            'Three.js',
+            'Tailwind CSS',
             'Technical SEO',
+            'Local SEO Palermo',
+            'Google search indexing',
             'Schema.org',
             'Multilingual websites',
+            'Landing pages',
+            'Web applications',
+            'GitHub Pages',
+            'VPS deployment',
+            'Responsive web design',
         ],
     },
 };
