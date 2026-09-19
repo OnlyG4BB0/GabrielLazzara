@@ -917,14 +917,14 @@ html.is-loading #navbar { opacity: 0; transform: translateY(-16px); }
         transform 0.6s var(--ease-expo);
 }
 
-.glass-card:hover,
-.spotlight-card:hover,
+.glass-card:hover:not(.project-card),
+.spotlight-card:hover:not(.project-card),
 .bento-item:hover,
 .skill-card:hover,
 .process-step:hover,
 .packages-unified:hover,
-.glass-card.motion-interactive:hover:not(:active):not(.is-pressed),
-.spotlight-card.motion-interactive:hover:not(:active):not(.is-pressed),
+.glass-card.motion-interactive:hover:not(.project-card):not(:active):not(.is-pressed),
+.spotlight-card.motion-interactive:hover:not(.project-card):not(:active):not(.is-pressed),
 .bento-item.motion-interactive:hover:not(:active):not(.is-pressed),
 .skill-card.motion-interactive:hover:not(:active):not(.is-pressed),
 .process-step.motion-interactive:hover:not(:active):not(.is-pressed),
@@ -1575,14 +1575,33 @@ html.js-marquee .marquee-track { animation: none; }
 
 .project-card,
 .project-card.glass-panel,
-.project-card.glass-card {
+.project-card.glass-card,
+.project-card.spotlight-card {
     background: transparent !important;
+    background-color: transparent !important;
     border: none !important;
     border-radius: 0 !important;
     overflow: visible !important;
+    box-shadow: none !important;
 }
 
-.project-card:hover { transform: none !important; background: transparent !important; }
+.project-card:hover,
+.project-card.glass-card:hover,
+.project-card.spotlight-card:hover,
+.project-card.motion-interactive:hover:not(:active):not(.is-pressed),
+.project-card.glass-card.motion-interactive:hover:not(:active):not(.is-pressed) {
+    transform: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.project-card.spotlight-card::before,
+.project-card.spotlight-card:hover::before {
+    display: none !important;
+    opacity: 0 !important;
+}
 
 .project-thumb {
     border: 1px solid var(--line);
@@ -1591,6 +1610,12 @@ html.js-marquee .marquee-track { animation: none; }
     aspect-ratio: 16 / 10;
     height: auto !important;
     transform: translateZ(0);
+    transition: transform 0.6s var(--ease-expo), border-color 0.5s var(--ease-expo);
+}
+
+.project-card:hover .project-thumb {
+    transform: translate3d(0, -4px, 0);
+    border-color: var(--line-strong);
 }
 
 .project-card--featured .project-thumb { aspect-ratio: 4 / 3; min-height: 0; }
