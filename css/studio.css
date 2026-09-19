@@ -343,8 +343,8 @@ html.webgl-active[data-theme="light"] #webgl-bg.is-ready { opacity: 0.12; }
     display: none;
 }
 
-html.has-cursor .cursor,
-html.has-cursor .cursor-ring { display: block; }
+html.has-cursor .cursor { display: block; }
+html.has-cursor .cursor-ring { display: grid; }
 
 .cursor {
     width: 8px;
@@ -359,7 +359,6 @@ html.has-cursor .cursor-ring { display: block; }
     height: 38px;
     border: 1px solid rgba(243, 239, 233, 0.7);
     mix-blend-mode: difference;
-    display: grid;
     place-items: center;
     transition:
         width 0.35s var(--ease-expo),
@@ -405,6 +404,24 @@ html.cursor-text .cursor { opacity: 0; }
 html.cursor-down .cursor-ring { transform: translate3d(-50%, -50%, 0) scale(0.85); }
 html.cursor-hidden .cursor,
 html.cursor-hidden .cursor-ring { opacity: 0; }
+
+@media (hover: none), (pointer: coarse), (max-width: 900px) {
+    html.has-cursor,
+    html.has-cursor body,
+    html.has-cursor a,
+    html.has-cursor button,
+    html.has-cursor summary,
+    html.has-cursor label {
+        cursor: auto;
+    }
+
+    .cursor,
+    .cursor-ring,
+    html.has-cursor .cursor,
+    html.has-cursor .cursor-ring {
+        display: none !important;
+    }
+}
 
 /* ---------- Layout / sections ---------- */
 body, .site-body { margin: 0; }

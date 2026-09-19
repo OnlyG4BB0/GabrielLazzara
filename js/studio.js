@@ -8,6 +8,8 @@
     const html = document.documentElement;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const isMobileViewport = window.matchMedia('(max-width: 900px)').matches;
+    const isCoarsePointer = window.matchMedia('(hover: none), (pointer: coarse)').matches;
     const lerp = (a, b, t) => a + (b - a) * t;
     const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
     const easeOutExpo = (t) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t));
@@ -182,7 +184,12 @@
         const ring = document.querySelector('.cursor-ring');
         const label = ring ? ring.querySelector('.cursor-ring__label') : null;
 
-        if (!finePointer || reduced) return;
+        if (!finePointer || isCoarsePointer || isMobileViewport || reduced) {
+            html.classList.remove('has-cursor');
+            if (dot) dot.style.display = 'none';
+            if (ring) ring.style.display = 'none';
+            return;
+        }
 
         let mx = window.innerWidth / 2;
         let my = window.innerHeight / 2;
