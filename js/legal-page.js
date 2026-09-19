@@ -33,12 +33,14 @@ function renderLegalPage(pageKey) {
     const article = document.getElementById('legal-content');
     if (!article) return;
 
-    article.innerHTML = page.sections.map((section) => `
+    // Keep the title + "updated" line: rebuild only the sections after them.
+    article.querySelectorAll('.legal-section').forEach((el) => el.remove());
+    article.insertAdjacentHTML('beforeend', page.sections.map((section) => `
         <section class="legal-section">
             <h2>${section.heading}</h2>
             ${section.body}
         </section>
-    `).join('');
+    `).join(''));
 
     document.querySelectorAll('[data-legal-lang]').forEach((btn) => {
         const btnLang = btn.getAttribute('data-legal-lang');
