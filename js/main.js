@@ -48,6 +48,7 @@ class PortfolioApp {
             document.documentElement.classList.add('motion-lite');
         }
 
+        this.selectedTopic = '';
         this.init();
     }
 
@@ -68,6 +69,7 @@ class PortfolioApp {
         this.setupCopyEmail();
         this.setupLanguageToggle();
         this.setupProjectFilters();
+        this.setupProjectThumbs();
         this.setupSpotlightCards();
         this.setupPressFeedback();
         this.setupNeoMotion();
@@ -233,6 +235,11 @@ class PortfolioApp {
             });
         });
 
+        const viewLabel = translations[lang]?.cursor_view || (lang === 'en' ? 'View' : 'Vedi');
+        document.querySelectorAll('[data-cursor="view"]').forEach((el) => {
+            el.setAttribute('data-cursor-label', viewLabel);
+        });
+
         if (typeof applySeoLanguage === 'function') {
             applySeoLanguage(lang);
         }
@@ -248,12 +255,40 @@ class PortfolioApp {
         window.requestAnimationFrame(() => this.repositionNavIndicator?.());
     }
 
+    setupProjectThumbs() {
+        document.querySelectorAll('.project-card .project-thumb').forEach((thumb) => {
+            const card = thumb.closest('.project-card');
+            const primaryLink = card?.querySelector('a[href^="http"]');
+            if (!primaryLink) return;
+
+            const title = card.querySelector('h3')?.textContent?.trim() || 'Progetto';
+            thumb.setAttribute('role', 'link');
+            thumb.setAttribute('tabindex', '0');
+            thumb.setAttribute('aria-label', `${title}`);
+
+            const openProject = (e) => {
+                if (e.target.closest('a')) return;
+                this.trackEvent('project_click', { project: title, url: primaryLink.href, source: 'thumb' });
+                window.open(primaryLink.href, '_blank', 'noopener,noreferrer');
+            };
+
+            thumb.addEventListener('click', openProject);
+            thumb.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openProject(e);
+                }
+            });
+        });
+    }
+
     setupProjectFilters() {
         if (!this.filterBtns.length) return;
 
         this.filterBtns.forEach((btn) => {
             btn.addEventListener('click', () => {
                 const filter = btn.getAttribute('data-project-filter');
+                if (filter === this.currentFilter) return;
                 this.currentFilter = filter;
                 this.filterBtns.forEach((b) => {
                     const isActive = b === btn;
@@ -272,21 +307,30 @@ class PortfolioApp {
     }
 
     applyProjectFilter(filter, isInitial = false) {
-        this.projectCards.forEach((card) => {
-            const cat = card.getAttribute('data-project-category');
-            const show = filter === 'all' || cat === filter;
-            card.classList.toggle('project-hidden', !show);
-            card.setAttribute('aria-hidden', show ? 'false' : 'true');
-            if (!isInitial) {
-                if (show) {
-                    card.classList.remove('project-enter');
-                    void card.offsetWidth;
-                    card.classList.add('project-enter');
-                } else {
-                    card.classList.remove('project-enter');
+        const updateDom = () => {
+            let visibleIdx = 0;
+            this.projectCards.forEach((card) => {
+                const cat = card.getAttribute('data-project-category');
+                const show = filter === 'all' || cat === filter;
+                card.classList.toggle('project-hidden', !show);
+                card.setAttribute('aria-hidden', show ? 'false' : 'true');
+                if (!isInitial) {
+                    if (show) {
+                        card.style.setProperty('--enter-delay', `${visibleIdx * 55}ms`);
+                        visibleIdx += 1;
+                        card.classList.remove('project-enter');
+                        void card.offsetWidth;
+                        card.classList.add('project-enter');
+                    } else {
+                        card.classList.remove('project-enter');
+                        card.style.removeProperty('--enter-delay');
+                    }
                 }
-            }
-        });
+            });
+            this.cacheNavSectionMetrics?.();
+        };
+
+        updateDom();
     }
 
     trackEvent(name, props = {}) {
@@ -1385,18 +1429,45 @@ class PortfolioApp {
             .join('');
     }
 
+    getSelectedTopicLabel() {
+        if (!this.selectedTopic) return '';
+        const t = translations[this.currentLang] || translations.it;
+        const map = {
+            landing: t.topic_landing,
+            webapp: t.topic_webapp,
+            seo: t.topic_seo,
+            deploy: t.topic_deploy,
+        };
+        return map[this.selectedTopic] || '';
+    }
+
+    selectTopic(topicKey, forceSelect = false) {
+        if (forceSelect) {
+            this.selectedTopic = topicKey;
+        } else {
+            this.selectedTopic = this.selectedTopic === topicKey ? '' : topicKey;
+        }
+        document.querySelectorAll('#contact-form .topic-chip').forEach((chip) => {
+            const active = chip.getAttribute('data-topic') === this.selectedTopic;
+            chip.classList.toggle('is-selected', active);
+            chip.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+    }
+
     buildWhatsAppMessage(name, email, message) {
         const lang = this.currentLang;
         const t = translations[lang] || translations.it;
+        const topicLabel = this.getSelectedTopicLabel();
         const lines = [
             t.whatsapp_intro,
             '',
             `${t.whatsapp_label_name} ${name.trim()}`,
             `${t.whatsapp_label_email} ${email.trim()}`,
-            '',
-            t.whatsapp_label_message,
-            message.trim(),
         ];
+        if (topicLabel) {
+            lines.push(`${t.whatsapp_label_topic || 'Interesse:'} ${topicLabel}`);
+        }
+        lines.push('', t.whatsapp_label_message, message.trim());
         return lines.join('\n');
     }
 
@@ -1404,32 +1475,75 @@ class PortfolioApp {
         const contactForm = document.getElementById('contact-form');
         if (!contactForm) return;
 
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+        const privacyConsent = contactForm.querySelector('#contact-privacy-consent');
+        const nameInput = contactForm.querySelector('input[name="name"]');
+        const emailInput = contactForm.querySelector('input[name="email"]');
+        const messageInput = contactForm.querySelector('textarea[name="message"]');
+        const emailBtn = contactForm.querySelector('#contact-email-btn');
 
-            const privacyConsent = contactForm.querySelector('#contact-privacy-consent');
-            const nameInput = contactForm.querySelector('input[name="name"]');
-            const emailInput = contactForm.querySelector('input[name="email"]');
-            const messageInput = contactForm.querySelector('textarea[name="message"]');
+        if (privacyConsent) {
+            privacyConsent.addEventListener('change', () => {
+                privacyConsent.setCustomValidity('');
+            });
+        }
+
+        contactForm.querySelectorAll('.topic-chip').forEach((chip) => {
+            chip.addEventListener('click', () => {
+                const topic = chip.getAttribute('data-topic');
+                this.selectTopic(topic, false);
+                this.trackEvent('contact_topic_select', { topic: this.selectedTopic || 'none' });
+            });
+        });
+
+        document.querySelectorAll('[data-select-topic]').forEach((cta) => {
+            cta.addEventListener('click', () => {
+                const topic = cta.getAttribute('data-select-topic');
+                if (topic) {
+                    this.selectTopic(topic, true);
+                    this.trackEvent('service_cta_click', { topic });
+                    window.setTimeout(() => {
+                        const targetInput = nameInput && !nameInput.value.trim() ? nameInput : messageInput;
+                        targetInput?.focus({ preventScroll: true });
+                    }, 580);
+                }
+            });
+        });
+
+        const validateAndExtract = () => {
             const t = translations[this.currentLang] || translations.it;
+            if (privacyConsent) {
+                privacyConsent.setCustomValidity('');
+            }
+            if (!contactForm.reportValidity()) return null;
 
             if (privacyConsent && !privacyConsent.checked) {
                 privacyConsent.setCustomValidity(t.form_consent_required);
                 privacyConsent.reportValidity();
-                return;
+                return null;
             }
-            if (privacyConsent) privacyConsent.setCustomValidity('');
+            return {
+                name: nameInput.value.trim(),
+                email: emailInput.value.trim(),
+                message: messageInput.value.trim(),
+                t,
+            };
+        };
 
-            if (!contactForm.reportValidity()) return;
+        const resetFormState = () => {
+            contactForm.reset();
+            this.selectTopic('', true);
+        };
 
-            const name = nameInput.value.trim();
-            const email = emailInput.value.trim();
-            const message = messageInput.value.trim();
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const data = validateAndExtract();
+            if (!data) return;
 
+            const { name, email, message, t } = data;
             const text = encodeURIComponent(this.buildWhatsAppMessage(name, email, message));
             const url = `https://wa.me/${this.getWhatsAppNumber()}?text=${text}`;
 
-            this.trackEvent('contact_whatsapp');
+            this.trackEvent('contact_whatsapp', { topic: this.selectedTopic || 'general' });
             window.open(url, '_blank', 'noopener,noreferrer');
 
             const btn = contactForm.querySelector('button[type="submit"]');
@@ -1438,9 +1552,35 @@ class PortfolioApp {
 
             setTimeout(() => {
                 btn.innerHTML = originalHtml;
-                contactForm.reset();
+                resetFormState();
             }, 3000);
         });
+
+        if (emailBtn) {
+            emailBtn.addEventListener('click', () => {
+                const data = validateAndExtract();
+                if (!data) return;
+
+                const { name, email, message, t } = data;
+                const topicLabel = this.getSelectedTopicLabel();
+                const subjectRaw = topicLabel
+                    ? `${t.email_subject_prefix || 'Richiesta progetto'} — ${topicLabel} (${name})`
+                    : `${t.email_subject_prefix || 'Richiesta progetto'} (${name})`;
+                const bodyRaw = this.buildWhatsAppMessage(name, email, message);
+                const mailto = `mailto:gabrielelazzara67@gmail.com?subject=${encodeURIComponent(subjectRaw)}&body=${encodeURIComponent(bodyRaw)}`;
+
+                this.trackEvent('contact_email', { topic: this.selectedTopic || 'general' });
+                window.location.href = mailto;
+
+                const originalHtml = emailBtn.innerHTML;
+                emailBtn.innerHTML = `${t.email_opening || 'Apertura email...'} <i class="fas fa-check ml-1" aria-hidden="true"></i>`;
+
+                setTimeout(() => {
+                    emailBtn.innerHTML = originalHtml;
+                    resetFormState();
+                }, 3000);
+            });
+        }
     }
 }
 

@@ -621,6 +621,51 @@ function buildAboutFox() {
 
     let yawOffset = 0;
     let pitchOffset = 0;
+    let pulse = 0;
+    let isDragging = false;
+    let pointerMoved = false;
+    let lastPtrX = 0;
+    let lastPtrY = 0;
+    let dragYaw = 0;
+    let dragPitch = 0;
+    let dragVelX = 0;
+    let dragVelY = 0;
+    let orbPhaseBoost = 0;
+
+    host.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        pointerMoved = false;
+        lastPtrX = e.clientX;
+        lastPtrY = e.clientY;
+        host.classList.add('is-grabbing');
+        try { host.setPointerCapture(e.pointerId); } catch {}
+    });
+
+    host.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - lastPtrX;
+        const dy = e.clientY - lastPtrY;
+        if (Math.abs(dx) + Math.abs(dy) > 3) pointerMoved = true;
+        lastPtrX = e.clientX;
+        lastPtrY = e.clientY;
+        dragYaw += dx * 0.011;
+        dragPitch = Math.max(-0.65, Math.min(0.65, dragPitch + dy * 0.009));
+        dragVelX = dx * 0.16;
+        dragVelY = dy * 0.12;
+    });
+
+    const endDrag = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        host.classList.remove('is-grabbing');
+        try { host.releasePointerCapture(e.pointerId); } catch {}
+        if (!pointerMoved) {
+            pulse = 1;
+            dragVelX += (Math.random() > 0.5 ? 1 : -1) * 2.2;
+        }
+    };
+    host.addEventListener('pointerup', endDrag);
+    host.addEventListener('pointercancel', endDrag);
 
     tickFns.push((delta, elapsed) => {
         if (!inView) return;
@@ -628,27 +673,59 @@ function buildAboutFox() {
         yawOffset += (input.px * 0.45 - yawOffset) * 0.05;
         pitchOffset += (input.py * 0.25 - pitchOffset) * 0.05;
 
-        ringOuter.rotation.z = elapsed * 0.22;
-        ringOuter.rotation.x = Math.PI * 0.5 + Math.sin(elapsed * 0.3) * 0.08;
-        ringInner.rotation.z = -elapsed * 0.16;
-        ringInner.rotation.x = Math.PI * 0.5 + Math.cos(elapsed * 0.25) * 0.06;
-        ringTilt.rotation.z = elapsed * 0.11;
-        ringTilt.rotation.x = Math.PI * 0.36 + Math.sin(elapsed * 0.2) * 0.05;
+        if (!isDragging) {
+            dragYaw += dragVelX * delta;
+            dragPitch = Math.max(-0.65, Math.min(0.65, dragPitch + dragVelY * delta));
+            const damp = Math.exp(-delta * 4.2);
+            dragVelX *= damp;
+            dragVelY *= damp;
+            const spring = Math.exp(-delta * 1.4);
+            dragYaw *= spring;
+            dragPitch *= spring;
+        }
 
-        foxGroup.rotation.y = Math.sin(elapsed * 0.45) * 0.22 + yawOffset * 0.35;
-        foxGroup.rotation.x = pitchOffset * 0.35 + Math.sin(elapsed * 0.55) * 0.03;
+        if (pulse > 0.001) {
+            pulse *= Math.exp(-delta * 2.6);
+            orbPhaseBoost += delta * pulse * 2.8;
+        } else {
+            pulse = 0;
+        }
+
+        const ringBoost = 1 + pulse * 0.11;
+        ringOuter.scale.setScalar(ringBoost);
+        ringInner.scale.setScalar(1 + pulse * 0.07);
+        ringTilt.scale.setScalar(1 + pulse * 0.14);
+        ringMat.emissiveIntensity = 0.45 + pulse * 0.7;
+
+        ringOuter.rotation.z = elapsed * 0.22 + orbPhaseBoost * 0.5;
+        ringOuter.rotation.x = Math.PI * 0.5 + Math.sin(elapsed * 0.3) * 0.08 + dragPitch * 0.25;
+        ringInner.rotation.z = -elapsed * 0.16 - orbPhaseBoost * 0.4;
+        ringInner.rotation.x = Math.PI * 0.5 + Math.cos(elapsed * 0.25) * 0.06 - dragPitch * 0.2;
+        ringTilt.rotation.z = elapsed * 0.11 + orbPhaseBoost * 0.6;
+        ringTilt.rotation.x = Math.PI * 0.36 + Math.sin(elapsed * 0.2) * 0.05 + dragYaw * 0.15;
+
+        const foxScale = 1.85 + Math.sin(pulse * Math.PI) * 0.16;
+        fox.scale.setScalar(foxScale);
+        edges.scale.setScalar(foxScale);
+        faceMat.emissiveIntensity = 0.3 + pulse * 0.6;
+        edges.material.opacity = 0.4 + pulse * 0.5;
+
+        foxGroup.rotation.y = Math.sin(elapsed * 0.45) * 0.22 + yawOffset * 0.35 + dragYaw;
+        foxGroup.rotation.x = pitchOffset * 0.35 + Math.sin(elapsed * 0.55) * 0.03 + dragPitch;
         foxGroup.position.y = Math.sin(elapsed * 0.65) * 0.04;
 
         for (let i = 0; i < gems.length; i += 1) {
             const g = gems[i];
             const ud = g.userData;
-            const a = ud.angle + elapsed * ud.speed;
+            const a = ud.angle + elapsed * ud.speed + orbPhaseBoost * (0.8 + i * 0.2);
+            const r = ud.radius * (1 + pulse * 0.09);
             g.position.set(
-                Math.cos(a) * ud.radius,
+                Math.cos(a) * r,
                 ud.y + Math.sin(elapsed + i) * 0.06,
-                Math.sin(a) * ud.radius * 0.28
+                Math.sin(a) * r * 0.28
             );
-            g.rotation.y = elapsed * 1.2 + i;
+            g.scale.setScalar(1 + pulse * 0.4);
+            g.rotation.y = elapsed * 1.2 + i + orbPhaseBoost;
         }
 
         camera.lookAt(0, 0, 0);
