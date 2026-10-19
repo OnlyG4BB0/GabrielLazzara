@@ -499,7 +499,7 @@ class PortfolioApp {
         const step = (now) => {
             if (startedAt === null) startedAt = now;
             const progress = Math.min(1, (now - startedAt) / duration);
-            window.scrollTo(0, startY + distance * easeOutQuart(progress));
+            window.scrollTo({ top: startY + distance * easeOutQuart(progress), left: 0, behavior: 'instant' });
 
             if (progress < 1) {
                 this._smoothScrollFrame = requestAnimationFrame(step);
@@ -553,7 +553,6 @@ class PortfolioApp {
             '.filter-btn:not(.reveal)',
             '.seo-visible-block:not(.reveal)',
             '.packages-unified:not(.reveal)',
-            '.cta-band:not(.reveal)',
             '.contact-panel:not(.reveal)',
             '.hero-visual-card:not(.reveal)',
         ];

@@ -53,9 +53,9 @@ function getPerfTier() {
 }
 
 const TIER_CFG = {
-    minimal: { renderScale: 0.62, maxDpr: 1.2, targetFps: 30, scrollFps: 24, crystals: 5, detail: 2, octaves: 2 },
-    balanced: { renderScale: 0.72, maxDpr: 1.35, targetFps: 40, scrollFps: 28, crystals: 7, detail: 2, octaves: 2 },
-    full: { renderScale: 0.85, maxDpr: 1.6, targetFps: 55, scrollFps: 32, crystals: 9, detail: 3, octaves: 3 },
+    minimal: { renderScale: 0.62, maxDpr: 1.2, targetFps: 30, scrollFps: 24, crystals: 4, detail: 0, octaves: 2 },
+    balanced: { renderScale: 0.72, maxDpr: 1.35, targetFps: 40, scrollFps: 28, crystals: 6, detail: 0, octaves: 2 },
+    full: { renderScale: 0.85, maxDpr: 1.6, targetFps: 55, scrollFps: 32, crystals: 7, detail: 0, octaves: 3 },
 };
 
 /* ---- palettes -------------------------------------------------------- */
@@ -65,16 +65,16 @@ const PALETTES = {
         aurB: new THREE.Color('#241753'),
         aurC: new THREE.Color('#7c3aed'),
         crystals: ['#c084fc', '#8b5cf6', '#e879f9', '#6366f1'],
-        crystalOpacity: 0.9,
-        crystalEmissive: 0.18,
+        crystalOpacity: 0.62,
+        crystalEmissive: 0.14,
     },
     light: {
         aurA: new THREE.Color('#f4f0fb'),
         aurB: new THREE.Color('#dcd0f4'),
         aurC: new THREE.Color('#b69bf0'),
         crystals: ['#7c3aed', '#6d28d9', '#9333ea', '#4f46e5'],
-        crystalOpacity: 0.55,
-        crystalEmissive: 0.05,
+        crystalOpacity: 0.42,
+        crystalEmissive: 0.04,
     },
 };
 
@@ -336,14 +336,14 @@ function buildBackground() {
                 emissiveIntensity: 0.18,
             });
             const mesh = new THREE.Mesh(geos[i % geos.length], mat);
-            const radius = narrow ? 3.5 + Math.random() * 4.5 : 4.5 + Math.random() * 6;
-            const angle = (i / count) * Math.PI * 2 + Math.random() * 0.6;
+            const side = i % 2 === 0 ? 1 : -1;
+            const xSpread = narrow ? (2.6 + Math.random() * 2.8) : (4.8 + Math.random() * 4.5);
             mesh.position.set(
-                Math.cos(angle) * radius,
+                side * xSpread,
                 (Math.random() - 0.5) * (narrow ? 8 : 11),
-                -2 - Math.random() * 10
+                -3 - Math.random() * 9
             );
-            mesh.scale.setScalar(narrow ? 0.65 + Math.random() * 0.85 : 0.55 + Math.random() * 1.05);
+            mesh.scale.setScalar(narrow ? 0.5 + Math.random() * 0.55 : 0.45 + Math.random() * 0.72);
             mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
             mesh.userData = {
                 rsx: (Math.random() - 0.5) * 0.16,
@@ -530,11 +530,6 @@ function buildAboutFox() {
     const root = new THREE.Group();
     scene.add(root);
 
-    root.add(new THREE.Mesh(
-        new THREE.SphereGeometry(1.45, 48, 48),
-        new THREE.MeshBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.12 })
-    ));
-
     const ringMat = new THREE.MeshStandardMaterial({
         color: 0xa855f7,
         emissive: 0x7c3aed,
@@ -544,10 +539,13 @@ function buildAboutFox() {
         transparent: true,
         opacity: 0.72,
     });
-    const ringOuter = new THREE.Mesh(new THREE.TorusGeometry(2.05, 0.024, 10, 96), ringMat);
-    const ringInner = new THREE.Mesh(new THREE.TorusGeometry(1.62, 0.018, 8, 72), ringMat.clone());
-    ringInner.material.opacity = 0.55;
-    root.add(ringOuter, ringInner);
+    const ringOuter = new THREE.Mesh(new THREE.TorusGeometry(2.05, 0.022, 10, 96), ringMat);
+    const ringInner = new THREE.Mesh(new THREE.TorusGeometry(1.62, 0.016, 8, 72), ringMat.clone());
+    ringInner.material.opacity = 0.52;
+    const ringTilt = new THREE.Mesh(new THREE.TorusGeometry(1.84, 0.012, 8, 72), ringMat.clone());
+    ringTilt.material.opacity = 0.34;
+    ringTilt.rotation.y = Math.PI * 0.32;
+    root.add(ringOuter, ringInner, ringTilt);
 
     const geo = buildFoxGeometry();
     geo.center();
@@ -572,7 +570,7 @@ function buildAboutFox() {
     foxGroup.add(edges);
     root.add(foxGroup);
 
-    const gemGeo = new THREE.OctahedronGeometry(0.1, 1);
+    const gemGeo = new THREE.OctahedronGeometry(0.12, 0);
     const gems = [];
     const gemColors = [0xc084fc, 0xe879f9, 0x6366f1];
     for (let i = 0; i < 3; i += 1) {
@@ -623,7 +621,6 @@ function buildAboutFox() {
 
     let yawOffset = 0;
     let pitchOffset = 0;
-    const glow = root.children[0];
 
     tickFns.push((delta, elapsed) => {
         if (!inView) return;
@@ -635,12 +632,12 @@ function buildAboutFox() {
         ringOuter.rotation.x = Math.PI * 0.5 + Math.sin(elapsed * 0.3) * 0.08;
         ringInner.rotation.z = -elapsed * 0.16;
         ringInner.rotation.x = Math.PI * 0.5 + Math.cos(elapsed * 0.25) * 0.06;
+        ringTilt.rotation.z = elapsed * 0.11;
+        ringTilt.rotation.x = Math.PI * 0.36 + Math.sin(elapsed * 0.2) * 0.05;
 
         foxGroup.rotation.y = Math.sin(elapsed * 0.45) * 0.22 + yawOffset * 0.35;
         foxGroup.rotation.x = pitchOffset * 0.35 + Math.sin(elapsed * 0.55) * 0.03;
         foxGroup.position.y = Math.sin(elapsed * 0.65) * 0.04;
-
-        glow.scale.setScalar(1 + Math.sin(elapsed * 0.8) * 0.03);
 
         for (let i = 0; i < gems.length; i += 1) {
             const g = gems[i];

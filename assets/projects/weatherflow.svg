@@ -1,17 +1,80 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="Weatherflow preview">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="Weatherflow dashboard preview">
   <defs>
-    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#312e81"/>
-      <stop offset="100%" stop-color="#0f172a"/>
+    <linearGradient id="wf-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+    <radialGradient id="wf-sun" cx="0.76" cy="0.24" r="0.32">
+      <stop offset="0%" stop-color="#fde047" stop-opacity="0.55"/>
+      <stop offset="45%" stop-color="#f59e0b" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#1e1b4b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="wf-card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.03"/>
+    </linearGradient>
+    <linearGradient id="wf-chart" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <rect width="800" height="450" fill="url(#sky)"/>
-  <circle cx="620" cy="110" r="48" fill="#fde047" opacity="0.95"/>
-  <ellipse cx="220" cy="300" rx="140" ry="36" fill="#6366f1" opacity="0.35"/>
-  <ellipse cx="380" cy="280" rx="180" ry="44" fill="#818cf8" opacity="0.45"/>
-  <ellipse cx="540" cy="310" rx="120" ry="30" fill="#a5b4fc" opacity="0.35"/>
-  <text x="40" y="60" fill="#e0e7ff" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Weatherflow</text>
-  <text x="40" y="110" fill="#c7d2fe" font-family="Segoe UI, Arial, sans-serif" font-size="52" font-weight="800">24 C</text>
-  <text x="40" y="400" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="20">Svelte - Python - Weather API</text>
+
+  <rect width="800" height="450" fill="url(#wf-bg)"/>
+  <rect width="800" height="450" fill="url(#wf-sun)"/>
+
+  <!-- Atmospheric sun & layered clouds -->
+  <circle cx="608" cy="108" r="42" fill="#fde047" opacity="0.92"/>
+  <g fill="#ffffff" fill-opacity="0.14">
+    <rect x="520" y="122" width="140" height="42" rx="21"/>
+    <circle cx="560" cy="118" r="26"/>
+    <circle cx="602" cy="112" r="32"/>
+  </g>
+
+  <!-- Main dashboard shell -->
+  <rect x="48" y="36" width="704" height="378" rx="24" fill="url(#wf-card)" stroke="#ffffff" stroke-opacity="0.14"/>
+
+  <!-- Left current weather column -->
+  <g transform="translate(82, 72)">
+    <rect width="128" height="24" rx="12" fill="#38bdf8" fill-opacity="0.16" stroke="#38bdf8" stroke-opacity="0.35"/>
+    <circle cx="16" cy="12" r="3.5" fill="#38bdf8"/>
+    <text x="28" y="16" fill="#bae6fd" font-family="ui-monospace, monospace" font-size="10" font-weight="600" letter-spacing="1.2">PALERMO · IT</text>
+
+    <text x="0" y="96" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="68" font-weight="800" letter-spacing="-2">24°</text>
+    <text x="112" y="64" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="20" font-weight="600">C</text>
+    <text x="0" y="124" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="15" font-weight="600">Cielo sereno · Brezza marina</text>
+    <text x="0" y="144" fill="#94a3b8" font-family="ui-monospace, monospace" font-size="11">MAX 26° · MIN 19° · LIVE API</text>
+  </g>
+
+  <!-- Hourly temperature curve chart -->
+  <g transform="translate(82, 224)">
+    <path d="M 0,72 C 70,68 110,32 180,28 C 250,24 290,54 360,38 C 410,26 440,12 480,18 L 480,105 L 0,105 Z" fill="url(#wf-chart)"/>
+    <path d="M 0,72 C 70,68 110,32 180,28 C 250,24 290,54 360,38 C 410,26 440,12 480,18" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+
+    <circle cx="0" cy="72" r="4.5" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+    <circle cx="180" cy="28" r="5" fill="#0f172a" stroke="#fde047" stroke-width="3"/>
+    <circle cx="360" cy="38" r="4.5" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+    <circle cx="480" cy="18" r="4.5" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+
+    <text x="0" y="126" fill="#94a3b8" font-family="ui-monospace, monospace" font-size="10">09:00</text>
+    <text x="166" y="126" fill="#fde047" font-family="ui-monospace, monospace" font-size="10" font-weight="700">13:00 · 24°</text>
+    <text x="346" y="126" fill="#94a3b8" font-family="ui-monospace, monospace" font-size="10">17:00</text>
+    <text x="452" y="126" fill="#94a3b8" font-family="ui-monospace, monospace" font-size="10">21:00</text>
+  </g>
+
+  <!-- Right metric widgets -->
+  <g transform="translate(596, 178)">
+    <rect width="124" height="58" rx="14" fill="#0f172a" fill-opacity="0.55" stroke="#ffffff" stroke-opacity="0.1"/>
+    <text x="16" y="22" fill="#94a3b8" font-family="ui-monospace, monospace" font-size="9.5" letter-spacing="1">VENTO</text>
+    <text x="16" y="44" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="17" font-weight="700">14 km/h</text>
+
+    <rect y="68" width="124" height="58" rx="14" fill="#0f172a" fill-opacity="0.55" stroke="#ffffff" stroke-opacity="0.1"/>
+    <text x="16" y="90" fill="#94a3b8" font-family="ui-monospace, monospace" font-size="9.5" letter-spacing="1">UMIDITÀ</text>
+    <text x="16" y="112" fill="#38bdf8" font-family="system-ui, sans-serif" font-size="17" font-weight="700">62%</text>
+
+    <rect y="136" width="124" height="58" rx="14" fill="#0f172a" fill-opacity="0.55" stroke="#ffffff" stroke-opacity="0.1"/>
+    <text x="16" y="158" fill="#94a3b8" font-family="ui-monospace, monospace" font-size="9.5" letter-spacing="1">INDICE UV</text>
+    <text x="16" y="180" fill="#fde047" font-family="system-ui, sans-serif" font-size="17" font-weight="700">04 · Mod</text>
+  </g>
 </svg>

@@ -1,15 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="Only Ball preview">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="Only Ball 3D platformer preview">
   <defs>
-    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0ea5e9"/>
-      <stop offset="100%" stop-color="#0369a1"/>
+    <linearGradient id="ob-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#061224"/>
+      <stop offset="55%" stop-color="#0c2d48"/>
+      <stop offset="100%" stop-color="#07192b"/>
+    </linearGradient>
+    <radialGradient id="ob-ball" cx="0.35" cy="0.3" r="0.65">
+      <stop offset="0%" stop-color="#fed7aa"/>
+      <stop offset="28%" stop-color="#fb923c"/>
+      <stop offset="72%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#7c2d12"/>
+    </radialGradient>
+    <linearGradient id="ob-track" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0.38"/>
+    </linearGradient>
+    <linearGradient id="ob-rail" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#34d399"/>
     </linearGradient>
   </defs>
-  <rect width="800" height="450" fill="url(#sky)"/>
-  <ellipse cx="400" cy="380" rx="320" ry="40" fill="#22c55e" opacity="0.8"/>
-  <circle cx="400" cy="280" r="56" fill="#f97316" stroke="#fff" stroke-width="4"/>
-  <circle cx="385" cy="268" r="10" fill="#fff" opacity="0.35"/>
-  <text x="40" y="60" fill="#e0f2fe" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Only Ball</text>
-  <text x="40" y="400" fill="#bae6fd" font-family="Segoe UI, Arial, sans-serif" font-size="20">Three.js - Cannon.js - WebGL</text>
+
+  <rect width="800" height="450" fill="url(#ob-sky)"/>
+
+  <!-- Background stars & distant checkpoint ring -->
+  <circle cx="140" cy="88" r="1.5" fill="#bae6fd" opacity="0.6"/>
+  <circle cx="260" cy="64" r="2" fill="#bae6fd" opacity="0.4"/>
+  <circle cx="640" cy="96" r="1.8" fill="#bae6fd" opacity="0.6"/>
+  <circle cx="520" cy="58" r="1.5" fill="#bae6fd" opacity="0.5"/>
+
+  <!-- Checkpoint Neon Gate at track horizon -->
+  <ellipse cx="445" cy="148" rx="68" ry="82" fill="none" stroke="#38bdf8" stroke-width="4" stroke-opacity="0.75"/>
+  <ellipse cx="445" cy="148" rx="58" ry="70" fill="none" stroke="#a5f3fc" stroke-width="1.5" stroke-dasharray="6 6" stroke-opacity="0.6"/>
+
+  <!-- 3D Perspective Track -->
+  <g>
+    <polygon points="370,165 520,165 690,450 110,450" fill="url(#ob-track)"/>
+    <!-- Perspective grid lines on track -->
+    <g stroke="#7dd3fc" stroke-opacity="0.22" stroke-width="1.2">
+      <line x1="408" y1="165" x2="255" y2="450"/>
+      <line x1="445" y1="165" x2="400" y2="450"/>
+      <line x1="482" y1="165" x2="545" y2="450"/>
+      <line x1="335" y1="210" x2="546" y2="210"/>
+      <line x1="286" y1="265" x2="579" y2="265"/>
+      <line x1="222" y1="335" x2="621" y2="335"/>
+      <line x1="150" y1="415" x2="668" y2="415"/>
+    </g>
+    <!-- Glowing side rails -->
+    <line x1="370" y1="165" x2="110" y2="450" stroke="url(#ob-rail)" stroke-width="5" stroke-linecap="round"/>
+    <line x1="520" y1="165" x2="690" y2="450" stroke="url(#ob-rail)" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Collectible floating gems -->
+  <polygon points="435,195 445,180 455,195 445,210" fill="#fde047"/>
+  <polygon points="425,240 437,222 449,240 437,258" fill="#fde047"/>
+
+  <!-- Motion speed arc behind ball -->
+  <path d="M 435,195 Q 418,245 395,290" fill="none" stroke="#fb923c" stroke-opacity="0.45" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- Ball shadow on track -->
+  <ellipse cx="395" cy="342" rx="58" ry="18" fill="#020617" opacity="0.65"/>
+
+  <!-- 3D Glossy Sphere -->
+  <circle cx="395" cy="276" r="58" fill="url(#ob-ball)" stroke="#fed7aa" stroke-opacity="0.5" stroke-width="1.5"/>
+  <ellipse cx="374" cy="250" rx="18" ry="10" transform="rotate(-24 374 250)" fill="#ffffff" opacity="0.55"/>
+
+  <!-- Game HUD -->
+  <g transform="translate(36, 32)">
+    <rect width="206" height="54" rx="12" fill="#040d1a" fill-opacity="0.72" stroke="#38bdf8" stroke-opacity="0.3"/>
+    <text x="18" y="23" fill="#38bdf8" font-family="ui-monospace, monospace" font-size="10" font-weight="700" letter-spacing="1.4">STAGE 04 · CHECKPOINT</text>
+    <text x="18" y="42" fill="#f8fafc" font-family="ui-monospace, monospace" font-size="14" font-weight="700">00:42.85 · 60 FPS</text>
+  </g>
 </svg>

@@ -1,16 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="ColorBlast preview">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="ColorBlast arcade reflex game preview">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#4c1d95"/>
-      <stop offset="100%" stop-color="#831843"/>
+    <linearGradient id="cb-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#160726"/>
+      <stop offset="50%" stop-color="#2b0938"/>
+      <stop offset="100%" stop-color="#0f0720"/>
     </linearGradient>
+    <radialGradient id="cb-glow" cx="0.48" cy="0.52" r="0.5">
+      <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.26"/>
+      <stop offset="55%" stop-color="#a855f7" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#0f0720" stop-opacity="0"/>
+    </radialGradient>
   </defs>
-  <rect width="800" height="450" fill="url(#bg)"/>
-  <circle cx="200" cy="200" r="48" fill="#f472b6"/>
-  <circle cx="400" cy="160" r="56" fill="#22d3ee"/>
-  <circle cx="600" cy="220" r="44" fill="#a3e635"/>
-  <circle cx="320" cy="300" r="52" fill="#facc15"/>
-  <text x="40" y="60" fill="#fce7f3" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">ColorBlast</text>
-  <text x="40" y="400" fill="#e9d5ff" font-family="Segoe UI, Arial, sans-serif" font-size="20">Reflex game - JavaScript</text>
+
+  <rect width="800" height="450" fill="url(#cb-bg)"/>
+  <rect width="800" height="450" fill="url(#cb-glow)"/>
+
+  <!-- Neon arena grid -->
+  <g stroke="#f472b6" stroke-opacity="0.08" stroke-width="1">
+    <line x1="0" y1="90" x2="800" y2="90"/>
+    <line x1="0" y1="180" x2="800" y2="180"/>
+    <line x1="0" y1="270" x2="800" y2="270"/>
+    <line x1="0" y1="360" x2="800" y2="360"/>
+    <line x1="160" y1="0" x2="160" y2="450"/>
+    <line x1="320" y1="0" x2="320" y2="450"/>
+    <line x1="480" y1="0" x2="480" y2="450"/>
+    <line x1="640" y1="0" x2="640" y2="450"/>
+  </g>
+
+  <!-- Target 1: Cyan burst (center-right) -->
+  <g transform="translate(430, 215)">
+    <circle r="86" fill="none" stroke="#22d3ee" stroke-opacity="0.2" stroke-width="1.5" stroke-dasharray="8 8"/>
+    <circle r="62" fill="#22d3ee" fill-opacity="0.14" stroke="#22d3ee" stroke-width="3"/>
+    <circle r="34" fill="#22d3ee"/>
+    <circle r="14" fill="#ecfeff"/>
+    <!-- Reticle ticks -->
+    <line x1="-74" y1="0" x2="-50" y2="0" stroke="#ecfeff" stroke-width="2.5"/>
+    <line x1="50" y1="0" x2="74" y2="0" stroke="#ecfeff" stroke-width="2.5"/>
+    <line x1="0" y1="-74" x2="0" y2="-50" stroke="#ecfeff" stroke-width="2.5"/>
+    <line x1="0" y1="50" x2="0" y2="74" stroke="#ecfeff" stroke-width="2.5"/>
+    <text x="52" y="-48" fill="#fde047" font-family="ui-monospace, monospace" font-size="14" font-weight="800">+250 PERFECT</text>
+  </g>
+
+  <!-- Target 2: Magenta (left) -->
+  <g transform="translate(195, 255)">
+    <circle r="50" fill="#f43f5e" fill-opacity="0.18" stroke="#fb7185" stroke-width="2.5"/>
+    <circle r="28" fill="#f43f5e"/>
+    <circle r="10" fill="#ffe4e6"/>
+  </g>
+
+  <!-- Target 3: Lime (bottom-right) -->
+  <g transform="translate(625, 295)">
+    <circle r="44" fill="#a3e635" fill-opacity="0.16" stroke="#a3e635" stroke-width="2.5"/>
+    <circle r="24" fill="#84cc16"/>
+    <circle r="8" fill="#ecfccb"/>
+  </g>
+
+  <!-- Particle sparks -->
+  <circle cx="330" cy="145" r="5" fill="#fde047"/>
+  <circle cx="525" cy="130" r="4" fill="#22d3ee"/>
+  <circle cx="310" cy="330" r="6" fill="#f472b6"/>
+  <circle cx="545" cy="340" r="4.5" fill="#a3e635"/>
+
+  <!-- Arcade Score & Combo HUD -->
+  <g transform="translate(36, 32)">
+    <rect width="236" height="56" rx="14" fill="#12051e" fill-opacity="0.82" stroke="#f472b6" stroke-opacity="0.35"/>
+    <text x="20" y="23" fill="#f472b6" font-family="ui-monospace, monospace" font-size="10" font-weight="700" letter-spacing="1.4">SCORE · REFLEX ARENA</text>
+    <text x="20" y="44" fill="#fdf2f8" font-family="ui-monospace, monospace" font-size="16" font-weight="800">14,820</text>
+    <rect x="136" y="25" width="82" height="22" rx="11" fill="#fde047" fill-opacity="0.2" stroke="#fde047" stroke-opacity="0.6"/>
+    <text x="177" y="40" text-anchor="middle" fill="#fde047" font-family="ui-monospace, monospace" font-size="11" font-weight="800">COMBO ×12</text>
+  </g>
 </svg>

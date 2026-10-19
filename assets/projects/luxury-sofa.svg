@@ -1,21 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="Luxury Sofa preview">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="Luxury Sofà e-commerce preview">
   <defs>
     <linearGradient id="lux-bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#1c1917"/>
-      <stop offset="100%" stop-color="#292524"/>
+      <stop offset="0%" stop-color="#171412"/>
+      <stop offset="55%" stop-color="#211d1a"/>
+      <stop offset="100%" stop-color="#12100e"/>
     </linearGradient>
-    <linearGradient id="lux-seat" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#a8a29e"/>
-      <stop offset="100%" stop-color="#78716c"/>
+    <radialGradient id="lux-glow" cx="0.42" cy="0.38" r="0.55">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.18"/>
+      <stop offset="55%" stop-color="#d6d3d1" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sofa-back" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e7e2da"/>
+      <stop offset="100%" stop-color="#b8afa3"/>
+    </linearGradient>
+    <linearGradient id="sofa-seat" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d6cec2"/>
+      <stop offset="100%" stop-color="#9c9285"/>
+    </linearGradient>
+    <linearGradient id="sofa-base" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#575049"/>
+      <stop offset="50%" stop-color="#787067"/>
+      <stop offset="100%" stop-color="#453f39"/>
+    </linearGradient>
+    <linearGradient id="pillow-accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+    <linearGradient id="card-glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2c2623" stop-opacity="0.92"/>
+      <stop offset="100%" stop-color="#1c1816" stop-opacity="0.92"/>
     </linearGradient>
   </defs>
+
   <rect width="800" height="450" fill="url(#lux-bg)"/>
-  <rect x="160" y="210" width="480" height="130" rx="28" fill="url(#lux-seat)"/>
-  <rect x="185" y="185" width="430" height="55" rx="22" fill="#d6d3d1"/>
-  <rect x="210" y="160" width="90" height="70" rx="14" fill="#e7e5e4"/>
-  <rect x="500" y="160" width="90" height="70" rx="14" fill="#e7e5e4"/>
-  <circle cx="400" cy="120" r="6" fill="#d6d3d1" opacity="0.5"/>
-  <text x="40" y="58" fill="#fafaf9" font-family="system-ui, Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Luxury Sofa</text>
-  <text x="40" y="400" fill="#d6d3d1" font-family="system-ui, Segoe UI, Arial, sans-serif" font-size="20">PHP - MySQL - E-commerce</text>
+  <rect width="800" height="450" fill="url(#lux-glow)"/>
+
+  <!-- Subtle architectural wall panelling -->
+  <g stroke="#ffffff" stroke-opacity="0.05" stroke-width="1">
+    <line x1="120" y1="0" x2="120" y2="330"/>
+    <line x1="280" y1="0" x2="280" y2="330"/>
+    <line x1="440" y1="0" x2="440" y2="330"/>
+    <line x1="600" y1="0" x2="600" y2="330"/>
+    <line x1="0" y1="330" x2="800" y2="330"/>
+  </g>
+
+  <!-- Browser / storefront header bar -->
+  <g transform="translate(44, 28)">
+    <rect width="460" height="34" rx="10" fill="#ffffff" fill-opacity="0.04" stroke="#ffffff" stroke-opacity="0.09"/>
+    <circle cx="18" cy="17" r="4.5" fill="#ef4444" fill-opacity="0.7"/>
+    <circle cx="32" cy="17" r="4.5" fill="#f59e0b" fill-opacity="0.7"/>
+    <circle cx="46" cy="17" r="4.5" fill="#10b981" fill-opacity="0.7"/>
+    <rect x="68" y="8" width="210" height="18" rx="9" fill="#ffffff" fill-opacity="0.05"/>
+    <text x="82" y="20" fill="#a8a29e" font-family="ui-monospace, monospace" font-size="10" letter-spacing="1">LUXURYSOFA.STORE / ATELIER</text>
+  </g>
+
+  <!-- Floor shadow -->
+  <ellipse cx="310" cy="358" rx="235" ry="22" fill="#000000" opacity="0.55"/>
+  <ellipse cx="310" cy="354" rx="190" ry="12" fill="#000000" opacity="0.4"/>
+
+  <!-- Sculpted modular sofa -->
+  <g transform="translate(75, 145)">
+    <!-- Backrest cushions -->
+    <rect x="42" y="18" width="188" height="86" rx="24" fill="url(#sofa-back)"/>
+    <rect x="234" y="18" width="188" height="86" rx="24" fill="url(#sofa-back)"/>
+
+    <!-- Left & right armrests -->
+    <rect x="0" y="48" width="58" height="118" rx="26" fill="url(#sofa-seat)"/>
+    <rect x="406" y="48" width="58" height="118" rx="26" fill="url(#sofa-seat)"/>
+
+    <!-- Accent throw pillows -->
+    <rect x="58" y="38" width="66" height="62" rx="16" transform="rotate(-8 91 69)" fill="url(#pillow-accent)"/>
+    <rect x="336" y="42" width="62" height="58" rx="15" transform="rotate(6 367 71)" fill="#e7e5e4"/>
+
+    <!-- Seat cushions -->
+    <rect x="46" y="86" width="184" height="62" rx="20" fill="url(#sofa-seat)"/>
+    <rect x="234" y="86" width="184" height="62" rx="20" fill="url(#sofa-seat)"/>
+
+    <!-- Plinth base & walnut legs -->
+    <rect x="14" y="144" width="436" height="26" rx="12" fill="url(#sofa-base)"/>
+    <rect x="42" y="170" width="10" height="26" rx="4" fill="#292524"/>
+    <rect x="412" y="170" width="10" height="26" rx="4" fill="#292524"/>
+    <!-- Seam highlight -->
+    <line x1="232" y1="26" x2="232" y2="144" stroke="#57534e" stroke-opacity="0.35" stroke-width="2"/>
+  </g>
+
+  <!-- Floating E-commerce Product Card -->
+  <g transform="translate(536, 108)">
+    <rect width="220" height="258" rx="20" fill="url(#card-glass)" stroke="#f5f5f4" stroke-opacity="0.14"/>
+    <text x="22" y="34" fill="#f59e0b" font-family="ui-monospace, monospace" font-size="10" font-weight="600" letter-spacing="1.6">COLLEZIONE MILANO</text>
+    <text x="22" y="60" fill="#fafaf9" font-family="system-ui, sans-serif" font-size="20" font-weight="700">Divano Bouclé 3P</text>
+    <text x="22" y="80" fill="#a8a29e" font-family="system-ui, sans-serif" font-size="12">★ 4.9 (128 recensioni)</text>
+
+    <line x1="22" y1="98" x2="198" y2="98" stroke="#ffffff" stroke-opacity="0.08"/>
+
+    <text x="22" y="120" fill="#a8a29e" font-family="ui-monospace, monospace" font-size="10" letter-spacing="1.2">FINITURA TESSUTO</text>
+    <circle cx="32" cy="140" r="9" fill="#d6cec2" stroke="#fafaf9" stroke-width="2"/>
+    <circle cx="58" cy="140" r="9" fill="#d97706"/>
+    <circle cx="84" cy="140" r="9" fill="#57534e"/>
+    <circle cx="110" cy="140" r="9" fill="#292524" stroke="#ffffff" stroke-opacity="0.2"/>
+
+    <text x="22" y="182" fill="#fafaf9" font-family="system-ui, sans-serif" font-size="24" font-weight="800">€ 2.490</text>
+    <rect x="122" y="166" width="74" height="22" rx="11" fill="#10b981" fill-opacity="0.16" stroke="#10b981" stroke-opacity="0.4"/>
+    <text x="159" y="181" text-anchor="middle" fill="#6ee7b7" font-family="ui-monospace, monospace" font-size="9.5" font-weight="600">IN STOCK</text>
+
+    <!-- CTA Pill -->
+    <rect x="22" y="202" width="176" height="38" rx="19" fill="#fafaf9"/>
+    <text x="110" y="225" text-anchor="middle" fill="#171412" font-family="system-ui, sans-serif" font-size="12" font-weight="700">Aggiungi al carrello →</text>
+  </g>
 </svg>

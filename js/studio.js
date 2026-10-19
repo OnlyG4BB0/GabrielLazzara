@@ -199,7 +199,9 @@
         let active = false;
 
         const useCursor = Boolean(dot && ring);
-        if (useCursor) html.classList.add('has-cursor');
+        if (useCursor) {
+            html.classList.add('has-cursor', 'cursor-hidden');
+        }
 
         window.addEventListener('mousemove', (e) => {
             mx = e.clientX;
