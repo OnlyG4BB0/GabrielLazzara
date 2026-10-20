@@ -848,6 +848,14 @@ ins.lg-refract-layer,
     overflow: hidden !important;
 }
 
+@media (max-width: 640px) {
+    .contact-panel,
+    .contact-panel.glass-panel {
+        padding: 1.5rem 1.15rem !important;
+        border-radius: 20px !important;
+    }
+}
+
 .contact-panel > .text-center {
     position: relative;
     top: auto;
@@ -910,6 +918,17 @@ ins.lg-refract-layer,
 }
 
 /* ---------- 13. Footer, Legal Article & Cookie Banner ---------- */
+.footer-giant__arrow {
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+}
+
 .footer-giant__arrow,
 .footer-social__link,
 footer.site-footer a.footer-social__link,

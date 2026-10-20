@@ -1461,12 +1461,16 @@ html.is-revealed .hero-title__role { opacity: 1; transform: none; }
 }
 
 @media (max-width: 640px) {
-    .hero-section, #hero.hero-section { padding-top: calc(var(--header-h) + 1.5rem); min-height: 100svh; }
-    .hero-title, h1.hero-title, #hero-heading.hero-title { line-height: 0.86; }
-    .hero-title__role { font-size: 1.02rem; margin-block: 0.45em; text-wrap: balance; }
+    .hero-section, #hero.hero-section { padding-top: calc(var(--header-h) + 1.25rem); min-height: 100svh; }
+    .hero-title, h1.hero-title, #hero-heading.hero-title { font-size: min(11.8cqw, 3.4rem); line-height: 0.88; }
+    .hero-title__role { font-size: 0.98rem; margin-block: 0.4em; text-wrap: balance; }
     .hero-coords { display: none; }
-    .hero-stats { grid-template-columns: repeat(3, 1fr); }
-    .hero-stat .stat-value { font-size: 1.35rem; }
+    .hero-actions { width: 100%; display: flex; flex-direction: column; gap: 0.5rem; }
+    .hero-actions .hero-action-btn { width: 100%; justify-content: center; text-align: center; }
+    .hero-stats { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; padding: 0.85rem 0.35rem !important; }
+    .hero-stat, .hero-stat.reveal { padding: 0.25rem 0.35rem !important; }
+    .hero-stat .stat-value { font-size: clamp(1.2rem, 5.2vw, 1.45rem); }
+    .hero-stat span { font-size: 0.56rem; letter-spacing: 0.08em; }
 }
 
 /* ---------- Marquee → giant outlined ticker ---------- */
@@ -2075,6 +2079,23 @@ html.has-cursor .project-thumb[role="link"] {
 .case-metric strong { font-family: var(--font-display); letter-spacing: -0.02em; color: var(--c-text) !important; font-size: 1rem !important; }
 .case-metric span { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; }
 
+.case-metric-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.65rem;
+}
+
+@media (max-width: 480px) {
+    .case-metric,
+    .case-metric.glass-panel { padding: 0.85rem 0.65rem !important; }
+    .case-metric strong { font-size: 0.85rem !important; }
+    .case-metric span { font-size: 0.58rem !important; }
+}
+
+@media (max-width: 339px) {
+    .case-metric-grid { grid-template-columns: 1fr !important; }
+}
+
 .case-cta-secondary,
 .case-cta-secondary.glass-panel {
     border-radius: 999px !important;
@@ -2482,6 +2503,36 @@ html.has-cursor .project-thumb[role="link"] {
     .form-email-submit {
         width: 100%;
     }
+
+    .contact-panel,
+    .contact-panel.glass-panel {
+        padding: 1.5rem 1.15rem !important;
+        border-radius: 20px !important;
+    }
+
+    .topic-chips {
+        gap: 0.45rem;
+    }
+
+    .topic-chip {
+        padding: 0.48rem 0.85rem;
+        font-size: 0.65rem;
+    }
+
+    .contact-panel .inline-flex.glass-panel,
+    .contact-panel .inline-flex[class*="glass-panel"] {
+        max-width: 100%;
+        font-size: clamp(0.72rem, 3.4vw, 0.95rem) !important;
+        padding: 0.5rem 0.85rem !important;
+        overflow-wrap: anywhere;
+    }
+
+    .cta-band .btn-primary,
+    .packages-unified__cta {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
 }
 
 .form-consent {
@@ -2524,28 +2575,52 @@ footer.site-footer {
 }
 
 .footer-giant {
-    display: block;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: clamp(0.75rem, 2.5vw, 2.5rem);
     width: 100%;
-    padding: clamp(3rem, 8vw, 6rem) 0 clamp(2rem, 5vw, 4rem);
+    padding: clamp(2rem, 5vw, 4rem) 0 clamp(1.75rem, 4vw, 3.25rem);
     font-family: var(--font-display);
     font-weight: 800;
-    /* "PARLIAMONE." ≈ 11.1em wide in Syne 800 → 8.2cqw leaves room for the arrow */
-    font-size: 8.2cqw;
-    line-height: 0.85;
-    letter-spacing: -0.055em;
+    font-size: clamp(1.35rem, 5.6cqw, 5.4rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
     text-transform: uppercase;
-    white-space: nowrap;
     color: var(--c-text);
     border-bottom: 1px solid var(--line);
     position: relative;
-    overflow: hidden;
-    transition: color 0.5s var(--ease-expo);
+    text-decoration: none;
+    overflow: visible;
+    transition: color 0.4s var(--ease-expo);
 }
 
 .site-footer > .site-shell { container-type: inline-size; }
 
 @supports not (font-size: 1cqw) {
-    .footer-giant { font-size: clamp(2.6rem, 8.6vw, 8rem); }
+    .footer-giant { font-size: clamp(1.35rem, 5.6vw, 5.4rem); }
+}
+
+@media (max-width: 640px) {
+    .footer-giant {
+        font-size: clamp(1.3rem, 6.2vw, 1.7rem) !important;
+        gap: 0.75rem !important;
+        padding: 1.75rem 0 1.25rem !important;
+    }
+}
+
+@media (max-width: 380px) {
+    .footer-giant {
+        font-size: clamp(1.15rem, 5.6vw, 1.35rem) !important;
+    }
+}
+
+.footer-giant__label {
+    display: inline-flex;
+    align-items: baseline;
+    white-space: nowrap;
+    min-width: 0;
+    flex-shrink: 1;
 }
 
 .footer-giant .footer-giant__dot {
@@ -2555,20 +2630,38 @@ footer.site-footer {
 }
 
 .footer-giant__arrow {
-    position: absolute;
-    right: 0;
-    bottom: clamp(2rem, 5vw, 4rem);
-    width: clamp(3rem, 7vw, 6rem);
-    height: clamp(3rem, 7vw, 6rem);
-    border-radius: 50%;
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    flex-shrink: 0;
+    width: clamp(2.35rem, 5.5vw, 4.75rem) !important;
+    height: clamp(2.35rem, 5.5vw, 4.75rem) !important;
+    border-radius: 50% !important;
     border: 1px solid var(--line-strong);
     display: grid;
     place-items: center;
     color: var(--c-text);
-    transition: background-color 0.5s var(--ease-expo), color 0.5s var(--ease-expo), transform 0.6s var(--ease-expo);
+    transition: background-color 0.4s var(--ease-expo), color 0.4s var(--ease-expo), transform 0.5s var(--ease-expo);
 }
 
-.footer-giant__arrow svg { width: 40%; height: 40%; transition: transform 0.5s var(--ease-expo); }
+@media (max-width: 640px) {
+    .footer-giant__arrow {
+        width: 2.5rem !important;
+        height: 2.5rem !important;
+    }
+}
+
+@media (max-width: 380px) {
+    .footer-giant__arrow {
+        width: 2.25rem !important;
+        height: 2.25rem !important;
+    }
+}
+
+.footer-giant__arrow svg { width: 42%; height: 42%; transition: transform 0.4s var(--ease-expo); }
 
 .footer-giant:hover { color: var(--c-accent-bright); }
 .footer-giant:hover .footer-giant__dot { transform: translateY(-0.12em) scale(1.15); }
