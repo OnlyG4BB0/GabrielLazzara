@@ -225,14 +225,22 @@
 
         if (!useCursor) return;
 
+        let ringRaf = 0;
         const loop = () => {
-            rx = lerp(rx, mx, 0.16);
-            ry = lerp(ry, my, 0.16);
+            rx = lerp(rx, mx, 0.18);
+            ry = lerp(ry, my, 0.18);
             const scale = html.classList.contains('cursor-down') ? 0.85 : 1;
-            ring.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%) scale(${scale})`;
-            requestAnimationFrame(loop);
+            ring.style.transform = `translate3d(${rx.toFixed(1)}px, ${ry.toFixed(1)}px, 0) translate(-50%, -50%) scale(${scale})`;
+            if (Math.hypot(mx - rx, my - ry) > 0.2) {
+                ringRaf = requestAnimationFrame(loop);
+            } else {
+                ringRaf = 0;
+            }
         };
-        requestAnimationFrame(loop);
+
+        window.addEventListener('mousemove', () => {
+            if (!ringRaf) ringRaf = requestAnimationFrame(loop);
+        }, { passive: true });
 
         const INTERACTIVE = 'a, button, summary, label, [role="button"], [role="tab"], input[type="checkbox"]';
 
@@ -295,10 +303,33 @@
             }
         }
 
+        let parallaxDirty = true;
+
+        const updateParallax = () => {
+            if (!useParallax || !parallaxDirty) return;
+            parallaxDirty = false;
+            const vh = window.innerHeight;
+            // Batch all DOM reads first to prevent layout thrashing
+            const updates = [];
+            for (let i = 0; i < parallaxEls.length; i++) {
+                const el = parallaxEls[i];
+                const rect = el.getBoundingClientRect();
+                if (rect.bottom < -200 || rect.top > vh + 200) continue;
+                const speed = parseFloat(el.dataset.parallax) || 0.08;
+                const offset = rect.top + rect.height / 2 - vh / 2;
+                updates.push({ el, py: (-offset * speed).toFixed(1) });
+            }
+            // Batch all DOM writes second
+            for (let i = 0; i < updates.length; i++) {
+                updates[i].el.style.setProperty('--py', `${updates[i].py}px`);
+            }
+        };
+
         const onScroll = () => {
             const y = window.scrollY;
             const dy = y - lastY;
             lastY = y;
+            parallaxDirty = true;
 
             if (progress) {
                 const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -330,16 +361,7 @@
         onScroll();
 
         const frame = () => {
-            if (useParallax) {
-                const vh = window.innerHeight;
-                parallaxEls.forEach((el) => {
-                    const speed = parseFloat(el.dataset.parallax) || 0.12;
-                    const rect = el.getBoundingClientRect();
-                    if (rect.bottom < -200 || rect.top > vh + 200) return;
-                    const offset = rect.top + rect.height / 2 - vh / 2;
-                    el.style.setProperty('--py', `${(-offset * speed).toFixed(1)}px`);
-                });
-            }
+            updateParallax();
 
             if (useMarquee && marqueeVisible && marqueeHalf > 0) {
                 vel = lerp(vel, targetVel, 0.08);

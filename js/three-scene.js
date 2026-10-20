@@ -53,9 +53,9 @@ function getPerfTier() {
 }
 
 const TIER_CFG = {
-    minimal: { renderScale: 0.62, maxDpr: 1.2, targetFps: 30, scrollFps: 24, crystals: 4, detail: 0, octaves: 2 },
-    balanced: { renderScale: 0.72, maxDpr: 1.35, targetFps: 40, scrollFps: 28, crystals: 6, detail: 0, octaves: 2 },
-    full: { renderScale: 0.85, maxDpr: 1.6, targetFps: 55, scrollFps: 32, crystals: 7, detail: 0, octaves: 3 },
+    minimal: { renderScale: 0.58, maxDpr: 1.0, targetFps: 28, scrollFps: 18, crystals: 4, detail: 0, octaves: 2 },
+    balanced: { renderScale: 0.66, maxDpr: 1.15, targetFps: 36, scrollFps: 20, crystals: 5, detail: 0, octaves: 2 },
+    full: { renderScale: 0.72, maxDpr: 1.25, targetFps: 42, scrollFps: 22, crystals: 6, detail: 0, octaves: 2 },
 };
 
 /* ---- palettes -------------------------------------------------------- */

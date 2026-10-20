@@ -374,30 +374,7 @@ class PortfolioApp {
     }
 
     setupSpotlightCards() {
-        if (this.motionTier === 'none') return;
-        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-
-        let rafId = null;
-        let activeCard = null;
-        let clientX = 0;
-        let clientY = 0;
-
-        document.querySelectorAll('.spotlight-card').forEach((card) => {
-            card.addEventListener('mousemove', (e) => {
-                activeCard = card;
-                clientX = e.clientX;
-                clientY = e.clientY;
-                if (rafId) return;
-                rafId = requestAnimationFrame(() => {
-                    if (activeCard) {
-                        const rect = activeCard.getBoundingClientRect();
-                        activeCard.style.setProperty('--spot-x', `${clientX - rect.left}px`);
-                        activeCard.style.setProperty('--spot-y', `${clientY - rect.top}px`);
-                    }
-                    rafId = null;
-                });
-            }, { passive: true });
-        });
+        // Spotlight tracking is handled with zero-reflow cached rects by liquid-glass.js
     }
 
     setupCopyEmail() {
@@ -1351,15 +1328,21 @@ class PortfolioApp {
             if (btn.dataset.magneticBound === '1') return;
             btn.dataset.magneticBound = '1';
 
+            let cachedRect = null;
+            btn.addEventListener('pointerenter', () => {
+                cachedRect = btn.getBoundingClientRect();
+            }, { passive: true });
+
             btn.addEventListener('pointermove', (e) => {
-                const rect = btn.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width - 0.5) * strength;
-                const y = ((e.clientY - rect.top) / rect.height - 0.5) * strength;
-                btn.style.setProperty('--mag-x', `${x}px`);
-                btn.style.setProperty('--mag-y', `${y}px`);
-            });
+                if (!cachedRect) return;
+                const x = ((e.clientX - cachedRect.left) / cachedRect.width - 0.5) * strength;
+                const y = ((e.clientY - cachedRect.top) / cachedRect.height - 0.5) * strength;
+                btn.style.setProperty('--mag-x', `${x.toFixed(1)}px`);
+                btn.style.setProperty('--mag-y', `${y.toFixed(1)}px`);
+            }, { passive: true });
 
             const reset = () => {
+                cachedRect = null;
                 btn.style.setProperty('--mag-x', '0px');
                 btn.style.setProperty('--mag-y', '0px');
             };
@@ -1369,26 +1352,7 @@ class PortfolioApp {
     }
 
     setupCardTilt() {
-        if (this.motionTier !== 'full') return;
-        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-
-        document.querySelectorAll('.project-card').forEach((card) => {
-            card.classList.add('project-tilt');
-
-            card.addEventListener('pointermove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const px = (e.clientX - rect.left) / rect.width - 0.5;
-                const py = (e.clientY - rect.top) / rect.height - 0.5;
-                const rotX = (-py * 6).toFixed(2);
-                const rotY = (px * 6).toFixed(2);
-                card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) translate(-4px, -4px)`;
-            });
-
-            const reset = () => {
-                card.style.transform = '';
-            };
-            card.addEventListener('pointerleave', reset);
-        });
+        // Disabled 3D perspective tilt on project cards to prevent GPU backdrop-filter re-rasterization lag
     }
 
     setupFaqMotion() {
