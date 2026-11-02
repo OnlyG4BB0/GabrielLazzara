@@ -31,3 +31,11 @@ JavaScript · React · Python · PHP · Tailwind CSS · MySQL · REST APIs · Gi
 ## Keywords (for discoverability)
 
 Gabriel Lazzara, web developer, developer Palermo, sviluppatore web Palermo, full stack developer Sicily, freelance web developer Italy, portfolio developer, siti web Palermo.
+
+## Editing content (IT / EN)
+
+Texts live in `js/i18n.js`; page structure in `index.html`. After changing either, rebuild the two static language pages (Italian at `/`, English at `/en/`) with their meta tags and JSON-LD:
+
+```bash
+python scripts/build-i18n.py
+```

@@ -20,7 +20,7 @@ class PortfolioApp {
             'faq',
             'contact',
         ];
-        this.navSectionAlias = { values: 'about', experience: 'about' };
+        this.navSectionAlias = { values: 'about', experience: 'about', scope: 'services', skills: 'process' };
         this.langToggles = document.querySelectorAll('.lang-toggle');
         this.copyEmailBtn = document.getElementById('copy-email-btn');
         this.projectCards = document.querySelectorAll('[data-project-category]');
@@ -31,11 +31,14 @@ class PortfolioApp {
         this.isProgrammaticScroll = false;
         this.scrollNavTarget = null;
 
+        // Each language has its own static URL (/ and /en/): the page decides the language.
+        this.pageLang = document.documentElement.getAttribute('data-lang') === 'en' ? 'en' : 'it';
+        this.currentLang = this.pageLang;
         const urlLang = new URLSearchParams(window.location.search).get('lang');
-        if (urlLang === 'it' || urlLang === 'en') {
-            this.currentLang = urlLang;
-        } else {
-            this.currentLang = localStorage.getItem('portfolio_lang') || 'it';
+        if ((urlLang === 'it' || urlLang === 'en') && urlLang !== this.pageLang) {
+            // Legacy ?lang= links → canonical page of that language
+            window.location.replace(this.langPageUrl(urlLang) + window.location.hash);
+            return;
         }
         this.currentFilter = 'all';
         this.currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
@@ -143,14 +146,19 @@ class PortfolioApp {
     }
 
     setupLanguageToggle() {
+        // Restored from the back/forward cache after a language switch: undo the exit fade
+        window.addEventListener('pageshow', (e) => {
+            if (e.persisted) document.documentElement.classList.remove('lang-transitioning');
+        });
+
         this.langToggles.forEach((toggle) => {
             toggle.addEventListener('click', () => {
                 const nextLang = this.currentLang === 'it' ? 'en' : 'it';
+                try { localStorage.setItem('portfolio_lang', nextLang); } catch (_) { /* ignore */ }
+                const target = this.langPageUrl(nextLang) + window.location.hash;
 
                 if (this.prefersReducedMotion) {
-                    this.currentLang = nextLang;
-                    localStorage.setItem('portfolio_lang', nextLang);
-                    this.applyLanguage(nextLang);
+                    window.location.href = target;
                     return;
                 }
 
@@ -165,14 +173,7 @@ class PortfolioApp {
                 document.documentElement.classList.add('lang-transitioning');
 
                 window.setTimeout(() => {
-                    this.currentLang = nextLang;
-                    localStorage.setItem('portfolio_lang', nextLang);
-                    this.applyLanguage(nextLang);
-                    document.documentElement.classList.remove('lang-transitioning');
-                    document.documentElement.classList.add('lang-entered');
-                    window.setTimeout(() => {
-                        document.documentElement.classList.remove('lang-entered');
-                    }, 450);
+                    window.location.href = target;
                 }, 220);
 
                 window.setTimeout(() => {
@@ -182,6 +183,12 @@ class PortfolioApp {
                 }, 640);
             });
         });
+    }
+
+    langPageUrl(lang) {
+        const toEn = lang === 'en';
+        if (toEn === (this.pageLang === 'en')) return './';
+        return toEn ? './en/' : '../';
     }
 
     applyLanguage(lang) {
@@ -207,12 +214,7 @@ class PortfolioApp {
             }
         }
 
-        document.querySelectorAll('[data-i18n]').forEach((el) => {
-            const key = el.getAttribute('data-i18n');
-            if (translations[lang][key]) {
-                el.innerHTML = translations[lang][key];
-            }
-        });
+        // [data-i18n] text is pre-rendered into each language page by scripts/build-i18n.py
 
         document.querySelectorAll('[data-i18n-ph]').forEach((el) => {
             const key = el.getAttribute('data-i18n-ph');
@@ -229,28 +231,12 @@ class PortfolioApp {
             }
         });
 
-        ['proj3_bullets', 'proj_luxury_bullets'].forEach((key) => {
-            document.querySelectorAll(`[data-i18n="${key}"]`).forEach((el) => {
-                if (translations[lang][key]) el.innerHTML = translations[lang][key];
-            });
-        });
-
         const viewLabel = translations[lang]?.cursor_view || (lang === 'en' ? 'View' : 'Vedi');
         document.querySelectorAll('[data-cursor="view"]').forEach((el) => {
             el.setAttribute('data-cursor-label', viewLabel);
         });
 
-        if (typeof applySeoLanguage === 'function') {
-            applySeoLanguage(lang);
-        }
-
         this.updateHeroHeading(lang);
-
-        if (typeof history !== 'undefined' && typeof URL !== 'undefined') {
-            const url = new URL(window.location.href);
-            url.searchParams.set('lang', lang);
-            window.history.replaceState({}, '', url);
-        }
 
         window.requestAnimationFrame(() => this.repositionNavIndicator?.());
     }
@@ -388,10 +374,11 @@ class PortfolioApp {
                 void this.copyEmailBtn.offsetWidth;
                 this.copyEmailBtn.classList.add('is-copied');
                 const span = this.copyEmailBtn.querySelector('[data-i18n]') || this.copyEmailBtn;
+                const idleLabel = span.innerHTML;
                 span.textContent = translations[this.currentLang].contact_copied;
                 setTimeout(() => {
                     this.copyEmailBtn.classList.remove('is-copied');
-                    this.applyLanguage(this.currentLang);
+                    span.innerHTML = idleLabel;
                 }, 2000);
             } catch {
                 window.location.href = `mailto:${email}`;

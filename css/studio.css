@@ -2849,12 +2849,16 @@ footer.site-footer .footer-credits {
     text-align: left;
 }
 
+.footer-lang { margin-left: auto; }
+
+.footer-lang,
 .footer-top {
     color: var(--c-secondary-muted);
     text-decoration: none;
     transition: color 0.3s var(--ease-expo);
 }
 
+.footer-lang:hover,
 .footer-top:hover { color: var(--c-text); }
 
 .footer-top {
@@ -2868,6 +2872,7 @@ footer.site-footer .footer-credits {
 
 @media (max-width: 480px) {
     .footer-bottom { flex-direction: column; align-items: flex-start; gap: 0.9rem; }
+    .footer-lang { margin-left: 0; }
 }
 
 /* ---------- Cookie banner ---------- */
@@ -3065,6 +3070,98 @@ footer.site-footer .footer-credits {
     outline-offset: 3px;
     border-radius: 4px;
 }
+
+/* ---------- Editorial details (v39) ---------- */
+
+/* Blueprint grid behind the hero, fading out from the centre */
+.hero-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+        linear-gradient(to right, var(--line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+    background-size: clamp(56px, 6vw, 88px) clamp(56px, 6vw, 88px);
+    background-position: center top;
+    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 42%, #000 15%, transparent 72%);
+    mask-image: radial-gradient(ellipse 75% 65% at 50% 42%, #000 15%, transparent 72%);
+    opacity: 0.55;
+}
+
+/* Soft accent glow under the name */
+.hero-section::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 38%;
+    width: min(70rem, 90vw);
+    height: min(26rem, 40vh);
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(closest-side, var(--c-accent-glow), transparent);
+    filter: blur(40px);
+    opacity: 0.7;
+}
+
+/* Name: subtle top-lit gradient on every glyph (glyphs are split, so the gradient lives on each one) */
+.hero-title .ch > span,
+.hero-title [data-split]:not([data-split-ready]) {
+    background-image: linear-gradient(180deg, var(--c-text) 35%, color-mix(in srgb, var(--c-text) 62%, var(--c-accent-bright)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Numbered section index in the eyebrows: "01 — Chi sono" */
+.site-main { counter-reset: section-index; }
+
+.site-main > section > .section-eyebrow {
+    counter-increment: section-index;
+}
+
+.site-main > section > .section-eyebrow::after {
+    content: counter(section-index, decimal-leading-zero);
+    order: -1;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--c-accent-bright);
+    padding-right: 0.75rem;
+    margin-right: 0.1rem;
+    border-right: 1px solid var(--line-strong);
+}
+
+/* Cards: hairline accent on the top edge when hovered */
+.process-grid--flow .process-step.glass-card::after,
+.skill-card.glass-card::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute;
+    left: 12%;
+    right: 12%;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--c-accent-bright), var(--c-accent-fuchsia), transparent);
+    opacity: 0;
+    transform: scaleX(0.4);
+    transition: opacity 0.5s var(--ease-expo), transform 0.7s var(--ease-expo);
+    pointer-events: none;
+}
+
+.process-grid--flow .process-step.glass-card:hover::after,
+.skill-card.glass-card:hover::after {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+.process-step.glass-card,
+.skill-card.glass-card { position: relative; }
 
 /* ---------- Motion tiers ---------- */
 html.motion-lite .studio-grain { animation: none; }

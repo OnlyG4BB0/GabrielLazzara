@@ -10,14 +10,15 @@
 - Portfolio: https://onlyg4bb0.github.io/GabrielLazzara/
 
 ## Key pages
-- Home: /
+- Home (Italian): /
+- Home (English): /en/
 - Privacy: /privacy.html
 - Cookie policy: /cookie.html
 - Legal notice: /note-legali.html
 
 ## Languages
-- Italian (default): /?lang=it
-- English: /?lang=en
+- Italian (default): /
+- English: /en/
 
 ## Keywords
 web developer Palermo, sviluppatore web Palermo, developer Sicilia, creazione siti web, landing page, web app, portfolio developer, SEO tecnica, indicizzazione Google, Schema.org, siti multilingua, React, JavaScript, TypeScript, Python, PHP, GitHub Pages, VPS, Mondello, freelance developer Italy
