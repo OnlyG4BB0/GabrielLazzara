@@ -214,7 +214,9 @@ const translations = {
         cursor_view: "Vedi",
         footer_nav_label: "Navigazione",
         footer_social_label: "Social",
-        footer_credits: "Progettato e sviluppato con <i class='fas fa-heart text-purple-500 mx-1'></i> da Gabriel Lazzara.<br>&copy; 2026 Tutti i diritti riservati.",
+        footer_credits: "&copy; 2026 Gabriel Lazzara · Progettato e sviluppato a Palermo",
+        footer_top: "Torna su",
+        footer_top_aria: "Torna all'inizio",
         email_opening: "Apertura client email..."
     },
     en: {
@@ -432,7 +434,9 @@ const translations = {
         cursor_view: "View",
         footer_nav_label: "Navigation",
         footer_social_label: "Social",
-        footer_credits: "Designed and developed with <i class='fas fa-heart text-purple-500 mx-1'></i> by Gabriel Lazzara.<br>&copy; 2026 All rights reserved.",
+        footer_credits: "&copy; 2026 Gabriel Lazzara · Designed and built in Palermo",
+        footer_top: "Back to top",
+        footer_top_aria: "Back to top",
         email_opening: "Opening email client..."
     }
 };
