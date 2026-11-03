@@ -1296,6 +1296,63 @@ footer.site-footer a.rounded-full {
     font-size: clamp(1.6rem, min(7vw, 6.4svh), 2.75rem) !important;
 }
 
+/* Menu open/close: the glass sheet unrolls from the capsule, links drop in one after another;
+   closing plays it backwards (links first, then the sheet rolls back up) */
+:root #mobile-menu.flex {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0 round 0 0 2rem 2rem);
+    transition:
+        clip-path 0.45s cubic-bezier(0.65, 0, 0.35, 1) 0.1s,
+        opacity 0.3s ease 0.2s;
+}
+
+:root #mobile-menu.flex.menu-visible {
+    opacity: 1;
+    clip-path: inset(0 0 0 0 round 0);
+    transition:
+        clip-path 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.25s ease;
+}
+
+:root #mobile-menu .mobile-link {
+    animation: none !important;
+    opacity: 0;
+    transform: translate3d(0, -0.6em, 0);
+    filter: blur(4px);
+    transition:
+        opacity 0.22s ease,
+        transform 0.3s cubic-bezier(0.65, 0, 0.35, 1),
+        filter 0.22s ease,
+        color 0.3s ease;
+}
+
+:root #mobile-menu.menu-visible .mobile-link {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition:
+        opacity 0.45s ease,
+        transform 0.6s var(--ease-spring),
+        filter 0.45s ease,
+        color 0.3s ease;
+    transition-delay: calc(0.12s + var(--i, 0) * 0.04s);
+}
+
+:root #mobile-menu.menu-visible .mobile-link:hover { transition-delay: 0s; }
+
+@media (prefers-reduced-motion: reduce) {
+    :root #mobile-menu.flex,
+    :root #mobile-menu.flex.menu-visible,
+    :root #mobile-menu .mobile-link,
+    :root #mobile-menu.menu-visible .mobile-link {
+        clip-path: none;
+        transform: none;
+        filter: none;
+        transition: opacity 0.15s ease;
+        transition-delay: 0s;
+    }
+}
+
 /* ---------- 14. Accessibility & Reduced Transparency Fallbacks ---------- */
 @media (prefers-reduced-transparency: reduce) {
     :root .liquid-glass,

@@ -388,6 +388,8 @@ class PortfolioApp {
 
     setupMobileMenu() {
         if (!this.menuBtn || !this.mobileMenu) return;
+        // Stagger index for the open/close animation of the links
+        this.mobileLinks.forEach((link, i) => link.style.setProperty('--i', i));
         this.menuBtn.addEventListener('click', () => this.toggleMenu());
         this.mobileLinks.forEach((link) => {
             link.addEventListener('click', () => {
@@ -416,23 +418,24 @@ class PortfolioApp {
             ? (t.menu_close_aria || 'Chiudi menu')
             : (t.menu_open_aria || 'Apri menu'));
 
+        window.clearTimeout(this.menuCloseTimer);
         if (this.isMenuOpen) {
             this.mobileMenu.classList.remove('hidden');
             this.mobileMenu.classList.add('flex');
             this.mobileMenu.setAttribute('aria-hidden', 'false');
-            requestAnimationFrame(() => {
-                this.mobileMenu.classList.add('menu-visible');
-                document.body.style.overflow = 'hidden';
-                this.mobileLinks[0]?.focus();
-            });
+            void this.mobileMenu.offsetWidth; // start the opening transition from the closed state
+            this.mobileMenu.classList.add('menu-visible');
+            document.body.style.overflow = 'hidden';
+            this.mobileLinks[0]?.focus({ preventScroll: true });
         } else {
             this.mobileMenu.classList.remove('menu-visible');
             this.mobileMenu.setAttribute('aria-hidden', 'true');
             document.body.style.overflow = '';
-            setTimeout(() => {
+            // Keep it on screen until the closing animation has finished
+            this.menuCloseTimer = window.setTimeout(() => {
                 this.mobileMenu.classList.add('hidden');
                 this.mobileMenu.classList.remove('flex');
-            }, 300);
+            }, this.prefersReducedMotion ? 0 : 560);
         }
     }
 
