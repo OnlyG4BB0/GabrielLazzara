@@ -1,34 +1,16 @@
 /* ==========================================================================
-   Liquid Glass — the dashersw/liquid-glass-js look, rendered on the live page
-   The optics (edge + rim refraction, corner boost, rim ripple, gaussian frost,
-   white→grey tint, deep drop shadow) are ported from the fragment shader of
-   https://github.com/dashersw/liquid-glass-js (MIT, © Armagan Amcalar).
-   Instead of sampling a static html2canvas screenshot, each element gets a
-   displacement map computed with the same formulas and applied through
-   backdrop-filter, so the glass always shows what is really behind it.
-   - Chromium (desktop and Android): full refraction (SVG filters inside backdrop-filter)
-   - Safari, Firefox and low-end devices: frost + tint + shadow only
+   Liquid Glass — Apple-style glass for the control layer (same system as
+   teaamo-palermo's useLiquidGlass)
+
+   Every browser gets the CSS glass in css/liquid-glass.css (.liquid-glass):
+   frosted + saturated backdrop, specular rim, inner glow and a highlight that
+   follows the pointer. Chromium additionally gets real, live refraction at the
+   rim: an SVG feDisplacementMap used as a backdrop-filter, driven by a
+   displacement map generated for the element's exact size and corner radius.
+   Unlike a page snapshot, it refracts whatever is behind right now.
    ========================================================================== */
 (function () {
     'use strict';
-
-    const root = document.documentElement;
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const reducedTransparency = window.matchMedia('(prefers-reduced-transparency: reduce)').matches;
-
-    // Same defaults as the library's window.glassControls
-    const OPTICS = Object.assign({
-        edgeIntensity: 0.01,
-        rimIntensity: 0.05,
-        baseIntensity: 0.01,
-        edgeDistance: 0.15,
-        rimDistance: 0.8,
-        baseDistance: 0.1,
-        cornerBoost: 0.02,
-        rippleEffect: 0.1,
-        // The shader works in page-texture UVs; this is the texture size (px) the offsets are scaled by
-        textureScale: 1000,
-    }, window.glassControls || {});
 
     class Container {
         static instances = [];
@@ -88,12 +70,10 @@
         '.faq-item',
         '.cta-band',
         '.contact-panel',
-        '.hero-stats',
         '.legal-article',
-        '#cookie-consent',
     ];
 
-    const PILL_SELECTORS = ['#navbar .nav-pill', '.hero-availability', '.about-float-badge', '.navbar-brand'];
+    const PILL_SELECTORS = ['.hero-availability', '.about-float-badge'];
 
     const CIRCLE_SELECTORS = [
         '#theme-toggle',
@@ -118,22 +98,19 @@
         '.case-cta-secondary',
     ];
 
-    // Elements rendered as liquid glass (the library's Container / Button look)
-    const GLASS_SELECTORS = [
-        '#navbar .nav-pill',
-        '.navbar-brand',
-        '#theme-toggle',
-        '.lang-toggle',
-        '#mobile-menu-btn',
-        '.hero-availability',
-        '.hero-action-btn.btn-ghost',
-        '.hero-stats',
-        '.hero-scroll-cue',
-        '.project-filters',
-        '.case-cta-secondary',
-        '.footer-giant__arrow',
-        '.footer-social__link',
-        '#cookie-consent',
+    // Glass controls and their refraction (strength/bevel in px, as in teaamo)
+    const GLASS = [
+        { selector: '#navbar .navbar-inner', refract: true, strength: 14, bevel: 20, aberration: true, mobile: { strength: 12, bevel: 16, aberration: false } },
+        { selector: '#theme-toggle, .lang-toggle, #mobile-menu-btn', press: true },
+        { selector: '.nav-link-cta', press: true, tint: true },
+        { selector: '.hero-availability', refract: true, strength: 12, bevel: 16 },
+        { selector: '.hero-action-btn.btn-ghost', refract: true, strength: 12, bevel: 16, press: true },
+        { selector: '.hero-stats', refract: true, strength: 14, bevel: 18 },
+        { selector: '.hero-scroll-cue', refract: true, strength: 12, bevel: 16, press: true },
+        { selector: '.project-filters', refract: true, strength: 14, bevel: 18 },
+        { selector: '.case-cta-secondary', refract: true, strength: 12, bevel: 16, press: true },
+        { selector: '.footer-giant__arrow, .footer-social__link', refract: true, strength: 12, bevel: 16, press: true },
+        { selector: '#cookie-consent', refract: true, strength: 16, bevel: 18, aberration: true, blur: 8 },
     ];
 
     function upgradeSurfaces() {
@@ -142,25 +119,103 @@
         each(PILL_SELECTORS, (el) => new Container({ element: el, type: 'pill' }));
         each(CIRCLE_SELECTORS, (el) => new Button({ element: el, type: 'circle' }));
         each(BUTTON_SELECTORS, (el) => new Button({ element: el, type: 'pill' }));
-        each(GLASS_SELECTORS, (el) => el.classList.add('liquid-glass'));
     }
 
-    /* ---------- Refraction map (port of the library's fragment shader) ---------- */
+    /* ---------- Refraction ---------- */
+    let refractionSupport = null;
+
+    const canRefract = () => {
+        if (refractionSupport !== null) return refractionSupport;
+        const ua = navigator.userAgent;
+        const isAppleWebKit = /iPhone|iPad|iPod/.test(ua) || (/Safari\//.test(ua) && !/Chrome|Chromium|Edg\//.test(ua));
+        const isFirefox = /Firefox\//.test(ua);
+        const reduced = window.matchMedia('(prefers-reduced-transparency: reduce)').matches
+            || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        refractionSupport = !isAppleWebKit && !isFirefox && !reduced
+            && typeof CSS !== 'undefined' && CSS.supports('backdrop-filter', 'url(#lg)');
+        return refractionSupport;
+    };
+
+    const mapCache = new Map();
+
+    /**
+     * Displacement map for a rounded rectangle. Red/green encode an inward pull that
+     * rises smoothly towards the rim, so the backdrop bends like a thick glass lens
+     * at the edges while the centre stays clear.
+     */
+    function refractionMap(w, h, radius, bevel) {
+        const key = `${w}x${h}-${radius.toFixed(1)}-${bevel}`;
+        const cached = mapCache.get(key);
+        if (cached) return cached;
+
+        // Generated at most ~320px on the long side; feImage stretches it smoothly
+        const s = Math.min(1, 320 / Math.max(w, h));
+        const cw = Math.max(2, Math.round(w * s));
+        const ch = Math.max(2, Math.round(h * s));
+        const canvas = document.createElement('canvas');
+        canvas.width = cw;
+        canvas.height = ch;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return '';
+        const img = ctx.createImageData(cw, ch);
+        const data = img.data;
+        const r = Math.min(radius, w / 2, h / 2);
+        const hw = w / 2;
+        const hh = h / 2;
+
+        for (let y = 0; y < ch; y++) {
+            for (let x = 0; x < cw; x++) {
+                const cx = (x + 0.5) / s - hw;
+                const cy = (y + 0.5) / s - hh;
+                const qx = Math.abs(cx) - (hw - r);
+                const qy = Math.abs(cy) - (hh - r);
+                const outside = Math.hypot(Math.max(qx, 0), Math.max(qy, 0));
+                const depth = -(outside + Math.min(Math.max(qx, qy), 0) - r);
+                let dx = 0;
+                let dy = 0;
+                if (depth >= 0 && depth < bevel) {
+                    let nx;
+                    let ny;
+                    if (qx > 0 && qy > 0 && outside > 0) {
+                        nx = (Math.sign(cx) * qx) / outside;
+                        ny = (Math.sign(cy) * qy) / outside;
+                    } else if (qx > qy) {
+                        nx = Math.sign(cx);
+                        ny = 0;
+                    } else {
+                        nx = 0;
+                        ny = Math.sign(cy);
+                    }
+                    const t = 1 - depth / bevel;
+                    // Smooth lens shoulder plus a faint inner ripple, like a liquid meniscus
+                    const mag = t * t * (3 - 2 * t) + 0.08 * Math.sin(t * Math.PI);
+                    dx = -nx * mag;
+                    dy = -ny * mag;
+                }
+                const i = (y * cw + x) * 4;
+                data[i] = 128 + dx * 127;
+                data[i + 1] = 128 + dy * 127;
+                data[i + 2] = 128;
+                data[i + 3] = 255;
+            }
+        }
+        ctx.putImageData(img, 0, 0);
+        const url = canvas.toDataURL();
+        mapCache.set(key, url);
+        return url;
+    }
+
     const SVG_NS = 'http://www.w3.org/2000/svg';
     let defs = null;
     let filterCount = 0;
-
-    // Only Chromium renders SVG filters inside backdrop-filter
-    const supportsRefraction = (() => {
-        const brands = navigator.userAgentData && navigator.userAgentData.brands;
-        return Array.isArray(brands) && brands.some((b) => /Chromium/i.test(b.brand));
-    })();
 
     function ensureDefs() {
         if (defs) return defs;
         const svg = document.createElementNS(SVG_NS, 'svg');
         svg.setAttribute('aria-hidden', 'true');
         svg.setAttribute('focusable', 'false');
+        svg.setAttribute('width', '0');
+        svg.setAttribute('height', '0');
         svg.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;pointer-events:none';
         defs = document.createElementNS(SVG_NS, 'defs');
         svg.appendChild(defs);
@@ -168,187 +223,98 @@
         return defs;
     }
 
-    function radiusOf(el, w, h) {
-        const raw = getComputedStyle(el).borderTopLeftRadius || '0';
-        const value = parseFloat(raw) || 0;
-        const r = raw.trim().endsWith('%') ? (Math.min(w, h) * value) / 100 : value;
-        return Math.min(r, w / 2, h / 2);
+    function filterMarkup(strength, aberration) {
+        if (!aberration) {
+            return `<feDisplacementMap in="SourceGraphic" in2="map" scale="${strength * 2}" xChannelSelector="R" yChannelSelector="G"/>`;
+        }
+        // Split red/green/blue slightly at the rim (three passes)
+        return `
+            <feDisplacementMap in="SourceGraphic" in2="map" scale="${strength * 2}" xChannelSelector="R" yChannelSelector="G" result="dr"/>
+            <feColorMatrix in="dr" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+            <feDisplacementMap in="SourceGraphic" in2="map" scale="${strength * 2.12}" xChannelSelector="R" yChannelSelector="G" result="dg"/>
+            <feColorMatrix in="dg" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+            <feDisplacementMap in="SourceGraphic" in2="map" scale="${strength * 2.26}" xChannelSelector="R" yChannelSelector="G" result="db"/>
+            <feColorMatrix in="db" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+            <feBlend in="r" in2="g" mode="screen" result="rg"/>
+            <feBlend in="rg" in2="b" mode="screen"/>`;
     }
 
-    /**
-     * Per-pixel refraction offset, as in container.js:
-     *   total  = edge·e^(−d·edgeDistance) + rim·e^(−d·rimDistance) [+ base when warping]
-     *   offset = normal·total + normal·cornerBoost + perpendicular·ripple
-     * d is the distance from the shape edge in px; the offset is in page UVs,
-     * converted to px with OPTICS.textureScale. Returns the map and its scale.
-     */
-    function refractionMap(w, h, radius, warp) {
-        const o = OPTICS;
-        const minDim = Math.min(w, h);
-        const isCircle = Math.abs(w - h) < 4 && Math.abs(radius - minDim / 2) < 1;
-        const isPill = !isCircle && Math.abs(radius - h / 2) < 2 && w > h + 4;
-        const offsets = new Float32Array(w * h * 2);
-        let maxOffset = 0;
+    function attachRefraction(el, options) {
+        if (!canRefract() || typeof ResizeObserver === 'undefined') return;
+        filterCount += 1;
+        const id = `lg-${filterCount}`;
+        const narrow = window.matchMedia('(max-width: 1023px)');
 
-        for (let y = 0; y < h; y++) {
-            for (let x = 0; x < w; x++) {
-                const px = x + 0.5;
-                const py = y + 0.5;
-                const u = px / w;
-                const v = py / h;
-                let sdf;
-                let nx;
-                let ny;
+        const build = () => {
+            const w = Math.round(el.offsetWidth);
+            const h = Math.round(el.offsetHeight);
+            if (!w || !h) return;
+            const r = Math.min(parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0, w / 2, h / 2);
+            const o = narrow.matches && options.mobile ? { ...options, ...options.mobile } : options;
+            const bevel = Math.min(o.bevel || 16, h / 2, w / 2);
+            const key = `${w}x${h}-${r.toFixed(1)}-${bevel}-${o.strength}-${o.aberration ? 1 : 0}`;
+            if (el._lgKey === key) return;
+            el._lgKey = key;
 
-                if (isPill) {
-                    const ax = Math.min(Math.max(px, radius), w - radius);
-                    const dx = px - ax;
-                    const dy = py - h / 2;
-                    const len = Math.hypot(dx, dy);
-                    sdf = len - radius;
-                    nx = len > 0 ? dx / len : 0;
-                    ny = len > 0 ? dy / len : 1;
-                } else if (isCircle) {
-                    const dx = px - w / 2;
-                    const dy = py - h / 2;
-                    const len = Math.hypot(dx, dy);
-                    sdf = len - radius;
-                    nx = len > 0 ? dx / len : 0;
-                    ny = len > 0 ? dy / len : 0;
-                } else {
-                    const qx = Math.abs(px - w / 2) - (w / 2 - radius);
-                    const qy = Math.abs(py - h / 2) - (h / 2 - radius);
-                    sdf = Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - radius;
-                    // The shader uses the UV direction from the centre for rounded rects
-                    const cx = u - 0.5;
-                    const cy = v - 0.5;
-                    const len = Math.hypot(cx, cy);
-                    nx = len > 0 ? cx / len : 0;
-                    ny = len > 0 ? cy / len : 0;
-                }
-
-                const d = Math.max(-sdf, 0);
-                const edge = Math.exp(-d * o.edgeDistance);
-                const rim = Math.exp(-d * o.rimDistance);
-                const base = warp ? (1 - Math.exp(-d * o.baseDistance)) * o.baseIntensity : 0;
-                const total = base + edge * o.edgeIntensity + rim * o.rimIntensity;
-
-                const cornerDistance = Math.max(Math.min(u, 1 - u), Math.min(v, 1 - v)) * minDim;
-                const corner = Math.exp(-cornerDistance * 0.3) * o.cornerBoost;
-                const ripple = Math.sin((d / minDim) * 25) * o.rippleEffect * rim;
-
-                const ox = (nx * (total + corner) - ny * ripple) * o.textureScale;
-                const oy = (ny * (total + corner) + nx * ripple) * o.textureScale;
-                const i = (y * w + x) * 2;
-                offsets[i] = ox;
-                offsets[i + 1] = oy;
-                maxOffset = Math.max(maxOffset, Math.abs(ox), Math.abs(oy));
+            const mapUrl = refractionMap(w, h, r, bevel);
+            if (!mapUrl) return;
+            let filter = ensureDefs().querySelector(`#${id}`);
+            if (!filter) {
+                filter = document.createElementNS(SVG_NS, 'filter');
+                filter.setAttribute('id', id);
+                filter.setAttribute('x', '0');
+                filter.setAttribute('y', '0');
+                filter.setAttribute('filterUnits', 'userSpaceOnUse');
+                filter.setAttribute('color-interpolation-filters', 'sRGB');
+                defs.appendChild(filter);
             }
-        }
-
-        // feDisplacementMap: P'(x) = P(x + scale·(C − ½)); encode offsets around 128
-        const scale = Math.max(2, Math.ceil(maxOffset * 2));
-        const canvas = document.createElement('canvas');
-        canvas.width = w;
-        canvas.height = h;
-        const ctx = canvas.getContext('2d');
-        const img = ctx.createImageData(w, h);
-        for (let p = 0, i = 0; p < w * h; p++, i += 2) {
-            img.data[p * 4] = Math.round(128 + (offsets[i] / scale) * 255);
-            img.data[p * 4 + 1] = Math.round(128 + (offsets[i + 1] / scale) * 255);
-            img.data[p * 4 + 2] = 128;
-            img.data[p * 4 + 3] = 255;
-        }
-        ctx.putImageData(img, 0, 0);
-        return { href: canvas.toDataURL('image/png'), scale };
-    }
-
-    function buildRefraction(el) {
-        const w = Math.round(el.offsetWidth);
-        const h = Math.round(el.offsetHeight);
-        if (w < 8 || h < 8) return;
-        const r = radiusOf(el, w, h);
-        const key = `${w}x${h}x${Math.round(r)}`;
-        if (el._lgKey === key) return;
-        el._lgKey = key;
-
-        if (!el._lgFilterId) {
-            filterCount += 1;
-            el._lgFilterId = `liquid-glass-${filterCount}`;
-        }
-        const id = el._lgFilterId;
-        const container = ensureDefs();
-        let filter = container.querySelector(`#${id}`);
-        if (!filter) {
-            filter = document.createElementNS(SVG_NS, 'filter');
-            filter.setAttribute('id', id);
-            filter.setAttribute('filterUnits', 'userSpaceOnUse');
-            filter.setAttribute('color-interpolation-filters', 'sRGB');
-            filter.setAttribute('x', '0');
-            filter.setAttribute('y', '0');
+            filter.setAttribute('width', String(w));
+            filter.setAttribute('height', String(h));
             filter.innerHTML =
-                '<feImage result="map" preserveAspectRatio="none" x="0" y="0"></feImage>' +
-                '<feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>';
-            container.appendChild(filter);
-        }
-        const { href, scale } = refractionMap(w, h, r, el.dataset.lgWarp === '1');
-        filter.setAttribute('width', String(w));
-        filter.setAttribute('height', String(h));
-        const image = filter.querySelector('feImage');
-        image.setAttribute('width', String(w));
-        image.setAttribute('height', String(h));
-        image.setAttribute('href', href);
-        filter.querySelector('feDisplacementMap').setAttribute('scale', String(scale));
+                `<feImage href="${mapUrl}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="map"/>` +
+                filterMarkup(o.strength || 18, !!o.aberration);
 
-        el.style.setProperty('--lg-refraction', `url(#${id})`);
-        el.classList.add('lg-refracting');
+            el.style.setProperty('--lg-refraction', `url(#${id}) blur(${o.blur || 3}px) saturate(1.9) brightness(1.06)`);
+            el.dataset.refract = 'true';
+        };
+
+        // Rebuild the map once a resize/transition settles, not on every intermediate frame
+        let timer = 0;
+        new ResizeObserver(() => {
+            window.clearTimeout(timer);
+            timer = window.setTimeout(build, 140);
+        }).observe(el);
+        build();
     }
 
-    function initRefraction(targets) {
-        // Low-end devices keep frost + tint only
-        const lowEnd = (typeof navigator.deviceMemory === 'number' && navigator.deviceMemory < 4)
-            || (typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency <= 4);
-        if (!supportsRefraction || reducedTransparency || lowEnd || !targets.length) return;
-        root.classList.add('lg-has-refraction');
-
-        let queued = new Set();
-        let raf = 0;
-        const flush = () => {
-            raf = 0;
-            queued.forEach(buildRefraction);
-            queued = new Set();
+    // Specular highlight follows the pointer / finger
+    function attachHighlight(el) {
+        const move = (e) => {
+            const rect = el.getBoundingClientRect();
+            el.style.setProperty('--lg-x', `${(((e.clientX - rect.left) / rect.width) * 100).toFixed(1)}%`);
+            el.style.setProperty('--lg-y', `${(((e.clientY - rect.top) / rect.height) * 100).toFixed(1)}%`);
         };
-        const queue = (el) => {
-            queued.add(el);
-            if (!raf) raf = requestAnimationFrame(flush);
-        };
+        el.addEventListener('pointermove', move, { passive: true });
+        el.addEventListener('pointerdown', move, { passive: true });
+        el.addEventListener('pointerleave', () => {
+            el.style.removeProperty('--lg-x');
+            el.style.removeProperty('--lg-y');
+        }, { passive: true });
+    }
 
-        const ro = new ResizeObserver((entries) => entries.forEach((e) => queue(e.target)));
-        targets.forEach((el) => {
-            ro.observe(el);
-            queue(el);
+    function initGlass() {
+        GLASS.forEach((options) => {
+            document.querySelectorAll(options.selector).forEach((el) => {
+                el.classList.add('liquid-glass');
+                if (options.press) el.classList.add('lg-press');
+                if (options.tint) el.classList.add('lg-tint');
+                attachHighlight(el);
+                if (options.refract) attachRefraction(el, options);
+            });
         });
     }
 
-    /* ---------- Liquid indicators (nav + project filters) ---------- */
-    function squish(el) {
-        if (reducedMotion) return;
-        el.classList.remove('lg-squish');
-        void el.offsetWidth;
-        el.classList.add('lg-squish');
-    }
-
-    function initNavIndicator() {
-        const indicator = document.querySelector('.nav-indicator');
-        if (!indicator) return;
-        let last = indicator.style.transform;
-        new MutationObserver(() => {
-            const next = indicator.style.transform;
-            if (next && last && next !== last) squish(indicator);
-            last = next;
-        }).observe(indicator, { attributes: true, attributeFilter: ['style'] });
-    }
-
+    /* ---------- Project filters: sliding indicator, like the teaamo tab bar ---------- */
     function initFilterThumb() {
         const group = document.querySelector('.project-filters');
         if (!group) return;
@@ -361,41 +327,28 @@
         group.prepend(thumb);
         group.classList.add('lg-segmented');
 
-        let current = null;
-        const place = (animate) => {
+        const place = () => {
             const active = buttons.find((b) => b.classList.contains('filter-active')) || buttons[0];
             thumb.style.width = `${active.offsetWidth}px`;
             thumb.style.height = `${active.offsetHeight}px`;
             thumb.style.transform = `translate3d(${active.offsetLeft}px, ${active.offsetTop}px, 0)`;
-            if (animate && current && current !== active) squish(thumb);
-            current = active;
         };
 
-        place(false);
+        place();
         requestAnimationFrame(() => thumb.classList.add('is-ready'));
-        const mo = new MutationObserver(() => place(true));
+        const mo = new MutationObserver(place);
         buttons.forEach((b) => mo.observe(b, { attributes: true, attributeFilter: ['class'] }));
-        new ResizeObserver(() => place(false)).observe(group);
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => place(false));
+        new ResizeObserver(place).observe(group);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
     }
 
     function init() {
         upgradeSurfaces();
-        initRefraction([...document.querySelectorAll('.liquid-glass')]);
-        initNavIndicator();
+        initGlass();
         initFilterThumb();
     }
 
-    // Lets a page opt extra elements in: LiquidGlass.apply(el)
-    window.LiquidGlass = {
-        optics: OPTICS,
-        apply(el) {
-            el.classList.add('liquid-glass');
-            initRefraction([el]);
-        },
-    };
-
-    // After main.js's own DOMContentLoaded handler, which sets the motion tier (motion-lite)
+    // After main.js's own DOMContentLoaded handler
     if (document.readyState === 'complete') {
         init();
     } else {
