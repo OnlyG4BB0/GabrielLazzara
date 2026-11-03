@@ -613,6 +613,30 @@ function buildAboutFox() {
     foxGroup.add(edges);
     root.add(foxGroup);
 
+    // Soft glow "shadow" under the fox: it tightens and fades as the fox rises, selling the float
+    const glowCanvas = document.createElement('canvas');
+    glowCanvas.width = glowCanvas.height = 128;
+    const gctx = glowCanvas.getContext('2d');
+    const grad = gctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    grad.addColorStop(0, 'rgba(196, 181, 253, 0.55)');
+    grad.addColorStop(0.45, 'rgba(139, 92, 246, 0.22)');
+    grad.addColorStop(1, 'rgba(139, 92, 246, 0)');
+    gctx.fillStyle = grad;
+    gctx.fillRect(0, 0, 128, 128);
+    const floorGlow = new THREE.Mesh(
+        new THREE.PlaneGeometry(2.6, 2.6),
+        new THREE.MeshBasicMaterial({
+            map: new THREE.CanvasTexture(glowCanvas),
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+        })
+    );
+    floorGlow.rotation.x = -Math.PI / 2.35;
+    floorGlow.position.set(0, -1.62, 0.2);
+    floorGlow.scale.set(1, 0.42, 1);
+    scene.add(floorGlow);
+
     const gemGeo = new THREE.OctahedronGeometry(0.12, 0);
     const gems = [];
     const gemColors = [0xc084fc, 0xe879f9, 0x6366f1];
@@ -710,11 +734,11 @@ function buildAboutFox() {
     host.addEventListener('pointerup', endDrag);
     host.addEventListener('pointercancel', endDrag);
 
-    tickFns.push((delta, elapsed) => {
-        if (!inView) return;
-
-        yawOffset += (input.px * 0.45 - yawOffset) * 0.05;
-        pitchOffset += (input.py * 0.25 - pitchOffset) * 0.05;
+    const tick = (delta, elapsed) => {
+        // Frame-rate independent easing towards the pointer
+        const follow = 1 - Math.exp(-delta * 2.4);
+        yawOffset += (input.tx * 0.45 - yawOffset) * follow;
+        pitchOffset += (input.ty * 0.25 - pitchOffset) * follow;
 
         if (!isDragging) {
             dragYaw += dragVelX * delta;
@@ -753,9 +777,20 @@ function buildAboutFox() {
         faceMat.emissiveIntensity = 0.12 + pulse * 0.5;
         edges.material.opacity = 0.55 + pulse * 0.4;
 
-        foxGroup.rotation.y = Math.sin(elapsed * 0.45) * 0.22 + yawOffset * 0.35 + dragYaw;
-        foxGroup.rotation.x = pitchOffset * 0.35 + Math.sin(elapsed * 0.55) * 0.03 + dragPitch;
-        foxGroup.position.y = Math.sin(elapsed * 0.65) * 0.04;
+        // Floating: slow vertical drift with a lissajous side sway, gentle banking and breathing
+        const float = Math.sin(elapsed * 0.7);
+        foxGroup.position.y = float * 0.16 + Math.sin(elapsed * 1.3) * 0.025;
+        foxGroup.position.x = Math.sin(elapsed * 0.35) * 0.06;
+        foxGroup.rotation.y = Math.sin(elapsed * 0.32) * 0.24 + yawOffset * 0.35 + dragYaw;
+        foxGroup.rotation.x = pitchOffset * 0.35 + Math.sin(elapsed * 0.5 + 0.8) * 0.06 + dragPitch;
+        foxGroup.rotation.z = Math.sin(elapsed * 0.45 + 1.4) * 0.05;
+        foxGroup.scale.setScalar(1 + Math.sin(elapsed * 0.9) * 0.012);
+
+        // Rings and gems follow the float with a lag, so the whole thing feels suspended
+        root.position.y = Math.sin(elapsed * 0.7 - 0.9) * 0.07;
+
+        floorGlow.scale.set(1 - float * 0.12, 0.42 * (1 - float * 0.12), 1);
+        floorGlow.material.opacity = 0.85 - float * 0.25 + pulse * 0.3;
 
         for (let i = 0; i < gems.length; i += 1) {
             const g = gems[i];
@@ -773,6 +808,24 @@ function buildAboutFox() {
 
         camera.lookAt(0, 0, 0);
         renderer.render(scene, camera);
+    };
+
+    // Own loop at the display refresh rate (the shared background loop is capped near 40fps)
+    const foxClock = new THREE.Clock();
+    let foxRaf = 0;
+    const loop = () => {
+        foxRaf = requestAnimationFrame(loop);
+        const delta = Math.min(foxClock.getDelta(), 0.05);
+        if (!inView || document.hidden) return;
+        tick(delta, foxClock.elapsedTime);
+    };
+    foxRaf = requestAnimationFrame(loop);
+    document.addEventListener('visibilitychange', () => {
+        cancelAnimationFrame(foxRaf);
+        if (!document.hidden) {
+            foxClock.getDelta();
+            foxRaf = requestAnimationFrame(loop);
+        }
     });
 
     return true;
