@@ -151,37 +151,67 @@ class PortfolioApp {
             if (e.persisted) document.documentElement.classList.remove('lang-transitioning');
         });
 
-        this.langToggles.forEach((toggle) => {
-            toggle.addEventListener('click', () => {
-                const nextLang = this.currentLang === 'it' ? 'en' : 'it';
-                try { localStorage.setItem('portfolio_lang', nextLang); } catch (_) { /* ignore */ }
-                const target = this.langPageUrl(nextLang) + window.location.hash;
+        const rewriter = window.LangRewrite;
+        const other = () => (this.currentLang === 'it' ? 'en' : 'it');
 
-                if (this.prefersReducedMotion) {
-                    window.location.href = target;
-                    return;
-                }
+        // Have the other language ready before the click
+        const prefetch = () => rewriter?.prefetch(other());
+        this.langToggles.forEach((toggle) => {
+            toggle.addEventListener('pointerenter', prefetch, { passive: true });
+            toggle.addEventListener('focus', prefetch, { passive: true });
+        });
+        if ('requestIdleCallback' in window) requestIdleCallback(prefetch, { timeout: 4000 });
+
+        const finishSwitch = (lang) => {
+            this.currentLang = lang;
+            this.pageLang = lang;
+            this.applyLanguage(lang);
+        };
+
+        this.langToggles.forEach((toggle) => {
+            toggle.addEventListener('click', async () => {
+                const nextLang = other();
+                try { localStorage.setItem('portfolio_lang', nextLang); } catch (_) { /* ignore */ }
+                const fallback = () => { window.location.href = this.langPageUrl(nextLang) + window.location.hash; };
 
                 const directionClass = nextLang === 'en' ? 'to-en' : 'to-it';
-
                 this.langToggles.forEach((btn) => {
                     btn.classList.remove('is-switching', 'to-en', 'to-it', 'lang-pop');
                     void btn.offsetWidth;
                     btn.classList.add('is-switching', directionClass);
                 });
-
-                document.documentElement.classList.add('lang-transitioning');
-
                 window.setTimeout(() => {
-                    window.location.href = target;
-                }, 220);
-
-                window.setTimeout(() => {
-                    this.langToggles.forEach((btn) => {
-                        btn.classList.remove('is-switching', 'to-en', 'to-it');
-                    });
+                    this.langToggles.forEach((btn) => btn.classList.remove('is-switching', 'to-en', 'to-it'));
                 }, 640);
+
+                // Rewrite the page in place; fall back to a normal navigation if that fails
+                if (!rewriter) {
+                    fallback();
+                    return;
+                }
+                const switching = rewriter.switchTo(nextLang, { animate: !this.prefersReducedMotion });
+                // Toggle and labels flip right away, the texts keep rewriting
+                const ok = await Promise.race([switching, new Promise((r) => setTimeout(() => r('pending'), 400))]);
+                if (ok === false) {
+                    fallback();
+                    return;
+                }
+                finishSwitch(nextLang);
+                if (ok === 'pending' && (await switching) === false) fallback();
+                window.requestAnimationFrame(() => this.repositionNavIndicator?.());
             });
+        });
+
+        // Back / forward between / and /en/
+        window.addEventListener('popstate', async () => {
+            const wanted = /\/en\/?$/.test(window.location.pathname) ? 'en' : 'it';
+            if (wanted === this.currentLang || !rewriter) return;
+            const ok = await rewriter.switchTo(wanted, { animate: !this.prefersReducedMotion, push: false });
+            if (!ok) {
+                window.location.reload();
+                return;
+            }
+            finishSwitch(wanted);
         });
     }
 
