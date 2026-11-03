@@ -461,7 +461,7 @@ function buildBackground() {
 }
 
 /* ---- origami fox geometry (used in About scene) ---------------------- */
-function buildFoxGeometry() {
+function buildFoxGeometry(lighten = 0) {
     // Vertices from the SVG logo (x,y in 0..100), mapped to normalized 3D
     // with a z-depth that folds the face forward like origami.
     const P = {
@@ -486,7 +486,7 @@ function buildFoxGeometry() {
     const colors = [];
     const col = new THREE.Color();
     for (const tri of tris) {
-        col.set(tri.c);
+        col.set(tri.c).lerp(WHITE, lighten);
         for (const key of tri.v) {
             const p = P[key];
             positions.push(p[0], p[1], p[2]);
@@ -498,6 +498,35 @@ function buildFoxGeometry() {
     geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
     geo.computeVertexNormals();
     return geo;
+}
+
+const WHITE = new THREE.Color('#ffffff');
+
+/**
+ * Small studio for the glass fox to reflect: a white softbox on top, fuchsia and
+ * indigo strips on the sides (the navbar glass palette), prefiltered with PMREM.
+ */
+function buildGlassEnvironment(renderer) {
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const studio = new THREE.Scene();
+    studio.background = new THREE.Color('#0b0716');
+    const panel = (color, intensity, pos, size) => {
+        const mesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(1, 1),
+            new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(intensity), side: THREE.DoubleSide })
+        );
+        mesh.position.set(pos[0], pos[1], pos[2]);
+        mesh.scale.set(size[0], size[1], 1);
+        mesh.lookAt(0, 0, 0);
+        studio.add(mesh);
+    };
+    panel('#ffffff', 2.6, [0, 4.5, 2], [7, 1.4]);
+    panel('#e879f9', 1.8, [5, 1, 1.5], [1.6, 5]);
+    panel('#6366f1', 1.8, [-5, -1, 1.5], [1.6, 5]);
+    panel('#c4b5fd', 0.9, [0, -1, -6], [9, 3]);
+    const env = pmrem.fromScene(studio, 0.035).texture;
+    pmrem.dispose();
+    return env;
 }
 
 /* ---- about origami fox (anelli 3D + gemme orbitanti) ----------------- */
@@ -514,6 +543,7 @@ function buildAboutFox() {
     renderer.setClearColor(0x000000, 0);
 
     const scene = new THREE.Scene();
+    scene.environment = buildGlassEnvironment(renderer);
     const camera = new THREE.PerspectiveCamera(33, 1, 0.1, 30);
     camera.position.set(0, 0.08, 7.35);
     camera.lookAt(0, 0, 0);
@@ -547,24 +577,37 @@ function buildAboutFox() {
     ringTilt.rotation.y = Math.PI * 0.32;
     root.add(ringOuter, ringInner, ringTilt);
 
-    const geo = buildFoxGeometry();
+    // Liquid glass, like the navbar: transmissive facets tinted with the logo colours,
+    // a touch of frost, clear-coat specular and a faint iridescent sheen
+    const geo = buildFoxGeometry(0.4);
     geo.center();
     const foxGroup = new THREE.Group();
-    const faceMat = new THREE.MeshStandardMaterial({
+    const faceMat = new THREE.MeshPhysicalMaterial({
         vertexColors: true,
         flatShading: true,
-        metalness: 0.4,
-        roughness: 0.3,
-        emissive: new THREE.Color('#3b1a6b'),
-        emissiveIntensity: 0.3,
         side: THREE.DoubleSide,
+        metalness: 0,
+        roughness: 0.14,
+        transmission: 1,
+        thickness: 0.5,
+        ior: 1.45,
+        attenuationColor: new THREE.Color('#c4b5fd'),
+        attenuationDistance: 1.8,
+        clearcoat: 1,
+        clearcoatRoughness: 0.06,
+        iridescence: 0.45,
+        iridescenceIOR: 1.3,
+        envMapIntensity: 1.3,
+        emissive: new THREE.Color('#2a1050'),
+        emissiveIntensity: 0.12,
     });
     const fox = new THREE.Mesh(geo, faceMat);
     fox.scale.setScalar(1.85);
     foxGroup.add(fox);
     const edges = new THREE.LineSegments(
         new THREE.EdgesGeometry(geo, 1),
-        new THREE.LineBasicMaterial({ color: 0xf5d0fe, transparent: true, opacity: 0.4 })
+        // Bright refractive rim along every fold
+        new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.55 })
     );
     edges.scale.copy(fox.scale);
     foxGroup.add(edges);
@@ -707,8 +750,8 @@ function buildAboutFox() {
         const foxScale = 1.85 + Math.sin(pulse * Math.PI) * 0.16;
         fox.scale.setScalar(foxScale);
         edges.scale.setScalar(foxScale);
-        faceMat.emissiveIntensity = 0.3 + pulse * 0.6;
-        edges.material.opacity = 0.4 + pulse * 0.5;
+        faceMat.emissiveIntensity = 0.12 + pulse * 0.5;
+        edges.material.opacity = 0.55 + pulse * 0.4;
 
         foxGroup.rotation.y = Math.sin(elapsed * 0.45) * 0.22 + yawOffset * 0.35 + dragYaw;
         foxGroup.rotation.x = pitchOffset * 0.35 + Math.sin(elapsed * 0.55) * 0.03 + dragPitch;
