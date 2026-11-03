@@ -961,28 +961,347 @@ footer.site-footer a.rounded-full {
     border-radius: 24px !important;
 }
 
+/* ==========================================================================
+   15. Apple-style Liquid Glass material
+   Thin, bright, lens-like glass: low blur + high saturation, a specular rim
+   that turns towards the light (--lg-angle, driven by js/liquid-glass.js),
+   soft depth, and real edge refraction on Chromium (.lg-lens).
+   Selectors start with :root so they outrank the !important component rules above.
+   ========================================================================== */
+:root,
+[data-theme="dark"] {
+    --lg-angle: -45deg;
+    --g-fill: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.035) 46%, rgba(255, 255, 255, 0.07) 100%);
+    --g-fill-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.1) 100%);
+    --g-fill-panel: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(255, 255, 255, 0.035) 100%);
+    --g-fill-panel-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 40%, rgba(255, 255, 255, 0.05) 100%);
+    --g-fill-chip: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
+    --g-base: rgba(14, 10, 24, 0.34);
+    --g-sheen: radial-gradient(130% 80% at 50% -20%, rgba(255, 255, 255, 0.16), transparent 62%);
+    --g-backdrop-control: blur(4px) saturate(190%) brightness(1.08);
+    --g-backdrop-lens: blur(1.5px) saturate(190%) brightness(1.1);
+    --g-backdrop-panel: blur(14px) saturate(170%) brightness(1.03);
+    --g-rim-hi: rgba(255, 255, 255, 0.9);
+    --g-rim-mid: rgba(255, 255, 255, 0.32);
+    --g-rim-lo: rgba(255, 255, 255, 0.06);
+    --g-shadow:
+        0 12px 32px -12px rgba(0, 0, 0, 0.6),
+        0 2px 8px -3px rgba(0, 0, 0, 0.4),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.32),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.07),
+        inset 0 0 18px rgba(255, 255, 255, 0.035);
+    --g-shadow-hover:
+        0 16px 40px -12px rgba(0, 0, 0, 0.65),
+        0 0 0 1px rgba(196, 181, 253, 0.08),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.45),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.1),
+        inset 0 0 22px rgba(255, 255, 255, 0.05);
+    --g-shadow-panel:
+        0 28px 56px -32px rgba(0, 0, 0, 0.75),
+        inset 0 1px 0.5px rgba(255, 255, 255, 0.16),
+        inset 0 0 32px rgba(255, 255, 255, 0.02);
+    --g-shadow-chip:
+        0 4px 12px -6px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0.5px rgba(255, 255, 255, 0.3),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+    --g-drop: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%);
+    --g-drop-shadow:
+        0 6px 16px -8px rgba(0, 0, 0, 0.6),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.12);
+    --g-edge-fade: color-mix(in srgb, var(--c-dominant) 80%, transparent);
+}
+
+[data-theme="light"] {
+    --g-fill: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.38) 52%, rgba(255, 255, 255, 0.52) 100%);
+    --g-fill-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.5) 52%, rgba(255, 255, 255, 0.66) 100%);
+    --g-fill-panel: linear-gradient(180deg, rgba(255, 255, 255, 0.66) 0%, rgba(255, 255, 255, 0.42) 100%);
+    --g-fill-panel-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.56) 100%);
+    --g-fill-chip: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.55) 100%);
+    --g-base: rgba(255, 255, 255, 0.16);
+    --g-sheen: radial-gradient(130% 80% at 50% -20%, rgba(255, 255, 255, 0.7), transparent 62%);
+    --g-backdrop-control: blur(5px) saturate(180%) brightness(1.04);
+    --g-backdrop-lens: blur(3px) saturate(180%) brightness(1.05);
+    --g-backdrop-panel: blur(16px) saturate(160%);
+    --g-rim-hi: rgba(255, 255, 255, 1);
+    --g-rim-mid: rgba(20, 16, 31, 0.12);
+    --g-rim-lo: rgba(20, 16, 31, 0.06);
+    --g-shadow:
+        0 12px 30px -14px rgba(46, 24, 96, 0.28),
+        0 2px 6px -2px rgba(46, 24, 96, 0.12),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.95),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.5);
+    --g-shadow-hover:
+        0 16px 38px -14px rgba(124, 58, 237, 0.3),
+        0 2px 6px -2px rgba(46, 24, 96, 0.14),
+        inset 0 1px 1.5px rgba(255, 255, 255, 1),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.6);
+    --g-shadow-panel:
+        0 24px 48px -30px rgba(46, 24, 96, 0.3),
+        inset 0 1px 0.5px rgba(255, 255, 255, 0.95);
+    --g-shadow-chip:
+        0 4px 10px -6px rgba(46, 24, 96, 0.22),
+        inset 0 1px 0.5px rgba(255, 255, 255, 1),
+        inset 0 0 0 1px rgba(20, 16, 31, 0.07);
+    --g-drop: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.82) 100%);
+    --g-drop-shadow:
+        0 6px 14px -8px rgba(46, 24, 96, 0.35),
+        inset 0 1px 1px rgba(255, 255, 255, 1),
+        inset 0 0 0 1px rgba(20, 16, 31, 0.06);
+}
+
+/* Specular rim shared by every glass surface: bright where the light hits,
+   a softer counter-reflection on the opposite side */
+:root .lg-control::after,
+:root .lg-refract-layer::before,
+:root .lg-segment-thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+        from var(--lg-angle),
+        var(--g-rim-hi) 0deg,
+        var(--g-rim-mid) 40deg,
+        var(--g-rim-lo) 95deg,
+        var(--g-rim-lo) 150deg,
+        var(--g-rim-mid) 180deg,
+        var(--g-rim-lo) 215deg,
+        var(--g-rim-lo) 280deg,
+        var(--g-rim-mid) 320deg,
+        var(--g-rim-hi) 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+    z-index: 3;
+    transition: opacity 0.4s ease;
+}
+
+/* ---------- Floating controls (navbar, hero, filters, footer, cookie sheet) ---------- */
+:root .lg-control {
+    position: relative;
+    background: var(--g-sheen), var(--g-fill), linear-gradient(var(--g-base), var(--g-base)) !important;
+    border-color: transparent !important;
+    box-shadow: var(--g-shadow) !important;
+    -webkit-backdrop-filter: var(--g-backdrop-control) !important;
+    backdrop-filter: var(--g-backdrop-control) !important;
+    transition:
+        transform 0.5s var(--ease-spring),
+        box-shadow 0.4s var(--ease-expo),
+        background 0.4s ease,
+        color 0.3s ease;
+}
+
+:root.lg-has-lens .lg-control.lg-lens {
+    -webkit-backdrop-filter: var(--g-backdrop-lens) !important;
+    backdrop-filter: var(--lg-lens) var(--g-backdrop-lens) !important;
+}
+
+:root a.lg-control:hover,
+:root button.lg-control:hover {
+    background: var(--g-sheen), var(--g-fill-hover), linear-gradient(var(--g-base), var(--g-base)) !important;
+    box-shadow: var(--g-shadow-hover) !important;
+}
+
+/* Press: the glass swells slightly, like a droplet under a finger */
+:root a.lg-control:active,
+:root button.lg-control:active {
+    transform: scale(1.04);
+    transition-duration: 0.18s;
+}
+
+:root .navbar-brand.lg-control {
+    gap: 0.55rem !important;
+    padding: 0.3rem 1rem 0.3rem 0.4rem;
+    border-radius: 999px !important;
+    overflow: visible !important;
+}
+
+/* Navbar: no full-width bar any more — controls float, with a soft scroll-edge fade */
+:root #navbar,
+:root #navbar.navbar-scrolled {
+    background: transparent !important;
+    border-bottom-color: transparent !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+#navbar::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 -1.75rem;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(to bottom, var(--g-edge-fade) 0%, color-mix(in srgb, var(--c-dominant) 35%, transparent) 60%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.45s ease;
+}
+
+#navbar.navbar-scrolled::before { opacity: 1; }
+
+:root #navbar .nav-pill.lg-control,
+:root #navbar.navbar-scrolled .nav-pill.lg-control {
+    padding: 0.3rem !important;
+    -webkit-backdrop-filter: var(--g-backdrop-control) !important;
+    backdrop-filter: var(--g-backdrop-control) !important;
+}
+
+/* The nav carries text over scrolling content: a touch more frost for legibility */
+:root.lg-has-lens #navbar .nav-pill.lg-lens,
+:root.lg-has-lens #navbar.navbar-scrolled .nav-pill.lg-lens {
+    backdrop-filter: var(--lg-lens) blur(7px) saturate(190%) brightness(1.08) !important;
+}
+
+:root .hero-scroll-cue.lg-control::after { display: block; }
+
+/* The active nav item and the filter thumb are glass droplets that squish as they travel */
+:root .nav-indicator {
+    background: var(--g-drop) !important;
+    border-color: transparent !important;
+    box-shadow: var(--g-drop-shadow) !important;
+}
+
+.nav-indicator.lg-squish,
+.lg-segment-thumb.lg-squish {
+    animation: lgSquish 0.6s var(--ease-smooth);
+}
+
+@keyframes lgSquish {
+    0% { scale: 1 1; }
+    30% { scale: 1.14 0.84; }
+    65% { scale: 0.97 1.05; }
+    100% { scale: 1 1; }
+}
+
+/* Project filters → segmented control */
+:root .project-filters.lg-segmented {
+    position: relative;
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.3rem !important;
+    gap: 0.15rem !important;
+    border-radius: 999px !important;
+}
+
+:root .lg-segmented .filter-btn,
+:root .lg-segmented .filter-btn:hover,
+:root .lg-segmented .filter-btn.filter-active {
+    position: relative;
+    z-index: 1;
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+:root .lg-segmented .filter-btn.filter-active { color: var(--c-text) !important; }
+
+.lg-segment-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    border-radius: 999px;
+    background: var(--g-drop);
+    box-shadow: var(--g-drop-shadow);
+    pointer-events: none;
+    opacity: 0;
+    transition:
+        transform 0.55s var(--ease-spring),
+        width 0.55s var(--ease-spring),
+        height 0.55s var(--ease-spring),
+        opacity 0.3s ease;
+}
+
+.lg-segment-thumb.is-ready { opacity: 1; }
+
+@media (max-width: 640px) {
+    :root .project-filters.lg-segmented { width: 100%; }
+}
+
+/* ---------- Panels (cards, FAQ, contact, CTA…) ---------- */
+:root .glass-container[data-lg-type="rounded"]:not(.lg-control) {
+    background: var(--g-sheen), var(--g-fill-panel) !important;
+    border-color: transparent !important;
+    box-shadow: var(--g-shadow-panel) !important;
+    -webkit-backdrop-filter: var(--g-backdrop-panel) !important;
+    backdrop-filter: var(--g-backdrop-panel) !important;
+}
+
+:root .glass-container[data-lg-type="rounded"]:not(.lg-control):hover {
+    background: var(--g-sheen), var(--g-fill-panel-hover) !important;
+}
+
+:root .lg-refract-layer::before { opacity: 0.75; }
+:root .glass-container:hover > .lg-refract-layer::before { opacity: 1; }
+
+/* ---------- Chips & secondary buttons: glass look without backdrop cost ---------- */
+:root .glass-button:not(.lg-control):not(.btn-primary):not(.filter-btn) {
+    background: var(--g-fill-chip) !important;
+    border-color: transparent !important;
+    box-shadow: var(--g-shadow-chip) !important;
+}
+
+:root .glass-button:not(.lg-control):not(.btn-primary):not(.filter-btn):hover {
+    background: var(--g-fill-hover) !important;
+}
+
+:root .glass-button:not(.lg-control):active { transform: scale(0.97); }
+
+/* Primary CTA keeps its solid "paper" fill, with a crisper specular top edge */
+:root .btn-primary {
+    box-shadow:
+        0 12px 28px -10px rgba(0, 0, 0, 0.45),
+        inset 0 1px 1px rgba(255, 255, 255, 0.95),
+        inset 0 -2px 4px rgba(20, 16, 31, 0.12) !important;
+}
+
+/* Mobile menu: thick glass sheet */
+:root .mobile-menu-panel,
+:root #mobile-menu {
+    background: color-mix(in srgb, var(--c-dominant) 62%, transparent) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+    backdrop-filter: blur(28px) saturate(180%) !important;
+}
+
+/* Cookie sheet: denser base so the text stays readable over anything */
+:root #cookie-consent.lg-control {
+    background:
+        var(--g-sheen),
+        var(--g-fill),
+        linear-gradient(color-mix(in srgb, var(--c-dominant) 72%, transparent), color-mix(in srgb, var(--c-dominant) 72%, transparent)) !important;
+    border-color: transparent !important;
+    box-shadow: var(--g-shadow-hover) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+    backdrop-filter: blur(18px) saturate(180%) !important;
+}
+
+:root.lg-has-lens #cookie-consent.lg-control.lg-lens {
+    backdrop-filter: var(--lg-lens) blur(18px) saturate(180%) !important;
+}
+
 /* ---------- 14. Accessibility & Reduced Transparency Fallbacks ---------- */
 @media (prefers-reduced-transparency: reduce) {
+    :root .lg-control,
+    :root .glass-container[data-lg-type="rounded"]:not(.lg-control),
+    :root .mobile-menu-panel,
+    :root #mobile-menu,
     .glass-container,
     .glass-button,
     .nav-pill,
-    .about-copy-card,
-    .bento-item,
-    .timeline-item,
-    .packages-unified,
-    .process-step,
-    .skill-card,
-    .project-card,
-    .case-mockup,
-    .case-content article.glass-panel,
-    .case-metric,
-    .faq-item,
-    .cta-band,
-    .contact-panel,
-    .legal-article,
     #cookie-consent {
         -webkit-backdrop-filter: none !important;
         backdrop-filter: none !important;
         background: var(--c-secondary) !important;
     }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-indicator.lg-squish,
+    .lg-segment-thumb.lg-squish { animation: none; }
+    .lg-segment-thumb { transition: opacity 0.2s ease; }
 }

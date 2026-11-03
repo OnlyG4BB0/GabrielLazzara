@@ -612,7 +612,8 @@ h3 {
     transform: translate3d(0, 0, 0) rotate(0deg);
 }
 
-[data-split] .ws { display: inline-block; width: 0.28em; }
+/* A real space: it can break and hangs at line end, so wrapped lines never start indented */
+[data-split] .ws { display: inline; }
 
 /* ---------- Navbar ---------- */
 #navbar,
