@@ -1100,7 +1100,7 @@ footer.site-footer a.rounded-full {
     pointer-events: auto;
     width: min(74rem, calc(100% - 2 * max(var(--container-pad), var(--safe-left))));
     min-height: 0;
-    margin: 0.75rem auto 0;
+    margin: var(--nav-float) auto 0;
     padding: 0.5rem !important;
     border-radius: 999px;
 }
@@ -1171,7 +1171,7 @@ footer.site-footer a.rounded-full {
     :root #navbar .navbar-inner.liquid-glass {
         width: calc(100% - 1.5rem);
         max-width: 28rem;
-        margin-top: 0.6rem;
+        margin-top: var(--nav-float);
         padding: 0.375rem 0.375rem 0.375rem 0.5rem !important;
     }
 }
@@ -1279,10 +1279,17 @@ footer.site-footer a.rounded-full {
 }
 
 /* Hero starts clearly below the floating capsule (capsule offset + height + breathing room) */
-:root { --nav-capsule: calc(0.75rem + 70px); }
+:root {
+    /* Gap above the floating capsule */
+    --nav-float: 1.25rem;
+    --nav-capsule: calc(var(--nav-float) + 70px);
+}
 
 @media (max-width: 1023px) {
-    :root { --nav-capsule: calc(0.6rem + 56px); }
+    :root {
+        --nav-float: 1rem;
+        --nav-capsule: calc(var(--nav-float) + 56px);
+    }
 }
 
 :root #hero.hero-section {
@@ -1292,7 +1299,7 @@ footer.site-footer a.rounded-full {
 /* Menu list: start below the floating capsule, scroll if the screen is short */
 :root .mobile-menu-panel,
 :root #mobile-menu {
-    padding-top: calc(0.6rem + 56px + 1.5rem) !important;
+    padding-top: calc(var(--nav-capsule) + 1.5rem) !important;
     overflow-y: auto !important;
     overscroll-behavior: contain;
 }
