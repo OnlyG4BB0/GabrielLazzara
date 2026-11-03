@@ -633,7 +633,6 @@ h3 {
 }
 
 html.is-loading #navbar { opacity: 0; transform: translateY(-16px); }
-#navbar.nav-hidden { transform: translateY(-110%); }
 
 #navbar.navbar-scrolled {
     background: var(--c-nav-scrolled);

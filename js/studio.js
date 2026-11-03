@@ -270,11 +270,9 @@
         window.addEventListener('blur', () => html.classList.add('cursor-hidden'));
     }
 
-    /* ---------- Scroll: progress, nav hide, parallax, marquee ---------- */
+    /* ---------- Scroll: progress, parallax, marquee (the navbar stays fixed) ---------- */
     function initScroll() {
         const progress = document.querySelector('.studio-progress');
-        const navbar = document.getElementById('navbar');
-        const mobileMenu = document.getElementById('mobile-menu');
         const parallaxEls = Array.from(document.querySelectorAll('[data-parallax]'));
         const track = document.querySelector('.marquee-track');
         const marqueeWrap = document.querySelector('.marquee-wrap');
@@ -286,7 +284,6 @@
         let marqueeHalf = 0;
         let marqueeVisible = true;
         let dir = 1;
-        let navHiddenAt = 0;
 
         const useParallax = finePointer && !reduced && parallaxEls.length > 0;
         const useMarquee = Boolean(track) && !reduced;
@@ -334,21 +331,6 @@
             if (progress) {
                 const max = document.documentElement.scrollHeight - window.innerHeight;
                 progress.style.setProperty('--progress', max > 0 ? (y / max).toFixed(4) : '0');
-            }
-
-            if (navbar) {
-                const menuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
-                const smooth = html.classList.contains('is-smooth-scrolling');
-                if (!menuOpen && !smooth) {
-                    if (dy > 6 && y > 260) {
-                        navbar.classList.add('nav-hidden');
-                        navHiddenAt = y;
-                    } else if (dy < -4 || y < 120 || (navHiddenAt && y < navHiddenAt - 320)) {
-                        navbar.classList.remove('nav-hidden');
-                    }
-                } else {
-                    navbar.classList.remove('nav-hidden');
-                }
             }
 
             if (useMarquee) {
