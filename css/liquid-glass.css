@@ -1278,6 +1278,24 @@ footer.site-footer a.rounded-full {
     backdrop-filter: blur(28px) saturate(160%) !important;
 }
 
+/* Menu list: start below the floating capsule, scroll if the screen is short */
+:root .mobile-menu-panel,
+:root #mobile-menu {
+    padding-top: calc(0.6rem + 56px + 1.5rem) !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+}
+
+:root .mobile-menu-nav {
+    justify-content: flex-start !important;
+    margin-block: auto;
+    padding-block: 0 1.5rem !important;
+}
+
+:root .mobile-link {
+    font-size: clamp(1.6rem, min(7vw, 6.4svh), 2.75rem) !important;
+}
+
 /* ---------- 14. Accessibility & Reduced Transparency Fallbacks ---------- */
 @media (prefers-reduced-transparency: reduce) {
     :root .liquid-glass,
