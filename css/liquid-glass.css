@@ -1278,6 +1278,17 @@ footer.site-footer a.rounded-full {
     backdrop-filter: blur(28px) saturate(160%) !important;
 }
 
+/* Hero starts clearly below the floating capsule (capsule offset + height + breathing room) */
+:root { --nav-capsule: calc(0.75rem + 70px); }
+
+@media (max-width: 1023px) {
+    :root { --nav-capsule: calc(0.6rem + 56px); }
+}
+
+:root #hero.hero-section {
+    padding-top: calc(var(--nav-capsule) + clamp(3.5rem, 11vh, 6.5rem));
+}
+
 /* Menu list: start below the floating capsule, scroll if the screen is short */
 :root .mobile-menu-panel,
 :root #mobile-menu {
