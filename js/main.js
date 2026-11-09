@@ -20,7 +20,7 @@ class PortfolioApp {
             'faq',
             'contact',
         ];
-        this.navSectionAlias = { values: 'about', experience: 'about', scope: 'services', skills: 'process' };
+        this.navSectionAlias = { values: 'about', experience: 'about', scope: 'services', skills: 'process', 'skill-showcase': 'projects' };
         this.langToggles = document.querySelectorAll('.lang-toggle');
         this.copyEmailBtn = document.getElementById('copy-email-btn');
         this.projectCards = document.querySelectorAll('[data-project-category]');

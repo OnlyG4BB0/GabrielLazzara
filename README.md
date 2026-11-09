@@ -20,6 +20,10 @@ JavaScript · React · Python · PHP · Tailwind CSS · MySQL · REST APIs · Gi
 
 - **Rent Boat Mondello** — boat rental website (PHP, SEO, multilingual)
 
+## Open-source work
+
+- **[Video 3D Studio](https://github.com/OnlyG4BB0/video-3d-studio)** — free Claude Code skill that renders 3D videos from a description (Remotion, three.js)
+
 ## Contact
 
 - Portfolio contact form: [GabrielLazzara/#contact](https://onlyg4bb0.github.io/GabrielLazzara/#contact)

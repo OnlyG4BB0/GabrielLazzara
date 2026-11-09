@@ -28,3 +28,6 @@ JavaScript, React, TypeScript, Python, PHP, Three.js, Tailwind CSS, Schema.org, 
 
 ## Client work
 - Rent Boat Mondello: https://rentboatmondello.it
+
+## Open-source work
+- Video 3D Studio, a free Claude Code skill for rendered 3D videos: https://github.com/OnlyG4BB0/video-3d-studio

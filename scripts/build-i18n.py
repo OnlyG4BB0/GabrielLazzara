@@ -24,7 +24,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 BASE = "https://onlyg4bb0.github.io/GabrielLazzara/"
 PAGE_URL = {"it": BASE, "en": BASE + "en/"}
-UPDATED = "2026-11-02"
+UPDATED = "2026-11-09"
 OG_IMAGE = BASE + "assets/og-image.jpg"
 EMAIL = "gabrielelazzara67@gmail.com"
 SAME_AS = [
@@ -77,6 +77,7 @@ SEO = {
 # (name, url, description key, image, kind)
 PROJECTS = [
     ("Rent Boat Mondello", "https://rentboatmondello.it", "proj3_desc", "assets/projects/rent-boat.jpg", "WebSite"),
+    ("Video 3D Studio", "https://github.com/OnlyG4BB0/video-3d-studio", "proj_skill_desc", "assets/projects/video-3d-studio/cover.jpg", "SoftwareSourceCode"),
     ("Luxury Sofà", "https://github.com/OnlyG4BB0/Luxury-Sof-", "proj_luxury_desc", "assets/projects/luxury-sofa.svg", "SoftwareSourceCode"),
     ("Liquid Cube", "https://onlyg4bb0.github.io/LiquidCube/", "proj1_desc", "assets/projects/liquid-cube.svg", "WebApplication"),
     ("Weatherflow", "https://onlyg4bb0.github.io/WeatherFlow/", "proj2_desc", "assets/projects/weatherflow.svg", "WebApplication"),
