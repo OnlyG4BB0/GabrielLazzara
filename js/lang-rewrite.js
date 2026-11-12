@@ -36,7 +36,7 @@
     function fetchPage(lang) {
         const url = pageUrl(lang);
         if (!pageCache.has(url)) {
-            pageCache.set(url, fetch(url, { credentials: 'same-origin' })
+            pageCache.set(url, fetch(url, { credentials: 'same-origin', cache: 'no-cache' })
                 .then((r) => {
                     if (!r.ok) throw new Error(`HTTP ${r.status}`);
                     return r.text();
